@@ -13,6 +13,20 @@
 		839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839B907E1AA6C8C4002E0A01 /* Images.xcassets */; };
 		839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */; };
 		839B908E1AA6C8C4002E0A01 /* TripsTapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B908D1AA6C8C4002E0A01 /* TripsTapTests.swift */; };
+		839B90981AA76339002E0A01 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90971AA76339002E0A01 /* GoogleMaps.framework */; };
+		839B909A1AA7660D002E0A01 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90991AA7660D002E0A01 /* AVFoundation.framework */; };
+		839B909C1AA76615002E0A01 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B909B1AA76615002E0A01 /* CoreData.framework */; };
+		839B909E1AA7661D002E0A01 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B909D1AA7661D002E0A01 /* CoreLocation.framework */; };
+		839B90A01AA76626002E0A01 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B909F1AA76626002E0A01 /* CoreText.framework */; };
+		839B90A21AA7662F002E0A01 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90A11AA7662F002E0A01 /* GLKit.framework */; };
+		839B90A41AA76637002E0A01 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90A31AA76637002E0A01 /* ImageIO.framework */; };
+		839B90A61AA76646002E0A01 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90A51AA76646002E0A01 /* libc++.dylib */; };
+		839B90A81AA7664F002E0A01 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90A71AA7664F002E0A01 /* libicucore.dylib */; };
+		839B90AA1AA76656002E0A01 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90A91AA76656002E0A01 /* libz.dylib */; };
+		839B90AC1AA7665C002E0A01 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AB1AA7665C002E0A01 /* OpenGLES.framework */; };
+		839B90AE1AA76662002E0A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AD1AA76662002E0A01 /* QuartzCore.framework */; };
+		839B90B01AA76669002E0A01 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */; };
+		839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +50,21 @@
 		839B90871AA6C8C4002E0A01 /* TripsTapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TripsTapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		839B908C1AA6C8C4002E0A01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		839B908D1AA6C8C4002E0A01 /* TripsTapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripsTapTests.swift; sourceTree = "<group>"; };
+		839B90971AA76339002E0A01 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
+		839B90991AA7660D002E0A01 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		839B909B1AA76615002E0A01 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		839B909D1AA7661D002E0A01 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		839B909F1AA76626002E0A01 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		839B90A11AA7662F002E0A01 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		839B90A31AA76637002E0A01 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		839B90A51AA76646002E0A01 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		839B90A71AA7664F002E0A01 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		839B90A91AA76656002E0A01 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		839B90AB1AA7665C002E0A01 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		839B90AD1AA76662002E0A01 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		839B90B11AA76997002E0A01 /* TripsTap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TripsTap-Bridging-Header.h"; sourceTree = "<group>"; };
+		839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = TripsTap/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +72,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839B90B01AA76669002E0A01 /* SystemConfiguration.framework in Frameworks */,
+				839B90AE1AA76662002E0A01 /* QuartzCore.framework in Frameworks */,
+				839B90AC1AA7665C002E0A01 /* OpenGLES.framework in Frameworks */,
+				839B90AA1AA76656002E0A01 /* libz.dylib in Frameworks */,
+				839B90A81AA7664F002E0A01 /* libicucore.dylib in Frameworks */,
+				839B90A61AA76646002E0A01 /* libc++.dylib in Frameworks */,
+				839B90A41AA76637002E0A01 /* ImageIO.framework in Frameworks */,
+				839B90A21AA7662F002E0A01 /* GLKit.framework in Frameworks */,
+				839B90A01AA76626002E0A01 /* CoreText.framework in Frameworks */,
+				839B909E1AA7661D002E0A01 /* CoreLocation.framework in Frameworks */,
+				839B909C1AA76615002E0A01 /* CoreData.framework in Frameworks */,
+				839B909A1AA7660D002E0A01 /* AVFoundation.framework in Frameworks */,
+				839B90981AA76339002E0A01 /* GoogleMaps.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +101,19 @@
 		839B90691AA6C8C3002E0A01 = {
 			isa = PBXGroup;
 			children = (
+				839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */,
+				839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */,
+				839B90AD1AA76662002E0A01 /* QuartzCore.framework */,
+				839B90AB1AA7665C002E0A01 /* OpenGLES.framework */,
+				839B90A91AA76656002E0A01 /* libz.dylib */,
+				839B90A71AA7664F002E0A01 /* libicucore.dylib */,
+				839B90A51AA76646002E0A01 /* libc++.dylib */,
+				839B90A31AA76637002E0A01 /* ImageIO.framework */,
+				839B90A11AA7662F002E0A01 /* GLKit.framework */,
+				839B909F1AA76626002E0A01 /* CoreText.framework */,
+				839B909D1AA7661D002E0A01 /* CoreLocation.framework */,
+				839B909B1AA76615002E0A01 /* CoreData.framework */,
+				839B90991AA7660D002E0A01 /* AVFoundation.framework */,
 				839B90741AA6C8C3002E0A01 /* TripsTap */,
 				839B908A1AA6C8C4002E0A01 /* TripsTapTests */,
 				839B90731AA6C8C3002E0A01 /* Products */,
@@ -77,12 +132,14 @@
 		839B90741AA6C8C3002E0A01 /* TripsTap */ = {
 			isa = PBXGroup;
 			children = (
+				839B90971AA76339002E0A01 /* GoogleMaps.framework */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
 				839B90791AA6C8C4002E0A01 /* ViewController.swift */,
 				839B907B1AA6C8C4002E0A01 /* Main.storyboard */,
 				839B907E1AA6C8C4002E0A01 /* Images.xcassets */,
 				839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */,
 				839B90751AA6C8C3002E0A01 /* Supporting Files */,
+				839B90B11AA76997002E0A01 /* TripsTap-Bridging-Header.h */,
 			);
 			path = TripsTap;
 			sourceTree = "<group>";
@@ -195,6 +252,7 @@
 				839B907D1AA6C8C4002E0A01 /* Main.storyboard in Resources */,
 				839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */,
 				839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */,
+				839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,9 +396,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TripsTap",
+				);
 				INFOPLIST_FILE = TripsTap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TripsTap/TripsTap-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -348,9 +414,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TripsTap",
+				);
 				INFOPLIST_FILE = TripsTap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TripsTap/TripsTap-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -407,6 +480,7 @@
 				839B90931AA6C8C4002E0A01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		839B90941AA6C8C4002E0A01 /* Build configuration list for PBXNativeTarget "TripsTapTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +489,7 @@
 				839B90961AA6C8C4002E0A01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
