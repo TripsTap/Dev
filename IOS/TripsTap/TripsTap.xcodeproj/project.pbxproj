@@ -27,6 +27,7 @@
 		839B90AE1AA76662002E0A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AD1AA76662002E0A01 /* QuartzCore.framework */; };
 		839B90B01AA76669002E0A01 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */; };
 		839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */; };
+		83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2790B1AAE00C200052269 /* SlideMenuController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +65,8 @@
 		839B90AD1AA76662002E0A01 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		839B90B11AA76997002E0A01 /* TripsTap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TripsTap-Bridging-Header.h"; sourceTree = "<group>"; };
-		839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = TripsTap/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		83C2790B1AAE00C200052269 /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,19 +103,6 @@
 		839B90691AA6C8C3002E0A01 = {
 			isa = PBXGroup;
 			children = (
-				839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */,
-				839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */,
-				839B90AD1AA76662002E0A01 /* QuartzCore.framework */,
-				839B90AB1AA7665C002E0A01 /* OpenGLES.framework */,
-				839B90A91AA76656002E0A01 /* libz.dylib */,
-				839B90A71AA7664F002E0A01 /* libicucore.dylib */,
-				839B90A51AA76646002E0A01 /* libc++.dylib */,
-				839B90A31AA76637002E0A01 /* ImageIO.framework */,
-				839B90A11AA7662F002E0A01 /* GLKit.framework */,
-				839B909F1AA76626002E0A01 /* CoreText.framework */,
-				839B909D1AA7661D002E0A01 /* CoreLocation.framework */,
-				839B909B1AA76615002E0A01 /* CoreData.framework */,
-				839B90991AA7660D002E0A01 /* AVFoundation.framework */,
 				839B90741AA6C8C3002E0A01 /* TripsTap */,
 				839B908A1AA6C8C4002E0A01 /* TripsTapTests */,
 				839B90731AA6C8C3002E0A01 /* Products */,
@@ -132,7 +121,8 @@
 		839B90741AA6C8C3002E0A01 /* TripsTap */ = {
 			isa = PBXGroup;
 			children = (
-				839B90971AA76339002E0A01 /* GoogleMaps.framework */,
+				83C2790A1AAE008600052269 /* library */,
+				83C279091AAE004A00052269 /* framwork */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
 				839B90791AA6C8C4002E0A01 /* ViewController.swift */,
 				839B907B1AA6C8C4002E0A01 /* Main.storyboard */,
@@ -167,6 +157,35 @@
 				839B908C1AA6C8C4002E0A01 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83C279091AAE004A00052269 /* framwork */ = {
+			isa = PBXGroup;
+			children = (
+				839B90971AA76339002E0A01 /* GoogleMaps.framework */,
+				839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */,
+				839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */,
+				839B90AD1AA76662002E0A01 /* QuartzCore.framework */,
+				839B90AB1AA7665C002E0A01 /* OpenGLES.framework */,
+				839B90A91AA76656002E0A01 /* libz.dylib */,
+				839B90A71AA7664F002E0A01 /* libicucore.dylib */,
+				839B90A51AA76646002E0A01 /* libc++.dylib */,
+				839B90A31AA76637002E0A01 /* ImageIO.framework */,
+				839B90A11AA7662F002E0A01 /* GLKit.framework */,
+				839B909F1AA76626002E0A01 /* CoreText.framework */,
+				839B909D1AA7661D002E0A01 /* CoreLocation.framework */,
+				839B909B1AA76615002E0A01 /* CoreData.framework */,
+				839B90991AA7660D002E0A01 /* AVFoundation.framework */,
+			);
+			name = framwork;
+			sourceTree = "<group>";
+		};
+		83C2790A1AAE008600052269 /* library */ = {
+			isa = PBXGroup;
+			children = (
+				83C2790B1AAE00C200052269 /* SlideMenuController.swift */,
+			);
+			name = library;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				839B907A1AA6C8C4002E0A01 /* ViewController.swift in Sources */,
+				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
