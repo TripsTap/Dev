@@ -17,11 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyB2KaJa01bnVnRy__1GUK17ownU-ZeuMYQ");
         
+        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
         
+        let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         
-//        let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
-//        self.window?.rootViewController = slideMenuController
-//        self.window?.makeKeyAndVisible()
+        let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
+        as MenuViewController
+        
+        let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
+        
+        self.window?.rootViewController = slideMenuController
+        self.window?.makeKeyAndVisible()
         return true
     }
 

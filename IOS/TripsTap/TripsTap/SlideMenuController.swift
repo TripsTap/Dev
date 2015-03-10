@@ -10,8 +10,8 @@ import UIKit
 
 class SlideMenuOption {
     
-    let leftViewWidth: CGFloat = 270.0
-    let leftBezelWidth: CGFloat = 16.0
+    let leftViewWidth: CGFloat = 300.0
+    let leftBezelWidth: CGFloat = 10.0
     let contentViewScale: CGFloat = 0.96
     let contentViewOpacity: CGFloat = 0.5
     let shadowOpacity: CGFloat = 0.0
@@ -24,6 +24,7 @@ class SlideMenuOption {
     let rightPanFromBezel: Bool = true
     let hideStatusBar: Bool = true
     let pointOfNoReturnWidth: CGFloat = 44.0
+
     
     init() {
         
