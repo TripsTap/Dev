@@ -14,23 +14,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        GMSServices.provideAPIKey("AIzaSyB2KaJa01bnVnRy__1GUK17ownU-ZeuMYQ");
+        // regis google map sdk
+        GMSServices.provideAPIKey("AIzaSyB2KaJa01bnVnRy__1GUK17ownU-ZeuMYQ")
         
+        // regis facebook sdk
+        FBLoginView.self
+        
+        //created slide menu
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        
         let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
-        
         let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
         as MenuViewController
-        
         let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
-        
         self.window?.rootViewController = slideMenuController
         self.window?.makeKeyAndVisible()
         return true
     }
 
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: NSString?, annotation: AnyObject) -> Bool {
+        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+    
+        return wasHandled
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

@@ -29,6 +29,7 @@
 		83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2790B1AAE00C200052269 /* SlideMenuController.swift */; };
 		83C279121AAE985900052269 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279111AAE985900052269 /* MenuViewController.swift */; };
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
+		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		83C2790B1AAE00C200052269 /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		83C279111AAE985900052269 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				839B909C1AA76615002E0A01 /* CoreData.framework in Frameworks */,
 				839B909A1AA7660D002E0A01 /* AVFoundation.framework in Frameworks */,
 				839B90981AA76339002E0A01 /* GoogleMaps.framework in Frameworks */,
+				83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +168,7 @@
 		83C279091AAE004A00052269 /* framwork */ = {
 			isa = PBXGroup;
 			children = (
+				83C279151AAF1EC100052269 /* FacebookSDK.framework */,
 				839B90971AA76339002E0A01 /* GoogleMaps.framework */,
 				839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */,
 				839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */,

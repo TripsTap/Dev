@@ -409,7 +409,7 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBk-i4-NGC" userLabel="facebook">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBk-i4-NGC" userLabel="facebook" customClass="FBLoginView">
                                         <rect key="frame" x="0.0" y="530" width="600" height="50"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -492,6 +492,9 @@
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="650"/>
+                    <connections>
+                        <outlet property="fbView" destination="VBk-i4-NGC" id="8Gl-uq-MEz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BgP-1b-lqF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
