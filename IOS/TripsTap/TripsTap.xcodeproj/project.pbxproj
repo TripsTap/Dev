@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */; };
+		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B90771AA6C8C4002E0A01 /* AppDelegate.swift */; };
 		839B907D1AA6C8C4002E0A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839B907B1AA6C8C4002E0A01 /* Main.storyboard */; };
 		839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839B907E1AA6C8C4002E0A01 /* Images.xcassets */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeViewController.swift; sourceTree = "<group>"; };
+		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		839B90721AA6C8C3002E0A01 /* TripsTap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripsTap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839B90761AA6C8C4002E0A01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		839B90771AA6C8C4002E0A01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				83C2790A1AAE008600052269 /* library */,
 				83C279091AAE004A00052269 /* framwork */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
+				8357A99B1AB07ACD00957BB9 /* Connection.swift */,
 				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
 				83C279111AAE985900052269 /* MenuViewController.swift */,
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
@@ -300,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
+				8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */,
 				8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */,
 				839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */,
 				83C279121AAE985900052269 /* MenuViewController.swift in Sources */,
