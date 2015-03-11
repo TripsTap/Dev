@@ -18,7 +18,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         super.viewDidLoad()
 
         fbView.delegate = self
-        fbView.readPermissions = ["public_profile", "email", "user_friends"]
+        fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
         // Do any additional setup after loading the view.
     }
 
@@ -41,6 +41,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         println("User Name: \(user.name)")
         var userEmail = user.objectForKey("email") as String
         println("User Email: \(userEmail)")
+        
+        getPlaceFromFB(user.objectID)
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
@@ -52,6 +54,36 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
     
+    
+    func getPlaceFromFB(userID : String){
+
+        
+        FBRequestConnection.startWithGraphPath("/"+userID+"?fields=tagged_places.limit(200)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+            
+//            var jsonFeeds = result as FBGraphObject
+            
+//            var jsonArray : Array = ((jsonFeeds["tagged_places"] as FBGraphObject)["data"] as NSMutableArray)
+//            for(var i = 0; i < jsonArray.count ; i++){
+            
+                println(result.description)
+//            }
+            
+
+        })
+
+        
+
+    }
+    
+    
+    func getInfoOfCategory(cateID : String){
+        
+        FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+
+            println(result.description)
+        })
+        
+    }
     
     /*
     // MARK: - Navigation
