@@ -158,6 +158,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		839807E11AB1B3D400A70CBC /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
+				83C279111AAE985900052269 /* MenuViewController.swift */,
+				83C279131AAE9AAD00052269 /* MainViewController.swift */,
+			);
+			name = controller;
+			sourceTree = "<group>";
+		};
 		839B90691AA6C8C3002E0A01 = {
 			isa = PBXGroup;
 			children = (
@@ -183,9 +193,7 @@
 				83C279091AAE004A00052269 /* framwork */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
 				8357A99B1AB07ACD00957BB9 /* Connection.swift */,
-				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
-				83C279111AAE985900052269 /* MenuViewController.swift */,
-				83C279131AAE9AAD00052269 /* MainViewController.swift */,
+				839807E11AB1B3D400A70CBC /* controller */,
 				839B907B1AA6C8C4002E0A01 /* Main.storyboard */,
 				839B907E1AA6C8C4002E0A01 /* Images.xcassets */,
 				839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */,
