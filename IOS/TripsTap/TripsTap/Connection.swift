@@ -45,20 +45,16 @@ class Connection: NSObject {
 //===============================================================================
 //
 
-    func getCategoryTripsMe(location : String ,place : Int  , completion :((result : NSObject , error : NSError ) ->()) )
+    func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
         var url = baseUrl + "getCategory"
         
         Alamofire.request(.GET, url, parameters: ["location": location , "place" : 0]  ).responseJSON { (request, response, data, error) -> Void in
-            println(request)
-            println(response)
-            println(error)
-            println("---------------------")
-            println(data?.description)
             
-        
-            completion(result: response!, error: error!)
+            println("---------------------")
+            completion(result: data, error: error)
+            println("---------------------")
         }
         
         

@@ -10,6 +10,7 @@
 		8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */; };
 		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		8357A9B11AB0817C00957BB9 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9B01AB0817C00957BB9 /* Alamofire.swift */; };
+		839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */; };
 		839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B90771AA6C8C4002E0A01 /* AppDelegate.swift */; };
 		839B907D1AA6C8C4002E0A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839B907B1AA6C8C4002E0A01 /* Main.storyboard */; };
 		839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839B907E1AA6C8C4002E0A01 /* Images.xcassets */; };
@@ -85,6 +86,7 @@
 		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		8357A99F1AB07BFC00957BB9 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../../Downloads/Alamofire-master/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		8357A9B01AB0817C00957BB9 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
+		839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeTableViewCell.swift; sourceTree = "<group>"; };
 		839B90721AA6C8C3002E0A01 /* TripsTap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripsTap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839B90761AA6C8C4002E0A01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		839B90771AA6C8C4002E0A01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
+				839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */,
 				83C279111AAE985900052269 /* MenuViewController.swift */,
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
 			);
@@ -399,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
 				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */,
 				8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */,
