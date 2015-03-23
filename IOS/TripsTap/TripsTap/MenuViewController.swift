@@ -13,13 +13,22 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     @IBOutlet weak var fbView: FBLoginView!
     
+    var tirpMeViewController: UIViewController!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         fbView.delegate = self
         fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
-        // Do any additional setup after loading the view.
+        
+        
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tirpMeViewController = storyboard.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
+        
+        self.tirpMeViewController = UINavigationController(rootViewController: tirpMeViewController)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,6 +92,13 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
             println(result.description)
         })
         
+    }
+    
+    
+    
+    
+    @IBAction func clickTripMe(sender: AnyObject) {
+        self.slideMenuController()?.changeMainViewController(self.tirpMeViewController, close: true)
     }
     
     /*

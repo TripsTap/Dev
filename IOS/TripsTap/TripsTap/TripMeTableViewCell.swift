@@ -8,11 +8,26 @@
 
 import UIKit
 
-class TripMeTableViewCell: UITableViewCell {
+protocol TripMeCellDelegate  {
+    func clickCell(index: Int)
+}
 
+
+
+class TripMeTableViewCell: UITableViewCell, TripMeCellDelegate {
+
+    @IBOutlet weak var labCategoryName: UILabel!
+    @IBOutlet var imageCategory: UIImageView!
+    @IBOutlet var imageSelect: UIImageView!
+    
+    var index : Int!
+    
+    
+    var delegate: TripMeCellDelegate?
+   
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -20,5 +35,20 @@ class TripMeTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    //MARK:-
+    //MARK:  delegate cell
+    //MARK:-
+    
+    
+    func clickCell(index: Int) {
+        self.delegate?.clickCell(index)
+    }
+    
+    @IBAction func clickSelectCell(sender: AnyObject) {
+        self.clickCell(index)
+        
+    }
+    
 
 }

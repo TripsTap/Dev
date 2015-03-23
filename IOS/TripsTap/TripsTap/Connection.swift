@@ -53,6 +53,8 @@ class Connection: NSObject {
         Alamofire.request(.GET, url, parameters: ["location": location , "place" : 0]  ).responseJSON { (request, response, data, error) -> Void in
             
             println("---------------------")
+            println("get category")
+            println(data)
             completion(result: data, error: error)
             println("---------------------")
         }
@@ -61,7 +63,16 @@ class Connection: NSObject {
 
     }
     
-    func getRuleTripsMe(categories : Int){
+    func getRuleTripsMe(location: String , categories : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
+        var url = baseUrl + "getRecommeder"
         
+        Alamofire.request(.GET, url, parameters: ["location":location , "categories": categories]  ).responseJSON { (request, response, data, error) -> Void in
+            
+            println("---------------------")
+            println("getRuleTripsMe")
+            completion(result: data, error: error)
+            println(data?.objectForKey("rules"))
+            println("---------------------")
+        }
     }
 }
