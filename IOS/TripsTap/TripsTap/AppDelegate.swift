@@ -20,14 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // regis facebook sdk
         FBLoginView.self
         
-//        //created slide menu
-//        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//        let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
-//        let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
-//        as MenuViewController
-//        let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
-//        self.window?.rootViewController = slideMenuController
-//        self.window?.makeKeyAndVisible()
+        //created slide menu
+        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
+        as MenuViewController
+        let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
+        slideMenuController.navigationController?.navigationBar.hidden = true
+        self.window?.rootViewController = slideMenuController
+        self.window?.makeKeyAndVisible()
         return true
     }
 

@@ -10,8 +10,9 @@
 		8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */; };
 		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		8357A9B11AB0817C00957BB9 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9B01AB0817C00957BB9 /* Alamofire.swift */; };
+		835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835F35D31ABC0594009BFF71 /* Main.storyboard */; };
+		839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */; };
 		839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B90771AA6C8C4002E0A01 /* AppDelegate.swift */; };
-		839B907D1AA6C8C4002E0A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839B907B1AA6C8C4002E0A01 /* Main.storyboard */; };
 		839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839B907E1AA6C8C4002E0A01 /* Images.xcassets */; };
 		839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */; };
 		839B908E1AA6C8C4002E0A01 /* TripsTapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B908D1AA6C8C4002E0A01 /* TripsTapTests.swift */; };
@@ -29,6 +30,7 @@
 		839B90AE1AA76662002E0A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AD1AA76662002E0A01 /* QuartzCore.framework */; };
 		839B90B01AA76669002E0A01 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */; };
 		839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */; };
+		83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */ = {isa = PBXBuildFile; fileRef = 83BED4161AC05E4700FB19C3 /* phuketlist.text */; };
 		83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2790B1AAE00C200052269 /* SlideMenuController.swift */; };
 		83C279121AAE985900052269 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279111AAE985900052269 /* MenuViewController.swift */; };
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
@@ -85,10 +87,11 @@
 		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		8357A99F1AB07BFC00957BB9 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../../Downloads/Alamofire-master/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		8357A9B01AB0817C00957BB9 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
+		835F35D31ABC0594009BFF71 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeTableViewCell.swift; sourceTree = "<group>"; };
 		839B90721AA6C8C3002E0A01 /* TripsTap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripsTap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839B90761AA6C8C4002E0A01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		839B90771AA6C8C4002E0A01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		839B907C1AA6C8C4002E0A01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		839B907E1AA6C8C4002E0A01 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		839B90811AA6C8C4002E0A01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		839B90871AA6C8C4002E0A01 /* TripsTapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TripsTapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +112,7 @@
 		839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		839B90B11AA76997002E0A01 /* TripsTap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TripsTap-Bridging-Header.h"; sourceTree = "<group>"; };
 		839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		83BED4161AC05E4700FB19C3 /* phuketlist.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = phuketlist.text; sourceTree = "<group>"; };
 		83C2790B1AAE00C200052269 /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		83C279111AAE985900052269 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +162,25 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		835F35CE1ABBFF57009BFF71 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */,
+			);
+			name = cell;
+			sourceTree = "<group>";
+		};
+		839807E11AB1B3D400A70CBC /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				835F35CE1ABBFF57009BFF71 /* cell */,
+				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
+				83C279111AAE985900052269 /* MenuViewController.swift */,
+				83C279131AAE9AAD00052269 /* MainViewController.swift */,
+			);
+			name = controller;
+			sourceTree = "<group>";
+		};
 		839B90691AA6C8C3002E0A01 = {
 			isa = PBXGroup;
 			children = (
@@ -183,13 +206,12 @@
 				83C279091AAE004A00052269 /* framwork */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
 				8357A99B1AB07ACD00957BB9 /* Connection.swift */,
-				8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */,
-				83C279111AAE985900052269 /* MenuViewController.swift */,
-				83C279131AAE9AAD00052269 /* MainViewController.swift */,
-				839B907B1AA6C8C4002E0A01 /* Main.storyboard */,
+				839807E11AB1B3D400A70CBC /* controller */,
+				835F35D31ABC0594009BFF71 /* Main.storyboard */,
 				839B907E1AA6C8C4002E0A01 /* Images.xcassets */,
 				839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */,
 				839B90751AA6C8C3002E0A01 /* Supporting Files */,
+				83BED41B1AC05E5300FB19C3 /* file */,
 				839B90B11AA76997002E0A01 /* TripsTap-Bridging-Header.h */,
 			);
 			path = TripsTap;
@@ -218,6 +240,14 @@
 				839B908C1AA6C8C4002E0A01 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83BED41B1AC05E5300FB19C3 /* file */ = {
+			isa = PBXGroup;
+			children = (
+				83BED4161AC05E4700FB19C3 /* phuketlist.text */,
+			);
+			name = file;
 			sourceTree = "<group>";
 		};
 		83C279091AAE004A00052269 /* framwork */ = {
@@ -370,10 +400,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				839B907D1AA6C8C4002E0A01 /* Main.storyboard in Resources */,
 				839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */,
 				839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */,
 				839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */,
+				835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +421,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
+				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,
 				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */,
 				8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */,
@@ -425,14 +457,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		839B907B1AA6C8C4002E0A01 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				839B907C1AA6C8C4002E0A01 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		839B90801AA6C8C4002E0A01 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -856,15 +856,15 @@ extension UIViewController {
         return nil;
     }
     
-    func addLeftBarButtonWithImage(buttonImage: UIImage) {
-        var leftButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleLeft")
-        self.navigationItem.leftBarButtonItem = leftButton;
-    }
-    
-    func addRightBarButtonWithImage(buttonImage: UIImage) {
-        var rightButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleRight")
-        self.navigationItem.rightBarButtonItem = rightButton;
-    }
+//    func addLeftBarButtonWithImage(buttonImage: UIImage) {
+//        var leftButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleLeft")
+//        self.navigationItem.leftBarButtonItem = leftButton;
+//    }
+//    
+//    func addRightBarButtonWithImage(buttonImage: UIImage) {
+//        var rightButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleRight")
+//        self.navigationItem.rightBarButtonItem = rightButton;
+//    }
     
     func toggleLeft() {
         self.slideMenuController()?.toggleLeft()

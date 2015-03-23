@@ -10,9 +10,28 @@ import UIKit
 
 class MainViewController: UIViewController {
 
+
+    
+    var pageID : String?
+    var listPlan : NSMutableArray?
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    init(listPlan : NSMutableArray , pageID : String){
+        super.init()
+        self.listPlan = listPlan;
+        self.pageID = pageID;
+    }
+
+  
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationController?.navigationBar.hidden = true
         
 
     }
@@ -22,10 +41,18 @@ class MainViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
     @IBAction func clickMenu(sender: AnyObject) {
         
         self.slideMenuController()?.openLeft()
     }
+    
+    
+    
+    
+    
+    
+    
 
     /*
     // MARK: - Navigation
