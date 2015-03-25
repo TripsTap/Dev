@@ -10,10 +10,13 @@
 		831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */; };
 		831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */; };
 		831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D883A1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift */; };
+		831D883D1AC25E42000C30DD /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D883C1AC25E42000C30DD /* InfoViewController.swift */; };
+		831D883F1AC26A2D000C30DD /* logo_02_circle-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 831D883E1AC26A2D000C30DD /* logo_02_circle-2.png */; };
 		8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */; };
 		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		8357A9B11AB0817C00957BB9 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9B01AB0817C00957BB9 /* Alamofire.swift */; };
 		835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835F35D31ABC0594009BFF71 /* Main.storyboard */; };
+		837D00A51AC2FD790016679D /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D00A41AC2FD790016679D /* ImageLoader.swift */; };
 		839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */; };
 		839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B90771AA6C8C4002E0A01 /* AppDelegate.swift */; };
 		839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839B907E1AA6C8C4002E0A01 /* Images.xcassets */; };
@@ -90,10 +93,13 @@
 		831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainOneTableViewCell.swift; sourceTree = "<group>"; };
 		831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaAndHotelViewController.swift; sourceTree = "<group>"; };
 		831D883A1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaAndHotelTableViewCell.swift; sourceTree = "<group>"; };
+		831D883C1AC25E42000C30DD /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		831D883E1AC26A2D000C30DD /* logo_02_circle-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_02_circle-2.png"; sourceTree = "<group>"; };
 		8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeViewController.swift; sourceTree = "<group>"; };
 		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		8357A9B01AB0817C00957BB9 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		835F35D31ABC0594009BFF71 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		837D00A41AC2FD790016679D /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeTableViewCell.swift; sourceTree = "<group>"; };
 		839B90721AA6C8C3002E0A01 /* TripsTap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripsTap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839B90761AA6C8C4002E0A01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -186,6 +192,7 @@
 				83C279111AAE985900052269 /* MenuViewController.swift */,
 				831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */,
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
+				831D883C1AC25E42000C30DD /* InfoViewController.swift */,
 			);
 			name = controller;
 			sourceTree = "<group>";
@@ -229,6 +236,7 @@
 		839B90751AA6C8C3002E0A01 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				831D883E1AC26A2D000C30DD /* logo_02_circle-2.png */,
 				839B90761AA6C8C4002E0A01 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -286,6 +294,7 @@
 			children = (
 				83C2790B1AAE00C200052269 /* SlideMenuController.swift */,
 				8357A9B01AB0817C00957BB9 /* Alamofire.swift */,
+				837D00A41AC2FD790016679D /* ImageLoader.swift */,
 				831D88251AC12D37000C30DD /* Alamofire.xcodeproj */,
 			);
 			name = library;
@@ -410,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */,
+				831D883F1AC26A2D000C30DD /* logo_02_circle-2.png in Resources */,
 				839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */,
 				839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */,
 				835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */,
@@ -430,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D00A51AC2FD790016679D /* ImageLoader.swift in Sources */,
 				831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */,
 				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
 				831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */,
@@ -439,6 +450,7 @@
 				8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */,
 				831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */,
 				839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */,
+				831D883D1AC25E42000C30DD /* InfoViewController.swift in Sources */,
 				83C279121AAE985900052269 /* MenuViewController.swift in Sources */,
 				83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */,
 				8357A9B11AB0817C00957BB9 /* Alamofire.swift in Sources */,

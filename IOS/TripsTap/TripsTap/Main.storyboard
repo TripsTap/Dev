@@ -303,9 +303,12 @@
                                                             <constraint firstAttribute="height" constant="120" id="ayE-ms-fFP"/>
                                                             <constraint firstAttribute="width" constant="120" id="uIG-lD-HjI"/>
                                                         </constraints>
-                                                        <state key="normal" title="Button">
+                                                        <state key="normal" title="Hotel">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="clickHotel:" destination="B2U-kX-6VF" eventType="touchUpInside" id="t3g-ba-j3z"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -343,7 +346,7 @@
                                                             <constraint firstAttribute="width" constant="120" id="duo-2O-nMU"/>
                                                             <constraint firstAttribute="height" constant="120" id="fh5-rT-jJj"/>
                                                         </constraints>
-                                                        <state key="normal" title="res">
+                                                        <state key="normal" title="Restaurant">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
                                                         <connections>
@@ -721,10 +724,12 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4z-VT-PrI">
                                 <rect key="frame" x="0.0" y="551" width="600" height="50"/>
+                                <color key="backgroundColor" red="0.094117647060000004" green="0.67843137249999996" blue="0.65098039220000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ftg-h1-15i"/>
                                 </constraints>
                                 <state key="normal" title="Trip Me Button">
+                                    <color key="titleColor" red="0.99215686270000003" green="0.91372549020000005" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -875,6 +880,9 @@
                                             <color key="titleColor" red="0.99215686274509807" green="0.9137254901960784" blue="0.47843137254901957" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="clickMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fBj-pX-Lng"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.094117647058823528" green="0.67843137254901964" blue="0.65098039215686276" alpha="1" colorSpace="calibratedRGB"/>
@@ -1210,7 +1218,7 @@
                                 <rect key="frame" x="0.0" y="70" width="600" height="530"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RestaAndHotelTableViewCell" rowHeight="80" id="FYs-hR-fxB" customClass="RestaAndHotelTableViewCell" customModule="TripsTap" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RestaAndHotelTableViewCell" rowHeight="80" id="FYs-hR-fxB" customClass="RestaAndHotelTableViewCell" customModule="TripsTap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FYs-hR-fxB" id="9M1-Jb-Wr1">
@@ -1256,16 +1264,43 @@
                                     <outlet property="delegate" destination="8oY-bp-Mee" id="9Qy-gs-A2E"/>
                                 </connections>
                             </tableView>
+                            <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Nr-ur-gA9" userLabel="View indicator">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZaP-Wo-OuU">
+                                        <rect key="frame" x="290" y="290" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="ZaP-Wo-OuU" secondAttribute="centerY" constant="-64" id="ZRH-0M-O4c"/>
+                                    <constraint firstAttribute="centerX" secondItem="ZaP-Wo-OuU" secondAttribute="centerX" id="azE-NW-zQK"/>
+                                    <constraint firstAttribute="centerX" secondItem="ZaP-Wo-OuU" secondAttribute="centerX" id="erL-g9-wbh"/>
+                                    <constraint firstAttribute="centerY" secondItem="ZaP-Wo-OuU" secondAttribute="centerY" id="q7D-3i-Pup"/>
+                                    <constraint firstAttribute="centerX" secondItem="ZaP-Wo-OuU" secondAttribute="centerX" id="tL1-At-ooH"/>
+                                    <constraint firstAttribute="centerY" secondItem="ZaP-Wo-OuU" secondAttribute="centerY" id="vlr-6z-p0a"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="ZRH-0M-O4c"/>
+                                        <exclude reference="q7D-3i-Pup"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="9Nr-ur-gA9" firstAttribute="trailing" secondItem="nLg-Yu-INa" secondAttribute="trailing" id="1TS-cu-L7e"/>
+                            <constraint firstItem="9Nr-ur-gA9" firstAttribute="leading" secondItem="eAm-jL-1Sl" secondAttribute="leading" id="AkA-vd-K0z"/>
                             <constraint firstItem="jag-gB-6Ij" firstAttribute="top" secondItem="nLg-Yu-INa" secondAttribute="bottom" id="Oi2-w6-WQI"/>
                             <constraint firstItem="nLg-Yu-INa" firstAttribute="top" secondItem="eAm-jL-1Sl" secondAttribute="bottom" id="RxF-9k-nXd"/>
                             <constraint firstItem="eAm-jL-1Sl" firstAttribute="top" secondItem="kpe-S0-H0d" secondAttribute="top" id="TbI-PV-FGF"/>
+                            <constraint firstItem="9Nr-ur-gA9" firstAttribute="top" secondItem="eAm-jL-1Sl" secondAttribute="top" id="eSz-Sk-CEM"/>
                             <constraint firstItem="nLg-Yu-INa" firstAttribute="leading" secondItem="kpe-S0-H0d" secondAttribute="leading" id="lV1-8D-Imj"/>
                             <constraint firstItem="eAm-jL-1Sl" firstAttribute="leading" secondItem="nLg-Yu-INa" secondAttribute="leading" id="lnf-Pp-loc"/>
                             <constraint firstItem="eAm-jL-1Sl" firstAttribute="trailing" secondItem="nLg-Yu-INa" secondAttribute="trailing" id="mgp-p5-qnd"/>
                             <constraint firstAttribute="trailing" secondItem="nLg-Yu-INa" secondAttribute="trailing" id="tNe-m5-fO6"/>
+                            <constraint firstItem="9Nr-ur-gA9" firstAttribute="bottom" secondItem="jag-gB-6Ij" secondAttribute="top" id="vyo-jU-DtF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KMJ-gb-mQC"/>
@@ -1274,16 +1309,17 @@
                     <connections>
                         <outlet property="labTitle" destination="got-5t-bjj" id="Nyg-63-rfq"/>
                         <outlet property="table" destination="nLg-Yu-INa" id="J1l-sj-Jgk"/>
+                        <outlet property="viewLoader" destination="9Nr-ur-gA9" id="BiG-Fn-fUb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oD8-xX-NfB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3143" y="1300"/>
         </scene>
-        <!--View Controller-->
+        <!--Info View Controller-->
         <scene sceneID="kUy-F0-tzm">
             <objects>
-                <viewController id="hvC-0m-oiQ" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InfoViewController" id="hvC-0m-oiQ" customClass="InfoViewController" customModule="TripsTap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3XC-hR-jnV"/>
                         <viewControllerLayoutGuide type="bottom" id="uLS-el-2Zf"/>
@@ -1322,6 +1358,9 @@
                                             <color key="titleColor" red="0.99215686270000003" green="0.91372549020000005" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="clickBack:" destination="hvC-0m-oiQ" eventType="touchUpInside" id="5Yc-OZ-8kA"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.094117647060000004" green="0.67843137249999996" blue="0.65098039220000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -1423,7 +1462,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RbZ-8H-LHo">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RbZ-8H-LHo">
                                 <rect key="frame" x="16" y="267" width="578" height="318"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -1451,6 +1490,16 @@
                             <constraint firstItem="XgQ-lG-KbM" firstAttribute="leading" secondItem="3wb-Lg-jsj" secondAttribute="leading" id="z9v-5k-Axn"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="image1" destination="Umu-rQ-dap" id="qg5-A1-Y4g"/>
+                        <outlet property="image2" destination="IEY-Rd-wMB" id="Ho7-82-hMd"/>
+                        <outlet property="image3" destination="97G-59-198" id="0ir-my-Iiz"/>
+                        <outlet property="image4" destination="83s-QO-7CV" id="oad-f9-jfR"/>
+                        <outlet property="image5" destination="upC-yr-gJV" id="VQh-uY-jbh"/>
+                        <outlet property="image6" destination="weE-fx-s2j" id="jj2-Xm-JHv"/>
+                        <outlet property="labName" destination="6v6-pC-3BX" id="chD-gh-zH0"/>
+                        <outlet property="textInfo" destination="RbZ-8H-LHo" id="J5g-FG-7uc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofF-Cg-kaL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

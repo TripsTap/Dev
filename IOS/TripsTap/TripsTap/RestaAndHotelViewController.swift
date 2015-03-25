@@ -12,7 +12,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
 
     @IBOutlet var labTitle: UILabel!
     @IBOutlet var table: UITableView!
-
+    @IBOutlet var viewLoader: UIView!
     var connection : Connection!
     var pageType : String!
     
@@ -31,30 +31,39 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
 
-        
         self.connection = Connection.sharedInstance
         self.listOfTable = NSMutableArray()
         
-
     }
     
     override func viewWillAppear(animated: Bool) {
+        self.viewLoader.hidden = false
         if(self.pageType == "restaurant"){
             self.labTitle.text = "Restaurant"
             var ll = "2,3"
             connection.getRestaurant(ll,{ (result, error) -> () in
+                self.viewLoader.hidden = true
                 if (error == nil){
+                    self.listOfTable = (result.objectForKey("response") as NSDictionary).objectForKey("venues") as NSMutableArray
+                    self.table.reloadData()
+                }
+                else{
+                    
+                }
+            });
+        }
+        else{
+            self.labTitle.text = "Hotel"
+            
+            var ll = "2,3"
+            connection.getHotel(ll,{ (result, error) -> () in
+                if (error == nil){
+                    self.viewLoader.hidden = true
                     self.listOfTable = (result.objectForKey("response") as NSDictionary).objectForKey("venues") as NSMutableArray
                     self.table.reloadData()
                 }
                 
             });
-            
-            
-            
-        }
-        else{
-            
         }
     }
 
@@ -95,6 +104,17 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as String
+        connection.getInfoRestaAndHotel(idStr) { (result, error) -> () in
+            var storyBroad = UIStoryboard(name: "Main", bundle: nil)
+            var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as InfoViewController
+            infoView.info = (result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary
+            self.navigationController?.pushViewController(infoView, animated: true)
+            
+        }
+        
+        
 
     }
 
@@ -102,6 +122,8 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         self.navigationController?.popToRootViewControllerAnimated(true)
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
+    
+    
     /*
     // MARK: - Navigation
 

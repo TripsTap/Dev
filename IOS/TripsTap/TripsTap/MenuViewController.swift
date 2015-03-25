@@ -116,6 +116,17 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         
         self.slideMenuController()?.changeMainViewController(self.restaAndHotelViewController, close: true)
     }
+    
+    
+    @IBAction func clickHotel(sender: AnyObject) {
+        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as RestaAndHotelViewController
+        restaAndHotelViewController.pageType = "hotel"
+        self.restaAndHotelViewController = UINavigationController(rootViewController: restaAndHotelViewController)
+        
+        self.slideMenuController()?.changeMainViewController(self.restaAndHotelViewController, close: true)
+        
+    }
+
     /*
     // MARK: - Navigation
 
