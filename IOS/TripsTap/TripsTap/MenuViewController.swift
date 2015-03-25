@@ -12,9 +12,12 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 
     
     @IBOutlet weak var fbView: FBLoginView!
-    
+
+    var mainViewController: UIViewController!
     var tirpMeViewController: UIViewController!
+    var restaAndHotelViewController: UIViewController!
     
+    var storyboards = UIStoryboard(name: "Main", bundle: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +27,12 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
         
         
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let tirpMeViewController = storyboard.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
+
         
+        let tirpMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
         self.tirpMeViewController = UINavigationController(rootViewController: tirpMeViewController)
+        
+       
         
     }
 
@@ -86,7 +91,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     
     func getInfoOfCategory(cateID : String){
-        
+
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
 
             println(result.description)
@@ -101,6 +106,16 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         self.slideMenuController()?.changeMainViewController(self.tirpMeViewController, close: true)
     }
     
+    @IBAction func clickRes(sender: AnyObject) {
+        
+
+        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as RestaAndHotelViewController
+        restaAndHotelViewController.pageType = "restaurant"
+        self.restaAndHotelViewController = UINavigationController(rootViewController: restaAndHotelViewController)
+        
+        
+        self.slideMenuController()?.changeMainViewController(self.restaAndHotelViewController, close: true)
+    }
     /*
     // MARK: - Navigation
 

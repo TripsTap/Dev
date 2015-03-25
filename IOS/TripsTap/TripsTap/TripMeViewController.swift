@@ -29,14 +29,14 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: variable
 //MARK: -
     
-    let location : Array<String> = ["Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Uthai Thani","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",    "Phuket",    "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
+    let location : Array<String> = ["Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Uthai Thani","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
     
 
     var connection : Connection!
     var selectCategory : NSMutableArray!
-    var category : NSMutableArray = NSMutableArray()
+    var category : NSMutableArray! = NSMutableArray()
     var mainViewController: UIViewController!
-    var planList : NSDictionary!
+    var planList : NSMutableArray!
     
     
 //MARK:-
@@ -52,12 +52,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
         self.selectCategory = NSMutableArray()
+        self.category = NSMutableArray()
+        self.planList = NSMutableArray()
         
-        var filePath = NSBundle.mainBundle().pathForResource("phuketlist", ofType:"text")
-        var data     = NSData(contentsOfFile:filePath!)
-        self.planList = NSDictionary()
-        self.planList = NSKeyedUnarchiver.unarchiveObjectWithData(data!) as NSDictionary
-        println("test")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,6 +64,12 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        self.selectCategory.removeAllObjects()
+        self.category.removeAllObjects()
+        self.planList.removeAllObjects()
     }
     
     
@@ -86,17 +89,48 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         println(textLocation.text)
         // send request
          self.connection = Connection.sharedInstance
+        
         connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
             
             self.viewIndicator.hidden = true
-            
+            self.category.removeAllObjects()
+            self.table.reloadData()
             if(error == nil){
-                self.category = ((result as NSDictionary)["categories"] as NSMutableArray)
+                self.category = ((result.objectAtIndex(0) as NSDictionary)["categories"] as NSMutableArray).mutableCopy() as NSMutableArray
+                
+                
                 println(self.category.description)
                 self.table.reloadData()
             }
         }
+        
+        connection.getRuleTripsMe(textLocation.text , completion: { (result, error) -> () in
+            println("sucess")
+            self.planList = NSMutableArray()
+            self.planList = ((result.objectAtIndex(0) as NSDictionary)["rules"] as NSMutableArray).mutableCopy() as NSMutableArray
+            println(self.planList.description)
+        })
+
     }
+    @IBAction func clickBack(sender: AnyObject) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
+    }
+    
+    
+    @IBAction func clickTripMe(sender: AnyObject) {
+        
+        var cateSelectList : NSMutableArray = NSMutableArray()
+        for (var i = 0 ; i < self.selectCategory.count ;i++){
+            cateSelectList.addObject(category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int))
+        }
+        
+        
+
+        
+    }
+    
+
 
     
 //MARK:-
@@ -128,50 +162,40 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK:-
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return category.count
-        return 30
+        return category.count
+//        return 30
 
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         var cell  = tableView.dequeueReusableCellWithIdentifier("TripMeTableViewCell" ,forIndexPath: indexPath) as TripMeTableViewCell
         
-        //
+
         //  set information
-        //
-        
-//        cell.labCategoryName.text = (self.category[indexPath.row] as NSDictionary) ["catName"] as String
-        
+        cell.labCategoryName.text = (self.category[indexPath.row] as NSDictionary) ["catName"] as String
         cell.delegate = self
         cell.index = indexPath.row
         
-        cell.labCategoryName.text = "test"
 
-        
-        //
         // check select category
-        //
         var checkSelect : Bool = false
         for(var i = 0 ; i < self.selectCategory.count ; i++){
             if( (selectCategory.objectAtIndex(i) as Int) == indexPath.row){
                 checkSelect = true
             }
         }
+        
         // select already
         if (checkSelect){
             cell.imageSelect.backgroundColor = UIColor.greenColor()
         }
+            
         // not select
         else{
             cell.imageSelect.backgroundColor = UIColor.redColor()
         }
         
-        
-        
-        
         return cell
-        
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -179,42 +203,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
     
     func  tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
         return 80;
     }
     
  
-    @IBAction func clickBack(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
-        self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
-    }
-    
-    
-    
-    @IBAction func clickTripMe(sender: AnyObject) {
-     
-        selectCategory = NSMutableArray()
-        selectCategory.addObject("Beach")
-        
-        connection.getRuleTripsMe(textLocation.text, categories: selectCategory, completion: { (result, error) -> () in
-            println("sucess")
-            var list : NSArray = result.objectForKey("rules") as NSArray
-            
-//            MainViewController(listPlan: list, pageID: "test")
-            
-            var sb : UIStoryboard = UIStoryboard(name:"Main", bundle: nil)
-            
-            var mainView : UIViewController = sb.instantiateViewControllerWithIdentifier("MainViewController") as UIViewController
-            
-            
-            self.navigationController?.pushViewController(mainView, animated: true)
-            
-        
-
-        })
-        
-
-    }
-  
     
 
     // MARK: - Navigation
@@ -233,7 +226,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             if( (selectCategory.objectAtIndex(i) as Int) == index){
                 selectCategory.removeObjectAtIndex(i)
                 table.reloadData()
-                break;
+                return;
             }
         }
         selectCategory.addObject(index)

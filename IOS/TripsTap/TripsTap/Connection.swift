@@ -36,9 +36,12 @@ class Connection: NSObject {
 //===============================================================================
 //
     
-    let baseUrl : String = "http://171.98.210.83:8080/TripTap/rest/service/"
+    let baseUrl : String = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/"
+    let apiKey : String = "pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
     
     
+    let CLIENT_ID = "VQFA1NFZFVHNCSQL1GTBVAOWBDQOHSQEHOW5YZKU1IS1JRFO"
+    let CLIENT_SECRET = "KMIYI5FXHQFHCQYKRE35EKX125UEH4AQERSJRXMAZXDRFLDF"
 //
 //===============================================================================
 //  function
@@ -48,9 +51,13 @@ class Connection: NSObject {
     func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
-        var url = baseUrl + "getCategory"
+        var url = baseUrl + "category"
+
+        var parameter : NSMutableDictionary! = NSMutableDictionary()
+        parameter.setObject(location, forKey: "nameEng")
         
-        Alamofire.request(.GET, url, parameters: ["location": location , "place" : 0]  ).responseJSON { (request, response, data, error) -> Void in
+        
+        Alamofire.request(.GET, url, parameters: ["q": parameter , "apiKey" : apiKey ]  ).responseJSON { (request, response, data, error) -> Void in
             
             println("---------------------")
             println("get category")
@@ -63,16 +70,36 @@ class Connection: NSObject {
 
     }
     
-    func getRuleTripsMe(location: String , categories : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
-        var url = baseUrl + "getRecommeder"
+    func getRuleTripsMe(location: String , completion :((result : AnyObject! , error : NSError! ) ->())){
+        var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
         
-        Alamofire.request(.GET, url, parameters: ["location":location , "categories": categories]  ).responseJSON { (request, response, data, error) -> Void in
+        var parameter : NSMutableDictionary! = NSMutableDictionary()
+        parameter.setObject(location, forKey: "state_init")
+
+        
+        Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
             
             println("---------------------")
             println("getRuleTripsMe")
+            println(data)
             completion(result: data, error: error)
-            println(data?.objectForKey("rules"))
-            println("---------------------")
         }
     }
+    
+    
+    func getRestaurant(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
+        
+        var url = "https://api.foursquare.com/v2/venues/search?near=phuket&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
+        
+        Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in    
+            println("---------------------")
+            println("getRuleTripsMe")
+            println(data)
+            completion(result: data, error: error)
+            
+        }
+        
+        
+    }
+
 }

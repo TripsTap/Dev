@@ -25,8 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
         as MenuViewController
+       
+        let nvc: UINavigationController = UINavigationController(rootViewController: mainView)
+        menuView.mainViewController = nvc
+        
         let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
         slideMenuController.navigationController?.navigationBar.hidden = true
+        
+        
+        
         self.window?.rootViewController = slideMenuController
         self.window?.makeKeyAndVisible()
         return true

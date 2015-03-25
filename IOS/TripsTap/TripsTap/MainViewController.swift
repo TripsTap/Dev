@@ -26,14 +26,9 @@ class MainViewController: UIViewController {
         self.pageID = pageID;
     }
 
-  
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
-        
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,9 +38,12 @@ class MainViewController: UIViewController {
     
     
     @IBAction func clickMenu(sender: AnyObject) {
-        
         self.slideMenuController()?.openLeft()
     }
+    
+    
+    
+    
     
     
     
