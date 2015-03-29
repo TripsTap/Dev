@@ -34,9 +34,6 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         self.connection = Connection.sharedInstance
         self.listOfTable = NSMutableArray()
         
-    }
-    
-    override func viewWillAppear(animated: Bool) {
         self.viewLoader.hidden = false
         if(self.pageType == "restaurant"){
             self.labTitle.text = "Restaurant"
@@ -65,7 +62,9 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
                 
             });
         }
+
     }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -110,6 +109,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
             var storyBroad = UIStoryboard(name: "Main", bundle: nil)
             var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as InfoViewController
             infoView.info = (result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary
+            infoView.pageType = self.labTitle.text
             self.navigationController?.pushViewController(infoView, animated: true)
             
         }

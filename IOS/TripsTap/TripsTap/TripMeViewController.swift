@@ -37,7 +37,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     var category : NSMutableArray! = NSMutableArray()
     var mainViewController: UIViewController!
     var planList : NSMutableArray!
-    
+
     
 //MARK:-
 //MARK: cycle
@@ -47,8 +47,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         super.viewDidLoad()
 
         self.navigationController?.navigationBar.hidden = true
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
         self.selectCategory = NSMutableArray()
@@ -86,7 +86,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         viewPicker.hidden = true
         
         viewIndicator.hidden = false
-        println(textLocation.text)
+
         // send request
          self.connection = Connection.sharedInstance
         
@@ -96,39 +96,81 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             self.category.removeAllObjects()
             self.table.reloadData()
             if(error == nil){
-                self.category = ((result.objectAtIndex(0) as NSDictionary)["categories"] as NSMutableArray).mutableCopy() as NSMutableArray
-                
-                
-                println(self.category.description)
+                self.category = ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSMutableArray).mutableCopy() as NSMutableArray
                 self.table.reloadData()
             }
         }
         
-        connection.getRuleTripsMe(textLocation.text , completion: { (result, error) -> () in
-            println("sucess")
-            self.planList = NSMutableArray()
-            self.planList = ((result.objectAtIndex(0) as NSDictionary)["rules"] as NSMutableArray).mutableCopy() as NSMutableArray
-            println(self.planList.description)
-        })
-
     }
     @IBAction func clickBack(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.navigationController?.popViewControllerAnimated(true)
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
     
     
     @IBAction func clickTripMe(sender: AnyObject) {
         
+        self.viewIndicator.hidden = false
+        
         var cateSelectList : NSMutableArray = NSMutableArray()
         for (var i = 0 ; i < self.selectCategory.count ;i++){
-            cateSelectList.addObject(category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int))
+            cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int) as NSDictionary).objectForKey("catName") as String)
         }
         
         
+        connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
+            println("getRuleTripsMe sucess")
+            self.planList = NSMutableArray()
+            
+            self.viewIndicator.hidden = true
+            
+            var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+            mainView.pageType = "TripME"
+            mainView.listPlan = result as NSMutableArray 
+            mainView.location = self.textLocation.text
+            mainView.pageType = "TripMe"
+            self.navigationController?.pushViewController(mainView, animated: true)
+            
+            
+            
+//            for(var i = 0 ; i < result.count ; i++){
+            
+                
+                
+//                var data: NSDictionary = result.objectAtIndex(i) as NSDictionary
+//                var conclusion : NSArray = data.objectForKey("conclusion") as NSArray
+//                var premises : NSArray = data.objectForKey("premises") as NSArray
+//               
+//                
+//                for(var j = 0 ; j < conclusion.count ; j++  ){
+//                    
+//                    var venue : String  = conclusion.objectAtIndex(j).objectForKey("vunueName") as String
+//                    self.connection.getInfoVenue(self.textLocation.text, venue: venue, completion: { (result, error) -> () in
+//                        
+//                    })
+//                    
+//                }
+//                for(var j = 0 ; j < premises.count ; j++){
+//                    
+//                    var venue : String  = premises.objectAtIndex(j).objectForKey("venueName") as String
+//                    self.connection.getInfoVenue(self.textLocation.text, venue: venue, completion: { (result, error) -> () in
+//                        
+//                    })
+//                }
+                
+//            }
 
-        
+
+            
+            
+//            var storyBroad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            var mainView : MainViewController = storyBroad.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+            
+            
+        }
     }
+    
     
 
 

@@ -10,11 +10,11 @@ import UIKit
 import Alamofire
 class Connection: NSObject {
 
-//
-//===============================================================================
-//  singleton
-//===============================================================================
-//
+
+    
+//MARK: -
+//MARK: singleton
+//MARK: -
     class var sharedInstance: Connection {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -31,9 +31,9 @@ class Connection: NSObject {
     }
     
 //
-//===============================================================================
-//  variable
-//===============================================================================
+//MARK: -
+//MARK: variable
+//MARK: -
 //
     
     let baseUrl : String = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/"
@@ -42,10 +42,11 @@ class Connection: NSObject {
     
     let CLIENT_ID = "VQFA1NFZFVHNCSQL1GTBVAOWBDQOHSQEHOW5YZKU1IS1JRFO"
     let CLIENT_SECRET = "KMIYI5FXHQFHCQYKRE35EKX125UEH4AQERSJRXMAZXDRFLDF"
+    
 //
-//===============================================================================
-//  function
-//===============================================================================
+//MARK: -
+//MARK: Trip me
+//MARK: -
 //
 
     func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
@@ -53,39 +54,59 @@ class Connection: NSObject {
         
         var url = baseUrl + "category"
 
-        var parameter : NSMutableDictionary! = NSMutableDictionary()
-        parameter.setObject(location, forKey: "nameEng")
+//        var parameter : NSMutableDictionary! = NSMutableDictionary()
+//        parameter.setObject(location, forKey: "state_init")
         
-        
+        var parameter : String = String(format:  "{  \"state_init\" : \"%@\"   }", location)
+
         Alamofire.request(.GET, url, parameters: ["q": parameter , "apiKey" : apiKey ]  ).responseJSON { (request, response, data, error) -> Void in
             
             println("---------------------")
             println("get category")
-            println(data)
-            completion(result: data, error: error)
             println("---------------------")
+            completion(result: data, error: error)
         }
         
         
 
     }
     
-    func getRuleTripsMe(location: String , completion :((result : AnyObject! , error : NSError! ) ->())){
+    func getRuleTripsMe(location: String , category : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
         var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
         
-        var parameter : NSMutableDictionary! = NSMutableDictionary()
-        parameter.setObject(location, forKey: "state_init")
-
+        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
+        var categorySort: NSArray = category.sortedArrayUsingDescriptors([descriptor])
+        
+        
+        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"cats.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
         
         Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
             
             println("---------------------")
             println("getRuleTripsMe")
-            println(data)
+            println("---------------------")
             completion(result: data, error: error)
         }
     }
     
+    func getInfoVenue(location : String, venue : String , completion :(result : AnyObject! , error : NSError!) ->()){
+        var url = "https://api.mongolab.com/api/1/databases/triptap_venue_information/collections/venues"
+        
+        var parameterQ : String = String(format: "{\"state_init\":\"%@\"}", location)
+        var parameterF : String = String(format: "{venues:{$elemMatch:{venueName:\"%@\"}}}", venue)
+
+        Alamofire.request(.GET, url, parameters: ["q" : parameterQ , "f" : parameterF ,"apiKey" : apiKey]).responseJSON { (request, response , data , error) -> Void in
+            
+            println("getInfoVenue")
+            completion(result: data, error: error)
+        }
+
+    }
+    
+    
+//MARK:-
+//MARK: Rstaurant and Hotel
+//MARK:-
     
     func getRestaurant(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
@@ -128,8 +149,10 @@ class Connection: NSObject {
         }
     }
     
-    func getImage(url : String , completion : (result : AnyObject! , error : NSError!)->() ){
-        
+    func getImage(url : String , completion : (image : UIImage! )->() ){
+        ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
+            completion(image: image)
+        }
         
     }
 
