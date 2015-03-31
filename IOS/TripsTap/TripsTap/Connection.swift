@@ -93,7 +93,7 @@ class Connection: NSObject {
         var url = "https://api.mongolab.com/api/1/databases/triptap_venue_information/collections/venues"
         
         var parameterQ : String = String(format: "{\"state_init\":\"%@\"}", location)
-        var parameterF : String = String(format: "{venues:{$elemMatch:{venueName:\"%@\"}}}", venue)
+        var parameterF : String = String(format: "{venues:{$elemMatch:{venueId:\"%@\"}}}", venue)
 
         Alamofire.request(.GET, url, parameters: ["q" : parameterQ , "f" : parameterF ,"apiKey" : apiKey]).responseJSON { (request, response , data , error) -> Void in
             

@@ -10,6 +10,12 @@ import UIKit
 
 class MainTwoTableViewCell: UITableViewCell {
 
+    @IBOutlet var imageOne: UIImageView!
+
+    @IBOutlet var imageTwo: UIImageView!
+    @IBOutlet var imageThree: UIImageView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

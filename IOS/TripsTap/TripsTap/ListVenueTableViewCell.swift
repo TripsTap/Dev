@@ -10,6 +10,7 @@ import UIKit
 
 class ListVenueTableViewCell: UITableViewCell {
 
+    @IBOutlet var labLocation: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

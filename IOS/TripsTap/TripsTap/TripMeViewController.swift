@@ -36,7 +36,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     var selectCategory : NSMutableArray!
     var category : NSMutableArray! = NSMutableArray()
     var mainViewController: UIViewController!
-    var planList : NSMutableArray!
+    var listPlan : NSMutableArray!
 
     
 //MARK:-
@@ -53,7 +53,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         self.selectCategory = NSMutableArray()
         self.category = NSMutableArray()
-        self.planList = NSMutableArray()
+        self.listPlan = NSMutableArray()
         
     }
     
@@ -69,7 +69,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     override func viewDidDisappear(animated: Bool) {
         self.selectCategory.removeAllObjects()
         self.category.removeAllObjects()
-        self.planList.removeAllObjects()
+        self.listPlan.removeAllObjects()
     }
     
     
@@ -120,7 +120,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
             println("getRuleTripsMe sucess")
-            self.planList = NSMutableArray()
+            self.listPlan = NSMutableArray()
             
             self.viewIndicator.hidden = true
             
@@ -242,6 +242,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        
+        
     }
     
     func  tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -255,9 +257,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+       
         
     }
     

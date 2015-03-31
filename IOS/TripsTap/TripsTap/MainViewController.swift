@@ -41,6 +41,23 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
     }
     
+    
+    func getUrlImage(urlFull : String)->String{
+        var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
+        var url : String!
+        for (var i = 0 ; i < imageArray.count ; i++){
+            if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
+            {
+                
+                url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
+                return url
+            }
+        }
+        return ""
+    }
+    
+    
+    
     override func viewWillAppear(animated: Bool) {
         if(pageType == nil){
             
@@ -55,54 +72,80 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 var loadImageCount :Int = 0
                 let imageAtIndex : Int = i
                 
-                for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
-                    loadImageCount++
-
-                    var imageString : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
-                    
-                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
-                    
-                    if (imageArray.count != 3){
-                        continue;
-                    }
-                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
-
-                    var imageDic : NSMutableDictionary = NSMutableDictionary()
-                    connection.getImage(url, completion: { (image) -> () in
-                        println("load image complete")
-                        imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                        imageDic.setObject(image as UIImage, forKey: "image")
-                        self.listImage?.addObject(imageDic)
-                        
-                        
-                       self.table.reloadData()
-                    })
-                    
-                }
                 
                 for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
                     loadImageCount++
-                    var imageString : String = (premises.objectAtIndex(j).objectForKey("image") as String)
-                    
-                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
-                    
-                    if (imageArray.count != 3)
-                    {
-                        continue;
+                    var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
+                    var imageUrl : String = getUrlImage(imageUrlFull)
+                    if(imageUrl == ""){
+                        println(conclusion.objectAtIndex(j))
+                        println(imageUrlFull)
+                        loadImageCount--
                     }
-                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
+                    else{
+                        connection.getImage(imageUrl, completion: { (image) -> () in
+                            println("load image complete")
+                            var imageDic : NSMutableDictionary = NSMutableDictionary()
+                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                            imageDic.setObject(image as UIImage, forKey: "image")
+                            self.listImage?.addObject(imageDic)
+                            
+                            self.table.reloadData()
+                        })
+                    }
                     
-                    connection.getImage(url, completion: { (image) -> () in
-                        println("load image complete")
-                        var imageDic : NSMutableDictionary = NSMutableDictionary()
-                        imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                        imageDic.setObject(image as UIImage, forKey: String(format: "%d", i))
-                        self.listImage?.addObject(imageDic)
-                        
-                        self.table.reloadData()
-                    })
+//                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
+                    
+
+                    
+//                    if (imageArray.count != 3)
+//                    {
+//                        loadImageCount--
+//                        continue;
+//                    }
+//                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
+                    
+                    
                     
                 }
+
+                
+                for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
+                    loadImageCount++
+
+                    var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
+                    var imageUrl : String = getUrlImage(imageUrlFull)
+                    if(imageUrl == ""){
+                        println(conclusion.objectAtIndex(j))
+                        println(imageUrlFull)
+                        loadImageCount--
+                    }
+
+                    else  {
+                        connection.getImage(imageUrl, completion: { (image) -> () in
+                            println("load image complete")
+                            var imageDic : NSMutableDictionary = NSMutableDictionary()
+                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                            imageDic.setObject(image as UIImage, forKey: "image")
+                            self.listImage?.addObject(imageDic)
+                            self.table.reloadData()
+                        })
+                    }
+//                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
+//                    
+//                    if (imageArray.count != 3){
+//                        loadImageCount--
+//                        continue;
+//                    }
+//                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
+
+
+                   
+                    
+                }
+                
+                
+                
                 
                 
                 
@@ -127,31 +170,67 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as MainOneTableViewCell
         
-        var countIamge = 0
-        for (var i = 0 ; i < self.listImage!.count ; i++){
-            if(listImage!.objectAtIndex(i).objectForKey("index") as String == String(format: "%d", indexPath.row)){
-                if(countIamge == 0){
-                    cell.imageOne.layer.cornerRadius = 10.0
-                    cell.imageOne.clipsToBounds = true
-                    cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+        var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as NSDictionary
+        var conclusionCount : Int = (data.objectForKey("conclusion") as NSArray).count
+        var premisesCount : Int = (data.objectForKey("premises") as NSArray).count
+        
+        if (conclusionCount + premisesCount  == 2 ){
+            
+            var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as MainTwoTableViewCell
+            
+            var countIamge = 0
+            for (var i = 0 ; i < self.listImage!.count ; i++){
+                if(listImage!.objectAtIndex(i).objectForKey("index") as String == String(format: "%d", indexPath.row)){
+                    if(countIamge == 0){
+                        cell.imageOne.layer.cornerRadius = 10.0
+                        cell.imageOne.clipsToBounds = true
+                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    else if(countIamge == 1){
+                        cell.imageTwo.layer.cornerRadius = 10.0
+                        cell.imageOne.clipsToBounds = true
+                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    countIamge++
                 }
-                else if(countIamge == 1){
-                    cell.imageTwo.layer.cornerRadius = 10.0
-                    cell.imageOne.clipsToBounds = true
-                    cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                }
-                else{
-                    cell.imageThree.layer.cornerRadius = 10.0
-                    cell.imageThree.clipsToBounds = true
-                    cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                }
-                countIamge++
             }
+            
+            return cell
+    
+            
+        }
+            
+        else
+        {
+            var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as MainOneTableViewCell
+            
+            var countIamge = 0
+            for (var i = 0 ; i < self.listImage!.count ; i++){
+                if(listImage!.objectAtIndex(i).objectForKey("index") as String == String(format: "%d", indexPath.row)){
+                    if(countIamge == 0){
+                        cell.imageOne.layer.cornerRadius = 10.0
+                        cell.imageOne.clipsToBounds = true
+                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    else if(countIamge == 1){
+                        cell.imageTwo.layer.cornerRadius = 10.0
+                        cell.imageOne.clipsToBounds = true
+                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    else{
+                        cell.imageThree.layer.cornerRadius = 10.0
+                        cell.imageThree.clipsToBounds = true
+                        cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    countIamge++
+                }
+            }
+            
+            return cell
         }
         
-        return cell
+
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -160,6 +239,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        
     }
     
     
@@ -173,14 +253,22 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "ListVenue"{
+            let listVenue : ListVenueViewController = segue.destinationViewController as ListVenueViewController
+            let indexPath = self.table.indexPathForSelectedRow()
+            listVenue.listPlan = self.listPlan?.objectAtIndex(indexPath!.row as Int) as NSDictionary
+            listVenue.location = self.location
+            
+        }
     }
-    */
+
 
 }
