@@ -11,13 +11,18 @@ import UIKit
 class MainViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
 
+    //MARK:-
+    //MARK: variable
+    //MARK:-
     var connection : Connection = Connection.sharedInstance
-    
     var pageType : String?
     var listPlan : NSMutableArray?
     var listImage : NSMutableArray?
     var location : String?
     
+    //MARK:-
+    //MARK: IBOutlet
+    //MARK:-
     @IBOutlet var table: UITableView!
     
     required init(coder aDecoder: NSCoder) {
@@ -42,18 +47,36 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     
     
-    func getUrlImage(urlFull : String)->String{
+    func getUrlImage(urlFull : String , index: Int )->String{
         var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
         var url : String!
-        for (var i = 0 ; i < imageArray.count ; i++){
-            if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
-            {
-                
-                url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
-                return url
+        let diceRoll = Int(arc4random_uniform(3))
+        if(index % 2 == 0){
+            
+            for (var i = 0 ; i < imageArray.count ; i++){
+                if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
+                {
+                    
+                    url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
+                    return url
+                }
             }
+            return ""
         }
-        return ""
+        
+        else{
+            
+            for(var i = imageArray.count - 1 ; i >= 0   ; i--)
+            {
+                if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
+                {
+                    
+                    url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
+                    return url
+                }
+            }
+            return ""
+        }
     }
     
     
@@ -72,80 +95,58 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 var loadImageCount :Int = 0
                 let imageAtIndex : Int = i
                 
-                
+                for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
+                    loadImageCount++
+                    
+                    var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
+                    var imageUrl : String = getUrlImage(imageUrlFull , index: i)
+                    if(imageUrl == ""){
+                        println(conclusion.objectAtIndex(j))
+                        println(imageUrlFull)
+                        loadImageCount--
+                    }
+                        
+                    else  {
+                        connection.getImage(imageUrl, completion: { (image) -> () in
+                            println("load image complete")
+                            if(image != nil){
+                                var imageDic : NSMutableDictionary = NSMutableDictionary()
+                                imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                                imageDic.setObject(image as UIImage, forKey: "image")
+                                self.listImage?.addObject(imageDic)
+                                self.table.reloadData()
+                            }
+                        })
+                    }
+                    
+                }
+
                 for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
                     loadImageCount++
                     var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
-                    var imageUrl : String = getUrlImage(imageUrlFull)
+                    var imageUrl : String = getUrlImage(imageUrlFull , index : i)
                     if(imageUrl == ""){
-                        println(conclusion.objectAtIndex(j))
+                        println(premises.objectAtIndex(j))
                         println(imageUrlFull)
                         loadImageCount--
                     }
                     else{
                         connection.getImage(imageUrl, completion: { (image) -> () in
                             println("load image complete")
-                            var imageDic : NSMutableDictionary = NSMutableDictionary()
-                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                            imageDic.setObject(image as UIImage, forKey: "image")
-                            self.listImage?.addObject(imageDic)
-                            
-                            self.table.reloadData()
+                            if(image != nil){
+                                var imageDic : NSMutableDictionary = NSMutableDictionary()
+                                imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                                imageDic.setObject(image as UIImage, forKey: "image")
+                                self.listImage?.addObject(imageDic)
+                                
+                                self.table.reloadData()
+                            }
                         })
                     }
                     
-//                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
-                    
 
-                    
-//                    if (imageArray.count != 3)
-//                    {
-//                        loadImageCount--
-//                        continue;
-//                    }
-//                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
-                    
-                    
-                    
                 }
 
-                
-                for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
-                    loadImageCount++
-
-                    var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
-                    var imageUrl : String = getUrlImage(imageUrlFull)
-                    if(imageUrl == ""){
-                        println(conclusion.objectAtIndex(j))
-                        println(imageUrlFull)
-                        loadImageCount--
-                    }
-
-                    else  {
-                        connection.getImage(imageUrl, completion: { (image) -> () in
-                            println("load image complete")
-                            var imageDic : NSMutableDictionary = NSMutableDictionary()
-                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                            imageDic.setObject(image as UIImage, forKey: "image")
-                            self.listImage?.addObject(imageDic)
-                            self.table.reloadData()
-                        })
-                    }
-//                    var imageArray : NSArray = ((imageString.componentsSeparatedByString("oooo") as NSArray).objectAtIndex(0)as String).componentsSeparatedByString("-") as NSArray
-//                    
-//                    if (imageArray.count != 3){
-//                        loadImageCount--
-//                        continue;
-//                    }
-//                    var url : String = String(format: "%@500x500%@", imageArray.objectAtIndex(0)as String ,imageArray.objectAtIndex(1) as String)
-
-
-                   
-                    
-                }
-                
-                
-                
                 
                 
                 

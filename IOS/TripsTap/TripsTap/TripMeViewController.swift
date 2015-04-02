@@ -29,7 +29,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: variable
 //MARK: -
     
-    let location : Array<String> = ["Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Uthai Thani","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
+    let location : Array<String> = ["Uthai Thani","Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
     
 
     var connection : Connection!
@@ -96,8 +96,15 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             self.category.removeAllObjects()
             self.table.reloadData()
             if(error == nil){
-                self.category = ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSMutableArray).mutableCopy() as NSMutableArray
-                self.table.reloadData()
+                if(  ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSArray).count != 0){
+                    
+                    self.category = ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSMutableArray).mutableCopy() as NSMutableArray
+                    self.table.reloadData()
+                }
+                else{
+                    println("cate == 0")
+                }
+                
             }
         }
         
@@ -124,48 +131,18 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             
             self.viewIndicator.hidden = true
             
-            var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
-            mainView.pageType = "TripME"
-            mainView.listPlan = result as NSMutableArray 
-            mainView.location = self.textLocation.text
-            mainView.pageType = "TripMe"
-            self.navigationController?.pushViewController(mainView, animated: true)
-            
-            
-            
-//            for(var i = 0 ; i < result.count ; i++){
-            
+            if(result.count == 0 ){
                 
-                
-//                var data: NSDictionary = result.objectAtIndex(i) as NSDictionary
-//                var conclusion : NSArray = data.objectForKey("conclusion") as NSArray
-//                var premises : NSArray = data.objectForKey("premises") as NSArray
-//               
-//                
-//                for(var j = 0 ; j < conclusion.count ; j++  ){
-//                    
-//                    var venue : String  = conclusion.objectAtIndex(j).objectForKey("vunueName") as String
-//                    self.connection.getInfoVenue(self.textLocation.text, venue: venue, completion: { (result, error) -> () in
-//                        
-//                    })
-//                    
-//                }
-//                for(var j = 0 ; j < premises.count ; j++){
-//                    
-//                    var venue : String  = premises.objectAtIndex(j).objectForKey("venueName") as String
-//                    self.connection.getInfoVenue(self.textLocation.text, venue: venue, completion: { (result, error) -> () in
-//                        
-//                    })
-//                }
-                
-//            }
-
-
-            
-            
-//            var storyBroad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//            var mainView : MainViewController = storyBroad.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+            }
+            else{
+                var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+                mainView.pageType = "TripME"
+                mainView.listPlan = result as NSMutableArray
+                mainView.location = self.textLocation.text
+                mainView.pageType = "TripMe"
+                self.navigationController?.pushViewController(mainView, animated: true)
+            }
             
             
         }
@@ -251,23 +228,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         return 80;
     }
     
- 
-    
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-       
-        
-    }
-    
-    
+//MARK:-
+//MARK:  cell delegate
+//MARK:-
     func clickCell(index: Int) {
-
+        
         for(var i = 0 ; i < self.selectCategory.count ; i++){
             if( (selectCategory.objectAtIndex(i) as Int) == index){
                 selectCategory.removeObjectAtIndex(i)
@@ -279,5 +244,15 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         table.reloadData()
     }
 
+    
+
+// MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+    }
+    
+    
+   
     
 }

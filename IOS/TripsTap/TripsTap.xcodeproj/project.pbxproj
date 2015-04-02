@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		831587011ACB99910011F2B0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831587001ACB99910011F2B0 /* MapViewController.swift */; };
 		831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */; };
 		831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */; };
 		831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D883A1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift */; };
@@ -92,6 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		831587001ACB99910011F2B0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		831D88251AC12D37000C30DD /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../Downloads/Alamofire-master/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainOneTableViewCell.swift; sourceTree = "<group>"; };
 		831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaAndHotelViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				83C279111AAE985900052269 /* MenuViewController.swift */,
 				831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */,
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
+				831587001ACB99910011F2B0 /* MapViewController.swift */,
 				831D883C1AC25E42000C30DD /* InfoViewController.swift */,
 			);
 			name = controller;
@@ -462,6 +465,7 @@
 				831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */,
 				839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */,
 				831D883D1AC25E42000C30DD /* InfoViewController.swift in Sources */,
+				831587011ACB99910011F2B0 /* MapViewController.swift in Sources */,
 				83C279121AAE985900052269 /* MenuViewController.swift in Sources */,
 				83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */,
 				832608731AC9501500ACEABD /* MainTwoTableViewCell.swift in Sources */,

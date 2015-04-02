@@ -10,19 +10,26 @@ import UIKit
 
 class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource {
 
+    //MARK:-
+    //MARK: IBOutlet
+    //MARK:-
     @IBOutlet var labTitle: UILabel!
     @IBOutlet var table: UITableView!
     @IBOutlet var viewLoader: UIView!
+    
+    //MARK:-
+    //MARK: variable
+    //MARK:-
     var connection : Connection!
     var pageType : String!
-    
     var latitude : String!
     var longitude : String!
-    
     var mainViewController: UIViewController!
-    
     var listOfTable : NSMutableArray!
     
+    //MARK:-
+    //MARK: cycle
+    //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,14 +79,11 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     }
     
     
-    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
-        
-        let currentLocation : CLLocation = newLocation
-        latitude = "\(currentLocation.coordinate.latitude)"
-        longitude = "\(currentLocation.coordinate.longitude)"
-        println("longitude \(self.latitude)")
-        println("latitude \(self.longitude)")
-    }
+
+    
+    //MARK:-
+    //MARK:  table delegate
+    //MARK:-
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 80
@@ -118,10 +122,27 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
 
     }
 
+    //MARK:-
+    //MARK: button action
+    //MARK:-
     @IBAction func clickBack(sender: AnyObject) {
         self.navigationController?.popToRootViewControllerAnimated(true)
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
+    
+    //MARK:-
+    //MARK: LocationManager
+    //MARK:-
+    
+    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
+        
+        let currentLocation : CLLocation = newLocation
+        latitude = "\(currentLocation.coordinate.latitude)"
+        longitude = "\(currentLocation.coordinate.longitude)"
+        println("longitude \(self.latitude)")
+        println("latitude \(self.longitude)")
+    }
+    
     
     
     /*

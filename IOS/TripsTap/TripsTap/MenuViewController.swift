@@ -10,41 +10,44 @@ import UIKit
 
 class MenuViewController: UIViewController, FBLoginViewDelegate {
 
-    
+//MARK:- 
+//MARK: IBOutlet
+//MARK:-
     @IBOutlet weak var fbView: FBLoginView!
-
+    
+    
+//MARK:-
+//MARK: variable
+//MARK:-
     var mainViewController: UIViewController!
     var tirpMeViewController: UIViewController!
     var restaAndHotelViewController: UIViewController!
-    
     var storyboards = UIStoryboard(name: "Main", bundle: nil)
 
+//MARK:-
+//MARK: cycle
+//MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        // facebook login
         fbView.delegate = self
         fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
         
         
-
-        
         let tirpMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
         self.tirpMeViewController = UINavigationController(rootViewController: tirpMeViewController)
         
-       
-        
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
 
-    
-    // facebook sdk
-    
+//MARK:-
+//MARK: facebook delegate
+//MARK:-
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
         println("User Logged In")
     }
@@ -100,7 +103,9 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
     
-    
+//MARK:-
+//MARK: button action
+//MARK:-
     
     @IBAction func clickTripMe(sender: AnyObject) {
         self.slideMenuController()?.changeMainViewController(self.tirpMeViewController, close: true)
