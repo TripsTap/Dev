@@ -135,16 +135,24 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     func getUrlImage(urlFull : String)->String{
         var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
-        var url : String!
-        for (var i = 0 ; i < imageArray.count ; i++){
-            if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
-            {
-                
-                url = String(format: "%@70x70%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
-                return url
+        var url : String = ""
+        
+        println("------------------------")
+        var a : NSArray = ((imageArray.objectAtIndex(1)as String).componentsSeparatedByString("-") as NSArray)
+        
+        for(var i = 0 ; i < a.count - 1 ; i++){
+            if(i == 0){
+                url += a.objectAtIndex(i) as String
             }
+            else if i == 1{
+                url += String(format: "70x70%@", a.objectAtIndex(i)as String)
+            }
+            else{
+                url += String(format: "-%@", a.objectAtIndex(i)as String)
+            }
+            
         }
-        return ""
+        return url
     }
     
     func getInfoVenue(location : String , venueID : String) -> (){

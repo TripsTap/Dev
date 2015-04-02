@@ -216,14 +216,19 @@ class InfoViewController: UIViewController {
     
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        var infoArray : NSMutableArray = NSMutableArray()
+        infoArray.addObject(self.info)
+        
+        var mapView : MapViewController = segue.destinationViewController as MapViewController
+        mapView.listInfo = infoArray as NSArray
+        
+
     }
-    */
+
 
 }

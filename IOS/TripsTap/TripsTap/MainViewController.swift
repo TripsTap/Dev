@@ -44,44 +44,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if(self.listPlan == nil){
             self.listPlan = NSMutableArray()
         }
-    }
-    
-    
-    func getUrlImage(urlFull : String , index: Int )->String{
-        var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
-        var url : String!
-        let diceRoll = Int(arc4random_uniform(3))
-        if(index % 2 == 0){
-            
-            for (var i = 0 ; i < imageArray.count ; i++){
-                if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
-                {
-                    
-                    url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
-                    return url
-                }
-            }
-            return ""
-        }
         
-        else{
-            
-            for(var i = imageArray.count - 1 ; i >= 0   ; i--)
-            {
-                if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
-                {
-                    
-                    url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
-                    return url
-                }
-            }
-            return ""
-        }
-    }
-    
-    
-    
-    override func viewWillAppear(animated: Bool) {
+        
         if(pageType == nil){
             
         }
@@ -120,7 +84,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     }
                     
                 }
-
+                
                 for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
                     loadImageCount++
                     var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
@@ -143,16 +107,44 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                             }
                         })
                     }
-                    
-
+                        
                 }
-
-                
-                
                 
             }
             
         }
+
+    }
+    
+    
+    func getUrlImage(urlFull : String , index: Int )->String{
+        var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
+        var url : String = ""
+        let diceRoll = Int(arc4random_uniform(3))
+        
+        println(diceRoll)
+        var a : NSArray = ((imageArray.objectAtIndex(diceRoll)as String).componentsSeparatedByString("-") as NSArray)
+        
+        for(var i = 0 ; i < a.count - 1 ; i++){
+            if(i == 0){
+                url += a.objectAtIndex(i) as String
+            }
+            else if i == 1{
+                url += String(format: "500x500%@", a.objectAtIndex(i)as String)
+            }
+            else{
+                url += String(format: "-%@", a.objectAtIndex(i)as String)
+            }
+            
+        }
+        return url
+        
+    }
+    
+    
+    
+    override func viewWillAppear(animated: Bool) {
+       
     }
 
     override func didReceiveMemoryWarning() {
