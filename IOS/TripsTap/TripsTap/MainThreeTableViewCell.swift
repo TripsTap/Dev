@@ -1,16 +1,15 @@
 //
-//  ListVenueTableViewCell.swift
+//  MainThreeTableViewCell.swift
 //  TripsTap
 //
-//  Created by Piyawut Kamwiset on 3/30/2558 BE.
+//  Created by Piyawut Kamwiset on 4/2/2558 BE.
 //  Copyright (c) 2558 Piyawut Kamwiset. All rights reserved.
 //
 
 import UIKit
 
-class ListVenueTableViewCell: UITableViewCell {
+class MainThreeTableViewCell: UITableViewCell {
 
-    @IBOutlet var labLocation: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
