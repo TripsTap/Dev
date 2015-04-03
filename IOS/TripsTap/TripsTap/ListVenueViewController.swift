@@ -107,7 +107,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         {
             
             if ( listImage.objectAtIndex(i).objectForKey("index") as String == String(format: "%d",indexPath.row  as Int)){
-                cell.imageView?.image = listImage.objectAtIndex(i).objectForKey("image") as UIImage
+                cell.imagePlace.layer.cornerRadius = 5.0
+                cell.imagePlace.clipsToBounds = true
+                cell.imagePlace?.image = listImage.objectAtIndex(i).objectForKey("image") as UIImage
                 break
             }
         }
@@ -145,7 +147,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 url += a.objectAtIndex(i) as String
             }
             else if i == 1{
-                url += String(format: "70x70%@", a.objectAtIndex(i)as String)
+                url += String(format: "100x100%@", a.objectAtIndex(i)as String)
             }
             else{
                 url += String(format: "-%@", a.objectAtIndex(i)as String)
@@ -228,6 +230,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         else if (segue.identifier == "MapViewController"){
             var mapView : MapViewController = segue.destinationViewController as MapViewController
             mapView.listInfo = self.listInfo
+            mapView.listImage = self.listImage
         }
         
         

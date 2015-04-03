@@ -107,7 +107,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                             }
                         })
                     }
-                        
+                    
                 }
                 
             }
@@ -171,7 +171,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if (conclusionCount + premisesCount  == 2 ){
             
             var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as MainTwoTableViewCell
-            
+            var locat : String = String(format: "%d place & Avg rating %.2f",conclusionCount + premisesCount , 2.45 )
+            cell.labCountRate.text = locat
             var countIamge = 0
             for (var i = 0 ; i < self.listImage!.count ; i++){
                 if(listImage!.objectAtIndex(i).objectForKey("index") as String == String(format: "%d", indexPath.row)){
@@ -194,9 +195,12 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
         }
             
-        else
+        else if (indexPath.row % 2 == 0 )
         {
             var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as MainOneTableViewCell
+            
+            var locat : String = String(format: "%d place & Avg rating %.2f",conclusionCount + premisesCount , 2.45 )
+            cell.labCountRate.text = locat
             
             var countIamge = 0
             for (var i = 0 ; i < self.listImage!.count ; i++){
@@ -208,7 +212,38 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     }
                     else if(countIamge == 1){
                         cell.imageTwo.layer.cornerRadius = 10.0
+                        cell.imageTwo.clipsToBounds = true
+                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    else{
+                        cell.imageThree.layer.cornerRadius = 10.0
+                        cell.imageThree.clipsToBounds = true
+                        cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    countIamge++
+                }
+            }
+            
+            return cell
+        }
+        
+        else{
+            var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as MainThreeTableViewCell
+            
+            var locat : String = String(format: "%d place & Avg rating %.2f",conclusionCount + premisesCount , 2.45 )
+            cell.labCountRate.text = locat
+            
+            var countIamge = 0
+            for (var i = 0 ; i < self.listImage!.count ; i++){
+                if(listImage!.objectAtIndex(i).objectForKey("index") as String == String(format: "%d", indexPath.row)){
+                    if(countIamge == 0){
+                        cell.imageOne.layer.cornerRadius = 10.0
                         cell.imageOne.clipsToBounds = true
+                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                    }
+                    else if(countIamge == 1){
+                        cell.imageTwo.layer.cornerRadius = 10.0
+                        cell.imageTwo.clipsToBounds = true
                         cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                     }
                     else{

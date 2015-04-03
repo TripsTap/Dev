@@ -10,6 +10,11 @@ import UIKit
 
 class MainThreeTableViewCell: UITableViewCell {
 
+
+    @IBOutlet var labCountRate: UILabel!
+    @IBOutlet var imageOne: UIImageView!
+    @IBOutlet var imageTwo: UIImageView!
+        @IBOutlet var imageThree: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

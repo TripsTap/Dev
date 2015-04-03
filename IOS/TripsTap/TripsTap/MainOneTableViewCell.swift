@@ -11,6 +11,7 @@ import UIKit
 class MainOneTableViewCell: UITableViewCell {
 
     @IBOutlet var imageOne: UIImageView!
+    @IBOutlet var labCountRate: UILabel!
     @IBOutlet var imageTwo: UIImageView!
     @IBOutlet var imageThree: UIImageView!
     @IBOutlet var labLocation: UILabel!

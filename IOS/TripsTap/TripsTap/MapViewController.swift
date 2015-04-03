@@ -13,7 +13,7 @@ class MapViewController: UIViewController {
     @IBOutlet var viewMap: UIView!
     
     var listInfo : NSArray!
-    
+    var listImage : NSArray!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +24,13 @@ class MapViewController: UIViewController {
         var lngFrist : Double = locationFrist.objectForKey("lng") as Double
         
         
-        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:15)
+        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:10)
         var mapView = GMSMapView.mapWithFrame(self.view.bounds, camera:camera)
         mapView.myLocationEnabled = false
         // Do any additional setup after loading the view.
         
-        
+        var path = GMSMutablePath()
+
         
         for(var i = 0 ; i < self.listInfo!.count ; i++ ){
             
@@ -38,17 +39,41 @@ class MapViewController: UIViewController {
             var lat : Double = location.objectForKey("lat") as Double
             var lng : Double = location.objectForKey("lng") as Double
             
-//            
+            
+            path.addLatitude(lat, longitude:lng)
+//
             
             var position : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             var marker = GMSMarker()
             marker.position = position
             marker.snippet = ((self.listInfo!.objectAtIndex(i).objectForKey("venues") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("venueName") as String
             marker.appearAnimation = kGMSMarkerAnimationPop
+            
+            
+            
+            
+            
+            
+//            for(var j = 0 ; j < self.listImage.count ; j++){
+//                var indexImage : Int = (self.listImage.objectAtIndex(j).objectForKey("index") as String).toInt()!
+//                if indexImage == i{
+//                    
+//                    var imagefull = (self.listImage.objectAtIndex(j).objectForKey("image") as UIImage)
+//                    marker.icon = RBResizeImage(imagefull, CGSize(width: 70, height: 70))
+//                    break
+//                }
+//                
+//            }
+            
             marker.map = mapView
             
 
         }
+        
+        var polyline = GMSPolyline(path: path)
+        polyline.strokeWidth = 2.0
+        polyline.geodesic = true
+        polyline.map = mapView
         self.viewMap.addSubview(mapView)
         
         

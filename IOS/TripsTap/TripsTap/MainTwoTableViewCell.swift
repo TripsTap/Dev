@@ -15,6 +15,7 @@ class MainTwoTableViewCell: UITableViewCell {
     @IBOutlet var imageTwo: UIImageView!
     @IBOutlet var imageThree: UIImageView!
     
+    @IBOutlet var labCountRate: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

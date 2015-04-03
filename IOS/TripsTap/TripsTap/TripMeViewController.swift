@@ -23,6 +23,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var viewPicker: UIView!
     @IBOutlet weak var viewIndicator: UIView!
+    @IBOutlet var segmentType: UISegmentedControl!
     
 
 //MARK: -
@@ -124,25 +125,30 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int) as NSDictionary).objectForKey("catName") as String)
         }
         
-        
-        connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
-            println("getRuleTripsMe sucess")
-            self.listPlan = NSMutableArray()
-            
-            self.viewIndicator.hidden = true
-            
-            if(result.count == 0 ){
+        if(self.segmentType.selectedSegmentIndex == 0 ){
+            connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
+                println("getRuleTripsMe sucess")
+                self.listPlan = NSMutableArray()
+                
+                self.viewIndicator.hidden = true
+                
+                if(result.count == 0 ){
+                    
+                }
+                else{
+                    var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                    var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+                    mainView.pageType = "TripME"
+                    mainView.listPlan = result as NSMutableArray
+                    mainView.location = self.textLocation.text
+                    mainView.pageType = "TripMe"
+                    self.navigationController?.pushViewController(mainView, animated: true)
+                }
                 
             }
-            else{
-                var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
-                mainView.pageType = "TripME"
-                mainView.listPlan = result as NSMutableArray
-                mainView.location = self.textLocation.text
-                mainView.pageType = "TripMe"
-                self.navigationController?.pushViewController(mainView, animated: true)
-            }
+        }
+        
+        else{
             
             
         }

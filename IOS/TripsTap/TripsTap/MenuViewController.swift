@@ -23,6 +23,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     var tirpMeViewController: UIViewController!
     var restaAndHotelViewController: UIViewController!
     var storyboards = UIStoryboard(name: "Main", bundle: nil)
+    var infoCateArr : NSMutableArray = NSMutableArray()
+    var countTagPlace : Int!
 
 //MARK:-
 //MARK: cycle
@@ -83,6 +85,14 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //            for(var i = 0; i < jsonArray.count ; i++){
             
                 println(result.description)
+            
+            var taggedPlaces : NSArray = (result as NSDictionary).objectForKey("tagged_places")?.objectForKey("data") as NSArray
+            
+            self.countTagPlace = taggedPlaces.count
+            
+            for(var i = 0 ; i < taggedPlaces.count ; i++){
+                self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as NSDictionary).objectForKey("id") as String)
+            }
 //            }
             
 
@@ -96,8 +106,17 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     func getInfoOfCategory(cateID : String){
 
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+            var infoCateDic : NSMutableDictionary = NSMutableDictionary()
+            infoCateDic.setObject(result.objectForKey("category")!, forKey: "category")
+            infoCateDic.setObject(result.objectForKey("category_list")!, forKey: "category_list")
+            infoCateDic.setObject(result.objectForKey("location")!, forKey: "location")
+            
+            self.infoCateArr.addObject(infoCateDic)
 
-            println(result.description)
+            if self.countTagPlace == self.infoCateArr.count{
+                println("send request")
+                println(self.infoCateArr)
+            }
         })
         
     }
