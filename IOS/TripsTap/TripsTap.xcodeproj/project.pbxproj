@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		831587011ACB99910011F2B0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831587001ACB99910011F2B0 /* MapViewController.swift */; };
+		831ACAC31AD2709100FD1056 /* PlanFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ACAC21AD2709100FD1056 /* PlanFile.swift */; };
 		831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */; };
 		831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */; };
 		831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D883A1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift */; };
@@ -96,6 +97,7 @@
 
 /* Begin PBXFileReference section */
 		831587001ACB99910011F2B0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		831ACAC21AD2709100FD1056 /* PlanFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanFile.swift; sourceTree = "<group>"; };
 		831D88251AC12D37000C30DD /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../Downloads/Alamofire-master/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		831D88361AC17F7D000C30DD /* MainOneTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainOneTableViewCell.swift; sourceTree = "<group>"; };
 		831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaAndHotelViewController.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				83C279091AAE004A00052269 /* framwork */,
 				839B90771AA6C8C4002E0A01 /* AppDelegate.swift */,
 				8357A99B1AB07ACD00957BB9 /* Connection.swift */,
+				831ACAC21AD2709100FD1056 /* PlanFile.swift */,
 				839807E11AB1B3D400A70CBC /* controller */,
 				835F35D31ABC0594009BFF71 /* Main.storyboard */,
 				839B907E1AA6C8C4002E0A01 /* Images.xcassets */,
@@ -466,6 +469,7 @@
 				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,
 				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				837C660F1ACD908B00E96FA2 /* ListVenueTableViewCell.swift in Sources */,
+				831ACAC31AD2709100FD1056 /* PlanFile.swift in Sources */,
 				8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */,
 				8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */,
 				831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */,

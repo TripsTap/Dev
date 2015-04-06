@@ -62,9 +62,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             // load image
             var urlFull : String = listPlan.objectForKey("conclusion")?.objectAtIndex(i).objectForKey("image") as String
             var url : String = getUrlImage(urlFull)
-//            if(url != ""){
-                loadImage(url, index: imageAtIndex)
-//            }
+            loadImage(url, index: imageAtIndex)
+
             
             // load info of eact place
             var venueID : String = (listPlan.objectForKey("conclusion") as NSArray).objectAtIndex(i).objectForKey("venueId") as String
@@ -159,10 +158,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     func getInfoVenue(location : String , venueID : String) -> (){
         
-        connection.getInfoVenue(location, venue: venueID  , completion: { (result, error) -> () in
-            self.listInfo.addObject(result.objectAtIndex(0))
-            
-            println(self.listInfo.count)
+        connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
+            self.listInfo.addObject((result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary)
             
             if(self.listInfo.count == (self.listPlan.objectForKey("premises") as NSArray).count + (self.listPlan.objectForKey("conclusion") as NSArray).count){
                 
@@ -194,7 +191,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             infoView.pageType = "TripMe"
             var indexPath = self.table.indexPathForSelectedRow()
             
-            infoView.location = location
             
             if(indexPath!.row <  (self.listPlan.objectForKey("premises") as NSArray).count as Int ){
                 
@@ -203,12 +199,10 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 for(var i = 0 ; i < self.listInfo.count ; i++ ){
                     
-                    if((listPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("venues")?.objectAtIndex(0).objectForKey("venueId") as String){
+                    if((listPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("id") as String){
                         
-                        infoView.info = listInfo.objectAtIndex(i).objectForKey("venues")?.objectAtIndex(0) as NSDictionary
-                        
+                        infoView.info = listInfo.objectAtIndex(i) as NSDictionary
                     }
-                    
                 }
             }
                 
@@ -218,9 +212,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 for(var i = 0 ; i < self.listInfo.count ; i++ ){
                     
-                    if((listPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath!.row - listPlan.objectForKey("premises")!.count).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("venues")?.objectAtIndex(0).objectForKey("venueId") as String){
+                    if((listPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath!.row - listPlan.objectForKey("premises")!.count).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("id") as String){
                         
-                        infoView.info = listInfo.objectAtIndex(i).objectForKey("venues")?.objectAtIndex(0) as NSDictionary
+                        infoView.info = listInfo.objectAtIndex(i) as NSDictionary
                     }
                 }
             }
@@ -236,5 +230,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
 
+    @IBAction func clickAddTrip(sender: AnyObject) {
+        
+    }
 
 }

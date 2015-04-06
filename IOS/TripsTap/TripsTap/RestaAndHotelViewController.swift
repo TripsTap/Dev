@@ -109,7 +109,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as String
-        connection.getInfoRestaAndHotel(idStr) { (result, error) -> () in
+        connection.getInfoFromFoursquare(idStr) { (result, error) -> () in
             var storyBroad = UIStoryboard(name: "Main", bundle: nil)
             var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as InfoViewController
             infoView.info = (result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary

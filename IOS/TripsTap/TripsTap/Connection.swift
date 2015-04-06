@@ -137,14 +137,14 @@ class Connection: NSObject {
         
     }
     
-    func getInfoRestaAndHotel(idString : String, completion : (result : AnyObject! , error : NSError!) ->() ){
+    func getInfoFromFoursquare(idString : String, completion : (result : AnyObject! , error : NSError!) ->() ){
         
         var url = "https://api.foursquare.com/v2/venues/"+idString+"?&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&v=20130815"
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("get info resraurant and hotel")
-            println(data)
+            println("---------------------")
             completion(result: data, error: error)
         }
     }

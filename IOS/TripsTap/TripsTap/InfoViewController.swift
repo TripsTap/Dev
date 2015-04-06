@@ -13,29 +13,20 @@ class InfoViewController: UIViewController {
 
     @IBOutlet var labName: UILabel!
     @IBOutlet var image1: UIImageView!
-    
     @IBOutlet var viewIndicator: UIView!
+    @IBOutlet var labLocaton: UILabel!
+    @IBOutlet var viewMap: UIView!
+    @IBOutlet var labRating: UILabel!
     
-    
-    
-    
-    @IBOutlet var image2: UIImageView!
-    @IBOutlet var image3: UIImageView!
-    @IBOutlet var image4: UIImageView!
-    @IBOutlet var image5: UIImageView!
-    @IBOutlet var image6: UIImageView!
-    @IBOutlet var image7: UIImageView!
-    @IBOutlet var textInfo: UITextView!
+    @IBOutlet var labPhone: UILabel!
     
     var connection : Connection!
-    
     var info : NSDictionary!
     var infoOld : NSDictionary!
-    
-    var lat : String!
-    var lng : String!
+    var lat : Double!
+    var lng : Double!
     var location : String!
-    var phone : String!
+    var phone : String! = "Phone : "
 
     var rating : String!
     var pageType: String!
@@ -43,41 +34,30 @@ class InfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         if(pageType == "Restaurant" || pageType == "Hotel"){
             
-            location = ((info.objectForKey("location") as NSDictionary).objectForKey("formattedAddress") as NSArray).componentsJoinedByString(", ")
-        
-            
-            //        phone = (info.objectForKey("contact") as NSDictionary).objectForKey("phone") as String
-
-            //        rating = info.objectForKey("rating") as String
-            
-            if ( (info.objectForKey("contact") as NSDictionary).objectForKey("phone") == nil) {
-                phone = "-"
-            }
-            else{
-                phone = (info.objectForKey("contact") as NSDictionary).objectForKey("phone") as String
-            }
-            labName.text = info.objectForKey("name") as String
-            
-            var text = NSString(format: "Location : %@ /n Phone : %@ /n", location, phone) as String
-            textInfo.text = text
+            setLatAndLng()
+            setMap()
             
             
             //load image
-            var prefix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("prefix") as String
-            var suffix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("suffix") as String
-            var urlImage = String(format: "%@500x500%@", prefix,suffix )
-            loadImage(urlImage)
+            loadImage(getUrlImage())
+            
+            setInfoOfView()
         }
         
             
         else if (pageType == "TripMe"){
             if(info == nil){
                 self.viewIndicator.hidden = false
+                
+                setLatAndLng()
+                setMap()
+                
                 // load image
-                var imageUrlFull : String = infoOld.objectForKey("image") as String
-                var imageUrl : String = getUrlImage(imageUrlFull)
+                var imageUrl : String = getUrlImage()
                 loadImage(imageUrl)
                 
                 //load info
@@ -86,15 +66,13 @@ class InfoViewController: UIViewController {
 
             }
             else{
+                setLatAndLng()
+                setMap()
                 
-//                textInfo.text = (info.objectForKey("description") as NSDictionary).objectForKey("address") as String
-//                
-//                labName.text = info.objectForKey("venueName") as? String
-                setInfoOfView()
-                
-                var imageUrlFull : String = (info.objectForKey("description") as NSDictionary).objectForKey("photo") as String
-                var urlImage : String = getUrlImage(imageUrlFull)
+                var urlImage : String = getUrlImage()
                 loadImage(urlImage)
+                
+                setInfoOfView()
                 
             }
         }
@@ -107,6 +85,8 @@ class InfoViewController: UIViewController {
         
     }
     
+    
+    
     func loadImage(url : String){
         //         load image
         connection = Connection.sharedInstance
@@ -114,9 +94,10 @@ class InfoViewController: UIViewController {
         connection.getImage(url, completion: { (image) -> () in
             if(image != nil){
                 self.image1.contentMode = UIViewContentMode.ScaleAspectFill
-                self.image1.layer.cornerRadius = 10.0
+                self.image1.layer.cornerRadius = 20.0
                 self.image1.clipsToBounds = true
                 self.image1.image = image
+                self.setInfoOfView()
             }
         })
         
@@ -132,30 +113,89 @@ class InfoViewController: UIViewController {
     }
     
     
-    func getUrlImage(urlFull : String)->String{
-        if(pageType == "TripMe"){
-            var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
-            var url : String!
-            for (var i = 0 ; i < imageArray.count ; i++){
-                if(((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).count == 3)
-                {
-                    
-                    url = String(format: "%@500x500%@", ((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(0)as String ,((imageArray.objectAtIndex(i)as String).componentsSeparatedByString("-") as NSArray).objectAtIndex(1) as String)
-                    return url
-                }
-            }
-            return ""
-        }
-        else{
-            return ""
-        }
+    func setLatAndLng(){
+        lat = ((info.objectForKey("location") as NSDictionary).objectForKey("lat") as NSNumber).doubleValue
+        lng = ((info.objectForKey("location") as NSDictionary).objectForKey("lng") as NSNumber).doubleValue
     }
     
-    func setInfoOfView(){
-        textInfo.text = (info.objectForKey("description") as NSDictionary).objectForKey("address") as String
+    func setMap(){
         
-        labName.text = info.objectForKey("venueName") as? String
+        var camera = GMSCameraPosition.cameraWithLatitude( lat , longitude: lng   , zoom:13)
+        var mapView = GMSMapView.mapWithFrame(self.viewMap.bounds, camera:camera)
+        mapView.myLocationEnabled = false
+        
+        var marker = GMSMarker()
+        marker.position = camera.target
+//        marker.snippet = info.objectForKey("name") as String
+        marker.appearAnimation = kGMSMarkerAnimationPop
+        marker.map = mapView
+        self.viewMap.addSubview(mapView)
+        
+        self.viewMap.contentMode = UIViewContentMode.ScaleAspectFill
+        self.viewMap.layer.cornerRadius = 10.0
+        self.viewMap.clipsToBounds = true
+        
+        
     }
+    
+    func getUrlImage()->String{
+        
+        
+        var prefix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("prefix") as String
+        var suffix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("suffix") as String
+        return String(format: "%@500x500%@", prefix,suffix )
+//        if(pageType == "TripMe"){
+//            
+//            var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
+//            var url : String = ""
+//            let diceRoll = Int(arc4random_uniform(3))
+//            
+//            println(diceRoll)
+//            var a : NSArray = ((imageArray.objectAtIndex(diceRoll)as String).componentsSeparatedByString("-") as NSArray)
+//            
+//            for(var i = 0 ; i < a.count - 1 ; i++){
+//                if(i == 0){
+//                    url += a.objectAtIndex(i) as String
+//                }
+//                else if i == 1{
+//                    url += String(format: "%@%@",a.objectAtIndex(a.count - 1)as String, a.objectAtIndex(i)as String)
+//                }
+//                else{
+//                    url += String(format: "-%@", a.objectAtIndex(i)as String)
+//                }
+//                
+//            }
+//            return url
+//
+//        }
+//        else{
+//            return ""
+//        }
+    }
+    
+    
+    func setInfoOfView(){
+        location = ((info.objectForKey("location") as NSDictionary).objectForKey("formattedAddress") as NSArray).componentsJoinedByString(", ")
+        
+        
+        labRating.text = (info.objectForKey("rating") as NSNumber).stringValue
+        
+        if ( (info.objectForKey("contact") as NSDictionary).objectForKey("phone") == nil) {
+            phone = "-"
+        }
+        else{
+            phone = (info.objectForKey("contact") as NSDictionary).objectForKey("phone") as String
+        }
+        labName.text = info.objectForKey("name") as String
+        labName.sizeToFit()
+        labPhone.text = String(format: "Phone : %@", phone)
+        
+        var text = NSString(format: "%@", location) as String
+        labLocaton.text = text
+        
+    }
+    
+    
     func getInfoVenue(location : String , venueID : String) -> (){
         
         connection.getInfoVenue(location, venue: venueID  , completion: { (result, error) -> () in
@@ -164,54 +204,6 @@ class InfoViewController: UIViewController {
             self.setInfoOfView()
         })
     }
-    
-    
-    
-    
-    
-    
-    //
-    //        prefix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(1) as NSDictionary).objectForKey("prefix") as String
-    //        suffix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(1) as NSDictionary).objectForKey("suffix") as String
-    //        urlImage = String(format: "%@500x500%@", prefix,suffix )
-    //
-    //        conection.getImage(urlImage, completion: { (image) -> () in
-    //            self.image2.image = image
-    //        })
-    //
-    //        prefix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(2) as NSDictionary).objectForKey("prefix") as String
-    //        suffix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(2) as NSDictionary).objectForKey("suffix") as String
-    //        urlImage = String(format: "%@100x100%@", prefix,suffix )
-    //
-    //        conection.getImage(urlImage, completion: { (image) -> () in
-    //            self.image3.image = image
-    //        })
-    //
-    //        prefix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(3) as NSDictionary).objectForKey("prefix") as String
-    //        suffix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(3) as NSDictionary).objectForKey("suffix") as String
-    //        urlImage = String(format: "%@100x100%@", prefix,suffix )
-    //
-    //        conection.getImage(urlImage, completion: { (image) -> () in
-    //            self.image4.image = image
-    //        })
-    //
-    //        prefix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(4) as NSDictionary).objectForKey("prefix") as String
-    //        suffix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(4) as NSDictionary).objectForKey("suffix") as String
-    //        urlImage = String(format: "%@100x100%@", prefix,suffix )
-    //
-    //        conection.getImage(urlImage, completion: { (image) -> () in
-    //            self.image5.image = image
-    //        })
-    //
-    //        prefix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(5) as NSDictionary).objectForKey("prefix") as String
-    //        suffix  = (((((info.objectForKey("photos") as NSDictionary).objectForKey("groups") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("items") as NSArray).objectAtIndex(5) as NSDictionary).objectForKey("suffix") as String
-    //        urlImage = String(format: "%@100x100%@", prefix,suffix )
-    //
-    //        conection.getImage(urlImage, completion: { (image) -> () in
-    //            self.image6.image = image
-    //        })
-    
-    
     
     
     

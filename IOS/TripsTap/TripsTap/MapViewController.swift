@@ -19,7 +19,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         
-        var locationFrist : NSDictionary = ((self.listInfo!.objectAtIndex(0).objectForKey("venues") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("location") as NSDictionary
+        var locationFrist : NSDictionary = self.listInfo.objectAtIndex(0).objectForKey("location") as NSDictionary
         var latFrist : Double = locationFrist.objectForKey("lat") as Double
         var lngFrist : Double = locationFrist.objectForKey("lng") as Double
         
@@ -27,14 +27,14 @@ class MapViewController: UIViewController {
         var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:10)
         var mapView = GMSMapView.mapWithFrame(self.view.bounds, camera:camera)
         mapView.myLocationEnabled = false
-        // Do any additional setup after loading the view.
+
         
         var path = GMSMutablePath()
 
         
         for(var i = 0 ; i < self.listInfo!.count ; i++ ){
             
-            var location : NSDictionary = ((self.listInfo!.objectAtIndex(i).objectForKey("venues") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("location") as NSDictionary
+            var location : NSDictionary = self.listInfo!.objectAtIndex(i).objectForKey("location") as NSDictionary
             
             var lat : Double = location.objectForKey("lat") as Double
             var lng : Double = location.objectForKey("lng") as Double
@@ -46,14 +46,10 @@ class MapViewController: UIViewController {
             var position : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             var marker = GMSMarker()
             marker.position = position
-            marker.snippet = ((self.listInfo!.objectAtIndex(i).objectForKey("venues") as NSArray).objectAtIndex(0) as NSDictionary).objectForKey("venueName") as String
+            marker.snippet = self.listInfo!.objectAtIndex(i).objectForKey("name") as String
             marker.appearAnimation = kGMSMarkerAnimationPop
             
-            
-            
-            
-            
-            
+        
 //            for(var j = 0 ; j < self.listImage.count ; j++){
 //                var indexImage : Int = (self.listImage.objectAtIndex(j).objectForKey("index") as String).toInt()!
 //                if indexImage == i{
@@ -74,6 +70,7 @@ class MapViewController: UIViewController {
         polyline.strokeWidth = 2.0
         polyline.geodesic = true
         polyline.map = mapView
+        
         self.viewMap.addSubview(mapView)
         
         
