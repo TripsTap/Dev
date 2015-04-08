@@ -78,7 +78,7 @@ class Connection: NSObject {
         var categorySort: NSArray = category.sortedArrayUsingDescriptors([descriptor])
         
         
-        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"cats.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
+        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"catsPremiss.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
         
         Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
             

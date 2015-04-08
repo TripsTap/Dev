@@ -25,6 +25,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     @IBOutlet weak var viewIndicator: UIView!
     @IBOutlet var segmentType: UISegmentedControl!
     
+    @IBOutlet var btnTripMe: UIButton!
 
 //MARK: -
 //MARK: variable
@@ -38,7 +39,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     var category : NSMutableArray! = NSMutableArray()
     var mainViewController: UIViewController!
     var listPlan : NSMutableArray!
-
+    var categorySort: NSArray!
+    var cateSelectList : NSMutableArray!
     
 //MARK:-
 //MARK: cycle
@@ -56,6 +58,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         self.category = NSMutableArray()
         self.listPlan = NSMutableArray()
         
+        btnTripMe.enabled = false
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -68,9 +72,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
     
     override func viewDidDisappear(animated: Bool) {
-        self.selectCategory.removeAllObjects()
-        self.category.removeAllObjects()
-        self.listPlan.removeAllObjects()
+       
     }
     
     
@@ -84,6 +86,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
     
     @IBAction func clickDonePicker(sender: AnyObject) {
+        selectCategory.removeAllObjects()
         viewPicker.hidden = true
         
         viewIndicator.hidden = false
@@ -111,6 +114,10 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
     }
     @IBAction func clickBack(sender: AnyObject) {
+        self.selectCategory.removeAllObjects()
+        self.category.removeAllObjects()
+        self.listPlan.removeAllObjects()
+        
         self.navigationController?.popViewControllerAnimated(true)
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
@@ -120,28 +127,36 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         self.viewIndicator.hidden = false
         
-        var cateSelectList : NSMutableArray = NSMutableArray()
+        cateSelectList = NSMutableArray()
         for (var i = 0 ; i < self.selectCategory.count ;i++){
             cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int) as NSDictionary).objectForKey("catName") as String)
         }
         
+        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
+            categorySort = cateSelectList.sortedArrayUsingDescriptors([descriptor])
+        
         if(self.segmentType.selectedSegmentIndex == 0 ){
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess")
-                self.listPlan = NSMutableArray()
+//                self.listPlan = NSMutableArray()
                 
                 self.viewIndicator.hidden = true
                 
                 if(result.count == 0 ){
-                    
+                    let alertController = UIAlertController(title: nil, message:
+                        "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
+
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 }
                 else{
+                    
+                    
                     var storyBoard = UIStoryboard(name: "Main", bundle: nil)
                     var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
-                    mainView.pageType = "TripME"
-                    mainView.listPlan = result as NSMutableArray
-                    mainView.location = self.textLocation.text
                     mainView.pageType = "TripMe"
+                    mainView.listPlan = result as? NSMutableArray
+                    mainView.location = self.textLocation.text
                     self.navigationController?.pushViewController(mainView, animated: true)
                 }
                 
@@ -149,15 +164,84 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         }
         
         else{
-            
-            
+            connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
+                println("getRuleTripsMe sucess")
+//                self.listPlan = NSMutableArray()
+                
+                self.viewIndicator.hidden = true
+                
+                var listByCate : NSMutableArray = NSMutableArray()
+                
+                if(result.count == 0 ){
+                    let alertController = UIAlertController(title: nil, message:
+                        "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
+                    
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+                else{
+                    
+
+                    for var i = 0 ; i < result.count ; i++ {
+                        
+                        var allCat : NSMutableArray = NSMutableArray()
+                        
+                        // add category of premiss
+                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("catsPremiss")!.count ; j++ {
+                            
+                            allCat.addObject((result.objectAtIndex(i).objectForKey("catsPremiss") as NSArray).objectAtIndex(j).objectForKey("catName") as String)
+                        }
+                        
+                        // add category of conclusion
+                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("catsConclu")!.count ; j++ {
+
+                        allCat.addObject((result.objectAtIndex(i).objectForKey("catsConclu") as NSArray).objectAtIndex(j).objectForKey("catName") as String)
+                            
+                        }
+                        
+                        //check that cate of ewsult to match wiht select category
+                        if self.checkMatchCat(allCat){
+                            listByCate.addObject(result.objectAtIndex(i))
+                        }
+                        
+                        
+                        
+                        
+                        
+                    }
+                    if(listByCate.count != 0 ){
+                        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                        var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+                        mainView.pageType = "TripMe"
+                        mainView.listPlan = listByCate as NSMutableArray
+                        mainView.location = self.textLocation.text
+                        self.navigationController?.pushViewController(mainView, animated: true)
+                    }
+                }
+                
+            }
         }
     }
-    
-    
 
 
-    
+    func checkMatchCat(cateList : NSArray) -> Bool{
+        
+        for var i = 0 ; i < cateList.count ; i++ {
+            var matchCat : Int = 0
+            for var j = 0 ; j < self.cateSelectList.count ; j++ {
+                if (self.cateSelectList.objectAtIndex(j) as NSString == cateList.objectAtIndex(i) as NSString){
+                    matchCat++
+                }
+            }
+            if matchCat == 0 {
+                return false
+            }
+        }
+        return true
+        
+    }
+
+
 //MARK:-
 //MARK:  picker function
 //MARK:-
@@ -238,19 +322,34 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK:  cell delegate
 //MARK:-
     func clickCell(index: Int) {
-        
+
         for(var i = 0 ; i < self.selectCategory.count ; i++){
             if( (selectCategory.objectAtIndex(i) as Int) == index){
                 selectCategory.removeObjectAtIndex(i)
                 table.reloadData()
+                checkEnableTripMeBtn()
                 return;
             }
         }
         selectCategory.addObject(index)
+        checkEnableTripMeBtn()
         table.reloadData()
     }
-
     
+    func checkEnableTripMeBtn(){
+        if(selectCategory.count > 0){
+            btnTripMe.enabled = true
+        }
+        else{
+            btnTripMe.enabled = false
+        }
+    }
+
+    @IBAction func clickDismiss(sender: AnyObject) {
+        viewPicker.hidden = true
+    }
+    
+   
 
 // MARK: - Navigation
     

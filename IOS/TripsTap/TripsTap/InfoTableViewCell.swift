@@ -10,6 +10,9 @@ import UIKit
 
 class InfoTableViewCell: UITableViewCell {
 
+    @IBOutlet var imageComment: UIImageView!
+    @IBOutlet var labComment: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

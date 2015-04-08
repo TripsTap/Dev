@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfoViewController: UIViewController {
+class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
 
 
     @IBOutlet var labName: UILabel!
@@ -17,7 +17,6 @@ class InfoViewController: UIViewController {
     @IBOutlet var labLocaton: UILabel!
     @IBOutlet var viewMap: UIView!
     @IBOutlet var labRating: UILabel!
-    
     @IBOutlet var labPhone: UILabel!
     
     var connection : Connection!
@@ -27,9 +26,10 @@ class InfoViewController: UIViewController {
     var lng : Double!
     var location : String!
     var phone : String! = "Phone : "
-
     var rating : String!
     var pageType: String!
+    var listComment : NSMutableArray!
+    var listImageComment : NSMutableArray!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +41,7 @@ class InfoViewController: UIViewController {
             setLatAndLng()
             setMap()
             
+            listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
             
             //load image
             loadImage(getUrlImage())
@@ -53,13 +54,6 @@ class InfoViewController: UIViewController {
             if(info == nil){
                 self.viewIndicator.hidden = false
                 
-                setLatAndLng()
-                setMap()
-                
-                // load image
-                var imageUrl : String = getUrlImage()
-                loadImage(imageUrl)
-                
                 //load info
                 var venueID : String = infoOld.objectForKey("venueId") as String
                 getInfoVenue(location, venueID: venueID)
@@ -68,7 +62,7 @@ class InfoViewController: UIViewController {
             else{
                 setLatAndLng()
                 setMap()
-                
+                listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
                 var urlImage : String = getUrlImage()
                 loadImage(urlImage)
                 
@@ -86,7 +80,6 @@ class InfoViewController: UIViewController {
     }
     
     
-    
     func loadImage(url : String){
         //         load image
         connection = Connection.sharedInstance
@@ -94,8 +87,8 @@ class InfoViewController: UIViewController {
         connection.getImage(url, completion: { (image) -> () in
             if(image != nil){
                 self.image1.contentMode = UIViewContentMode.ScaleAspectFill
-                self.image1.layer.cornerRadius = 20.0
-                self.image1.clipsToBounds = true
+//                self.image1.layer.cornerRadius = 20.0
+//                self.image1.clipsToBounds = true
                 self.image1.image = image
                 self.setInfoOfView()
             }
@@ -132,8 +125,8 @@ class InfoViewController: UIViewController {
         self.viewMap.addSubview(mapView)
         
         self.viewMap.contentMode = UIViewContentMode.ScaleAspectFill
-        self.viewMap.layer.cornerRadius = 10.0
-        self.viewMap.clipsToBounds = true
+//        self.viewMap.layer.cornerRadius = 10.0
+//        self.viewMap.clipsToBounds = true
         
         
     }
@@ -144,33 +137,6 @@ class InfoViewController: UIViewController {
         var prefix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("prefix") as String
         var suffix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("suffix") as String
         return String(format: "%@500x500%@", prefix,suffix )
-//        if(pageType == "TripMe"){
-//            
-//            var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
-//            var url : String = ""
-//            let diceRoll = Int(arc4random_uniform(3))
-//            
-//            println(diceRoll)
-//            var a : NSArray = ((imageArray.objectAtIndex(diceRoll)as String).componentsSeparatedByString("-") as NSArray)
-//            
-//            for(var i = 0 ; i < a.count - 1 ; i++){
-//                if(i == 0){
-//                    url += a.objectAtIndex(i) as String
-//                }
-//                else if i == 1{
-//                    url += String(format: "%@%@",a.objectAtIndex(a.count - 1)as String, a.objectAtIndex(i)as String)
-//                }
-//                else{
-//                    url += String(format: "-%@", a.objectAtIndex(i)as String)
-//                }
-//                
-//            }
-//            return url
-//
-//        }
-//        else{
-//            return ""
-//        }
     }
     
     
@@ -178,7 +144,7 @@ class InfoViewController: UIViewController {
         location = ((info.objectForKey("location") as NSDictionary).objectForKey("formattedAddress") as NSArray).componentsJoinedByString(", ")
         
         
-        labRating.text = (info.objectForKey("rating") as NSNumber).stringValue
+        labRating.text = String(format: "%.2f", (info.objectForKey("rating") as NSNumber).doubleValue )
         
         if ( (info.objectForKey("contact") as NSDictionary).objectForKey("phone") == nil) {
             phone = "-"
@@ -202,10 +168,36 @@ class InfoViewController: UIViewController {
             self.viewIndicator.hidden = true
             self.info = (result.objectAtIndex(0) as NSDictionary).objectForKey("venues") as NSDictionary
             self.setInfoOfView()
+            
+            
+            self.setLatAndLng()
+            self.setMap()
+            
+            // load image
+            var imageUrl : String = self.getUrlImage()
+            self.loadImage(imageUrl)
+            
+            self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
         })
     }
     
     
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listComment.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell : InfoTableViewCell! = tableView.dequeueReusableCellWithIdentifier("InfoTableViewCell") as InfoTableViewCell
+        cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as String
+        
+        return cell
+        
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 80
+    }
+
     
 
     

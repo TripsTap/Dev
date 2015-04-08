@@ -19,38 +19,43 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     var listPlan : NSMutableArray?
     var listImage : NSMutableArray?
     var location : String?
+    var planFile : PlanFile?
+    var mainViewController: UIViewController!
+    var storyboards = UIStoryboard(name: "Main", bundle: nil)
+    var stopLoad : Int?
     
     //MARK:-
     //MARK: IBOutlet
     //MARK:-
     @IBOutlet var table: UITableView!
+    @IBOutlet var btnBackAndMenu: UIButton!
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    init(listPlan : NSMutableArray , pageID : String){
-        super.init()
-        self.listPlan = listPlan;
-        self.pageType = pageID;
-
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
         
-        self.listImage = NSMutableArray()
-        if(self.listPlan == nil){
-            self.listPlan = NSMutableArray()
+        planFile = PlanFile.sharedInstance
+        
+            self.listImage = NSMutableArray()
+        if(pageType != "TripMe"){
+            listPlan = NSMutableArray(array: planFile!.listPlan)
         }
-        
-        
-        if(pageType == nil){
+        else{
+            btnBackAndMenu.setTitle("Back", forState: UIControlState.Normal)
             
         }
-        else if(pageType == "TripMe" ){
-            for(var i = 0 ; i < listPlan?.count  ; i++ ){
+        
+        
+//        if(pageType == nil){
+//            
+//        }
+//        else if(pageType == "TripMe" ){
+                for(var i = 0 ; i < listPlan?.count  ; i++ ){
                 
                 var data: NSDictionary = self.listPlan?.objectAtIndex(i) as NSDictionary
                 var conclusion : NSArray = data.objectForKey("conclusion") as NSArray
@@ -65,14 +70,14 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
                     var imageUrl : String = getUrlImage(imageUrlFull , index: i)
                     if(imageUrl == ""){
-                        println(conclusion.objectAtIndex(j))
-                        println(imageUrlFull)
+//                        println(conclusion.objectAtIndex(j))
+//                        println(imageUrlFull)
                         loadImageCount--
                     }
                         
                     else  {
                         connection.getImage(imageUrl, completion: { (image) -> () in
-                            println("load image complete")
+//                            println("load image complete")
                             if(image != nil){
                                 var imageDic : NSMutableDictionary = NSMutableDictionary()
                                 imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
@@ -90,13 +95,13 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
                     var imageUrl : String = getUrlImage(imageUrlFull , index : i)
                     if(imageUrl == ""){
-                        println(premises.objectAtIndex(j))
-                        println(imageUrlFull)
+//                        println(premises.objectAtIndex(j))
+//                        println(imageUrlFull)
                         loadImageCount--
                     }
                     else{
                         connection.getImage(imageUrl, completion: { (image) -> () in
-                            println("load image complete")
+//                            println("load image complete")
                             if(image != nil){
                                 var imageDic : NSMutableDictionary = NSMutableDictionary()
                                 imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
@@ -112,7 +117,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 
             }
             
-        }
+//        }
 
     }
     
@@ -122,7 +127,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         var url : String = ""
         let diceRoll = Int(arc4random_uniform(3))
         
-        println(diceRoll)
+//        println(diceRoll)
         var a : NSArray = ((imageArray.objectAtIndex(diceRoll)as String).componentsSeparatedByString("-") as NSArray)
         
         for(var i = 0 ; i < a.count - 1 ; i++){
@@ -154,7 +159,12 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     
     @IBAction func clickMenu(sender: AnyObject) {
-        self.slideMenuController()?.openLeft()
+        if(pageType == "TripMe"){
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+        else{
+            self.slideMenuController()?.openLeft()
+        }
     }
     
     
@@ -265,9 +275,20 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return 240
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if pageType != "TripMe"{
+            return true
+        }
+        return false
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete{
+            planFile?.listPlan.removeObjectAtIndex(indexPath.row)
+            planFile?.saveFile()
+            self.listPlan = planFile?.listPlan
+            table.reloadData()
+        }
     }
     
     
@@ -292,8 +313,15 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if segue.identifier == "ListVenue"{
             let listVenue : ListVenueViewController = segue.destinationViewController as ListVenueViewController
             let indexPath = self.table.indexPathForSelectedRow()
-            listVenue.listPlan = self.listPlan?.objectAtIndex(indexPath!.row as Int) as NSDictionary
+            listVenue.dicPlan = self.listPlan?.objectAtIndex(indexPath!.row as Int) as NSDictionary
             listVenue.location = self.location
+            if(pageType == nil){
+                listVenue.pageType = "Main"
+            }
+            else{
+                listVenue.pageType = self.pageType
+            }
+            
             
         }
     }

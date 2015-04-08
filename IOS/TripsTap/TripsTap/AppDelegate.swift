@@ -29,8 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nvc: UINavigationController = UINavigationController(rootViewController: mainView)
         menuView.mainViewController = nvc
         
-        let slideMenuController = SlideMenuController(mainViewController: mainView, leftMenuViewController: menuView)
-        slideMenuController.navigationController?.navigationBar.hidden = true
+        let slideMenuController = SlideMenuController(mainViewController: nvc , leftMenuViewController: menuView)
+//        slideMenuController.navigationController?.navigationBar.hidden = true
         
         
         

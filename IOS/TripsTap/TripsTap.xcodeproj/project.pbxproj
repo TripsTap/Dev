@@ -48,6 +48,7 @@
 		83C279121AAE985900052269 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279111AAE985900052269 /* MenuViewController.swift */; };
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
 		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
+		83DA42F71AD2DADF00FA3F04 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +144,7 @@
 		83C279111AAE985900052269 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 				839807E51AB1D27B00A70CBC /* TripMeTableViewCell.swift */,
 				831D883A1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift */,
 				837C660E1ACD908B00E96FA2 /* ListVenueTableViewCell.swift */,
+				83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */,
 			);
 			name = cell;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				83C279121AAE985900052269 /* MenuViewController.swift in Sources */,
 				83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */,
 				837C660A1ACD890900E96FA2 /* MainThreeTableViewCell.swift in Sources */,
+				83DA42F71AD2DADF00FA3F04 /* InfoTableViewCell.swift in Sources */,
 				832608731AC9501500ACEABD /* MainTwoTableViewCell.swift in Sources */,
 				8357A9B11AB0817C00957BB9 /* Alamofire.swift in Sources */,
 			);
