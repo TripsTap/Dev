@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListVenueViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
+class ListVenueViewController: UIViewController, UITableViewDelegate,UITableViewDataSource ,ListVenueCellDelegate {
 
 //MARK:-
 //MARK:  IBOutlet
@@ -28,6 +28,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     var connection : Connection = Connection.sharedInstance
     var pageType : String!
     var mainViewController : UIViewController?
+    var listPlaceNotSelect : NSMutableArray!
     
 //MARK:-
 //MARK:  cycle
@@ -40,9 +41,11 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
+                        listPlaceNotSelect = NSMutableArray()
         
         if(pageType == "TripMe"){
             btnAddTrip.hidden = false
+
         }
         else if (pageType == "Main"){
             btnAddTrip.hidden = true
@@ -105,7 +108,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell") as ListVenueTableViewCell
+        var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as ListVenueTableViewCell
         
         if(indexPath.row < (dicPlan.objectForKey("premises") as NSArray).count){
             cell.labLocation.text = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
@@ -126,7 +129,44 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 break
             }
         }
+        
+
+        if pageType != "Main"{
+            
+            cell.delegate = self
+            cell.index = indexPath.row
+            var checkSelect : Bool = false
+            for(var i = 0 ; i < self.listPlaceNotSelect.count ; i++){
+                if( (listPlaceNotSelect.objectAtIndex(i) as Int) == indexPath.row){
+                    checkSelect = true
+                }
+            }
+            
+            // not select already
+            if (checkSelect){
+                cell.imageSelect.backgroundColor = UIColor.redColor()
+            }
+                
+                //  select
+            else{
+                cell.imageSelect.backgroundColor = UIColor.greenColor()
+            }
+            
+        }
+        else{
+            cell.imageSelect.hidden = true
+            cell.btnSelectPlace.hidden = true
+        }
         return cell
+    }
+    
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        
+        
     }
     
 //MARK:-
@@ -245,12 +285,52 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     }
 
     @IBAction func clickAddTrip(sender: AnyObject) {
+        
+        var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as NSMutableArray)
+        var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as NSMutableArray)
+        
+
+    
+        
+        for(var i = 0 ; i < listPlaceNotSelect.count ; i++){
+            if( (listPlaceNotSelect.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
+                premiss.removeObjectAtIndex(i)
+            }
+            else{
+                
+                conclusion.removeObjectAtIndex( (listPlaceNotSelect.objectAtIndex(i) as Int) - (dicPlan.objectForKey("conclusion") as NSArray).count)
+            }
+        }
+
+        var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
+        newPlan.removeObjectForKey("premises")
+        newPlan.removeObjectForKey("conclusion")
+        newPlan.setObject(premiss, forKey: "premises")
+        newPlan.setObject(conclusion, forKey: "conclusion")
+        
+        
         var file : PlanFile = PlanFile.sharedInstance
-        file.listPlan.addObject(dicPlan)
+        file.listPlan.addObject(newPlan)
         file.saveFile()
         self.navigationController?.popToRootViewControllerAnimated(true)
         
         self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
+    }
+    
+    
+    func clickCell(index: Int) {
+        
+        for(var i = 0 ; i < self.listPlaceNotSelect.count ; i++){
+            if( (listPlaceNotSelect.objectAtIndex(i) as Int) == index){
+                listPlaceNotSelect.removeObjectAtIndex(i)
+                table.reloadData()
+
+                return;
+            }
+        }
+        listPlaceNotSelect.addObject(index)
+
+        table.reloadData()
     }
 
 }

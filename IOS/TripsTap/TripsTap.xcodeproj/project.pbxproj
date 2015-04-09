@@ -49,6 +49,7 @@
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
 		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
 		83DA42F71AD2DADF00FA3F04 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */; };
+		83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
+		83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +217,7 @@
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
 				831587001ACB99910011F2B0 /* MapViewController.swift */,
 				831D883C1AC25E42000C30DD /* InfoViewController.swift */,
+				83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */,
 			);
 			name = controller;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
 				831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */,
 				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,
+				83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */,
 				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				837C660F1ACD908B00E96FA2 /* ListVenueTableViewCell.swift in Sources */,
 				831ACAC31AD2709100FD1056 /* PlanFile.swift in Sources */,

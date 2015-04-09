@@ -56,7 +56,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
                 
                 //load info
                 var venueID : String = infoOld.objectForKey("venueId") as String
-                getInfoVenue(location, venueID: venueID)
+                getInfoVenue(venueID)
 
             }
             else{
@@ -87,8 +87,6 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         connection.getImage(url, completion: { (image) -> () in
             if(image != nil){
                 self.image1.contentMode = UIViewContentMode.ScaleAspectFill
-//                self.image1.layer.cornerRadius = 20.0
-//                self.image1.clipsToBounds = true
                 self.image1.image = image
                 self.setInfoOfView()
             }
@@ -162,11 +160,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     
     
-    func getInfoVenue(location : String , venueID : String) -> (){
+    func getInfoVenue( venueID : String) -> (){
         
-        connection.getInfoVenue(location, venue: venueID  , completion: { (result, error) -> () in
+        
+        
+        connection.getInfoFromFoursquare(venueID  , completion: { (result, error) -> () in
             self.viewIndicator.hidden = true
-            self.info = (result.objectAtIndex(0) as NSDictionary).objectForKey("venues") as NSDictionary
+            self.info =  ((result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary)
             self.setInfoOfView()
             
             
@@ -205,11 +205,18 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var infoArray : NSMutableArray = NSMutableArray()
-        infoArray.addObject(self.info)
+        if(segue.identifier == "MapViewController"){
+            var infoArray : NSMutableArray = NSMutableArray()
+            infoArray.addObject(self.info)
+            
+            var mapView : MapViewController = segue.destinationViewController as MapViewController
+            mapView.listInfo = infoArray as NSArray
+        }
         
-        var mapView : MapViewController = segue.destinationViewController as MapViewController
-        mapView.listInfo = infoArray as NSArray
+        else{
+            var imageView : ImageViewController = segue.destinationViewController as ImageViewController
+            imageView.venueID = infoOld.objectForKey("venueId") as String
+        }
         
 
     }

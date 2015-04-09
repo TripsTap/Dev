@@ -7,11 +7,20 @@
 //
 
 import UIKit
+protocol ListVenueCellDelegate  {
+    func clickCell(index: Int)
+}
 
-class ListVenueTableViewCell: UITableViewCell {
+class ListVenueTableViewCell: UITableViewCell , ListVenueCellDelegate {
 
     @IBOutlet var labLocation: UILabel!
     @IBOutlet var imagePlace: UIImageView!
+    @IBOutlet var imageSelect: UIImageView!
+    @IBOutlet var btnSelectPlace: UIButton!
+    
+    var delegate : ListVenueCellDelegate?
+    var index : Int!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -21,6 +30,16 @@ class ListVenueTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    
+    func clickCell(index: Int) {
+        self.delegate?.clickCell(index)
+    }
+    
+    @IBAction func clickSelectCell(sender: AnyObject) {
+        self.clickCell(index)
+        
     }
 
 }

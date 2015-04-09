@@ -149,6 +149,18 @@ class Connection: NSObject {
         }
     }
     
+    func getAllImageFromFS(venueID : String , completion : (result : AnyObject! , error : NSError!) -> () ){
+        var url = String(format: "https://api.foursquare.com/v2/venues/%@/photos?client_id=%@&client_secret=%@&&v=20130815&limit=200", venueID, CLIENT_ID,CLIENT_SECRET)
+        
+        Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in
+            println("---------------------")
+            println("get all url of image")
+            println("---------------------")
+            completion(result: data, error: error)
+        }
+        
+    }
+    
     func getImage(url : String , completion : (image : UIImage! )->() ){
         ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
             completion(image: image)
