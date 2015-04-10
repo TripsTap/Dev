@@ -36,7 +36,6 @@ class Connection: NSObject {
 //MARK: -
 //
     
-    let baseUrl : String = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/"
     let apiKey : String = "pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
     
     
@@ -52,7 +51,7 @@ class Connection: NSObject {
     func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
-        var url = baseUrl + "category"
+        var url = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/category"
 
 //        var parameter : NSMutableDictionary! = NSMutableDictionary()
 //        parameter.setObject(location, forKey: "state_init")
@@ -74,11 +73,17 @@ class Connection: NSObject {
     func getRuleTripsMe(location: String , category : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
         var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
         
+        
+        
+        
+        
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
         var categorySort: NSArray = category.sortedArrayUsingDescriptors([descriptor])
         
         
-        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"catsPremiss.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
+//        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"catsPremiss.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
+        
+        var parameter : String = String(format: "{\"state_init\":\"%@\",\"$or\":[{\"catsPremiss.catName\":{$all:[\"%@\"]}},{\"catsConclu.catName\":{$all:[\"%@\"]}}]}",location,categorySort.componentsJoinedByString("\",\"") as String , categorySort.componentsJoinedByString("\",\"") as String )
         
         Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
             

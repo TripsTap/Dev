@@ -18,6 +18,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     @IBOutlet var viewMap: UIView!
     @IBOutlet var labRating: UILabel!
     @IBOutlet var labPhone: UILabel!
+    @IBOutlet var tableComment: UITableView!
     
     var connection : Connection!
     var info : NSDictionary!
@@ -52,6 +53,8 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             
         else if (pageType == "TripMe"){
             if(info == nil){
+                connection = Connection.sharedInstance
+                listComment = NSMutableArray()
                 self.viewIndicator.hidden = false
                 
                 //load info
@@ -178,6 +181,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             self.loadImage(imageUrl)
             
             self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
+            self.tableComment.reloadData()
         })
     }
     

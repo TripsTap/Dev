@@ -17,6 +17,7 @@ class ListVenueTableViewCell: UITableViewCell , ListVenueCellDelegate {
     @IBOutlet var imagePlace: UIImageView!
     @IBOutlet var imageSelect: UIImageView!
     @IBOutlet var btnSelectPlace: UIButton!
+    @IBOutlet var labRate: UILabel!
     
     var delegate : ListVenueCellDelegate?
     var index : Int!

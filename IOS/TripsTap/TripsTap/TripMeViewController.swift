@@ -41,6 +41,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     var listPlan : NSMutableArray!
     var categorySort: NSArray!
     var cateSelectList : NSMutableArray!
+    var pageType : String!
     
 //MARK:-
 //MARK: cycle
@@ -63,7 +64,13 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
     
     override func viewWillAppear(animated: Bool) {
-        table.reloadData()
+        if(pageType == "Menu"){
+            pageType = ""
+            self.selectCategory.removeAllObjects()
+            self.category.removeAllObjects()
+            self.listPlan.removeAllObjects()
+        }
+            table.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,7 +162,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                     var storyBoard = UIStoryboard(name: "Main", bundle: nil)
                     var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
                     mainView.pageType = "TripMe"
-                    mainView.listPlan = result as? NSMutableArray
+                    mainView.listPlan = NSMutableArray(array: result as NSMutableArray)
                     mainView.location = self.textLocation.text
                     self.navigationController?.pushViewController(mainView, animated: true)
                 }

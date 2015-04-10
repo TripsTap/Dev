@@ -20,7 +20,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK: variable
 //MARK:-
     var mainViewController: UIViewController!
-    var tirpMeViewController: UIViewController!
+    var tripMeViewController: UIViewController!
     var restaAndHotelViewController: UIViewController!
     var storyboards = UIStoryboard(name: "Main", bundle: nil)
     var infoCateArr : NSMutableArray = NSMutableArray()
@@ -37,8 +37,9 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
         
         
-        let tirpMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
-        self.tirpMeViewController = UINavigationController(rootViewController: tirpMeViewController)
+        let tripMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
+        tripMeViewController.pageType = "Menu"
+        self.tripMeViewController = UINavigationController(rootViewController: tripMeViewController)
         
     }
     override func didReceiveMemoryWarning() {
@@ -127,7 +128,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
     
     @IBAction func clickTripMe(sender: AnyObject) {
-        self.slideMenuController()?.changeMainViewController(self.tirpMeViewController, close: true)
+        self.slideMenuController()?.changeMainViewController(self.tripMeViewController, close: true)
     }
     
     @IBAction func clickRes(sender: AnyObject) {

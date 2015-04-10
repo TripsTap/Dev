@@ -21,7 +21,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
 //MARK:-
 //MARK:  variable
 //MARK:-
-    var dicPlan : NSDictionary!
+    var dicPlan : NSMutableDictionary!
     var location : String!
     var listInfo : NSMutableArray!
     var listImage : NSMutableArray!
@@ -29,6 +29,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     var pageType : String!
     var mainViewController : UIViewController?
     var listPlaceNotSelect : NSMutableArray!
+    var addTripAlready : Bool!
     
 //MARK:-
 //MARK:  cycle
@@ -36,13 +37,15 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
        
+//        self.table.setEditing(true, animated: true)
+
+        
         self.navigationController?.navigationBar.hidden = true
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
-                        listPlaceNotSelect = NSMutableArray()
-        
+        listPlaceNotSelect = NSMutableArray()
         if(pageType == "TripMe"){
             btnAddTrip.hidden = false
 
@@ -53,6 +56,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         self.btnMap.enabled = false
         listInfo = NSMutableArray()
         listImage = NSMutableArray()
+        addTripAlready = false
         
         for(var i = 0 ; i < (dicPlan.objectForKey("premises") as NSArray).count ; i++){
             // index of image when func call back
@@ -89,6 +93,11 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
     }
     
+    override func viewDidAppear(animated: Bool) {
+        if addTripAlready == true {
+            self.navigationController?.popToRootViewControllerAnimated(false)
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
  
@@ -112,10 +121,14 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         if(indexPath.row < (dicPlan.objectForKey("premises") as NSArray).count){
             cell.labLocation.text = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
+            cell.labRate.text = String(format: "Rate : %@",(dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("rate") as String!)
             
         }
         else{
             cell.labLocation.text = (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as NSArray).count ).objectForKey("vunueName") as? String
+            
+            
+            cell.labRate.text = String(format: "Rate : %@", (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as NSArray).count ).objectForKey("rate") as String!)
         }
         
         
@@ -123,8 +136,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         {
             
             if ( listImage.objectAtIndex(i).objectForKey("index") as String == String(format: "%d",indexPath.row  as Int)){
-                cell.imagePlace.layer.cornerRadius = 5.0
-                cell.imagePlace.clipsToBounds = true
+//                cell.imagePlace.layer.cornerRadius = 5.0
+//                cell.imagePlace.clipsToBounds = true
                 cell.imagePlace?.image = listImage.objectAtIndex(i).objectForKey("image") as? UIImage
                 break
             }
@@ -160,11 +173,52 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         return cell
     }
     
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.Insert
+        
+    }
+    
+
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+
+    
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
+        
+//        if pageType  == "Main"{
+
+            return true
+//        }
+//        else{
+//            return false
+//        }
     }
     
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        
+        // case 1 in premises
+        if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as NSArray).count ){
+            ((dicPlan.objectForKey("premises") as NSMutableArray).insertObject((dicPlan.objectForKey("premises") as NSMutableArray).objectAtIndex(sourceIndexPath.row), atIndex: destinationIndexPath.row))
+            (dicPlan.objectForKey("premises") as NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
+            table.reloadData()
+        }
+        
+
+        // case 2 premiss to conclusion
+        
+        // case 3 in counclusion
+        
+        // case 4 conclusion to conclusion
+        
+//        if(indexPath.row < (dicPlan.objectForKey("premises") as NSArray).count){
+//            cell.labLocation.text = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
+//            
+//        }
+//        else{
+//            cell.labLocation.text = (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as NSArray).count ).objectForKey("vunueName") as? String
+//        }
         
         
     }
@@ -286,19 +340,30 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
 
     @IBAction func clickAddTrip(sender: AnyObject) {
         
+        addTripAlready = true
+        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
+        var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
+
+        
         var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as NSMutableArray)
         var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as NSMutableArray)
         
 
     
         
-        for(var i = 0 ; i < listPlaceNotSelect.count ; i++){
-            if( (listPlaceNotSelect.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
-                premiss.removeObjectAtIndex(i)
+        for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
+            if( (listPlaceNotSelectSort.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
+                premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as Int - i )
+
             }
-            else{
+        }
+        
+        var countDelete = 0
+        for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
+            if( (listPlaceNotSelectSort.objectAtIndex(j) as Int) >= (dicPlan.objectForKey("conclusion") as NSArray).count as Int){
+                conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as Int - countDelete - (dicPlan.objectForKey("premises") as NSArray).count as Int )
+                countDelete++
                 
-                conclusion.removeObjectAtIndex( (listPlaceNotSelect.objectAtIndex(i) as Int) - (dicPlan.objectForKey("conclusion") as NSArray).count)
             }
         }
 
@@ -307,14 +372,37 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         newPlan.removeObjectForKey("conclusion")
         newPlan.setObject(premiss, forKey: "premises")
         newPlan.setObject(conclusion, forKey: "conclusion")
+        var rate: String! = getRating(newPlan)
+        newPlan.setObject(rate, forKey: "rate")
+        
         
         
         var file : PlanFile = PlanFile.sharedInstance
         file.listPlan.addObject(newPlan)
         file.saveFile()
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        
         
         self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
+    }
+    
+    func getRating(plan : NSMutableDictionary) -> String{
+        var sumRate : Double = 0.0
+        
+        for var i = 0 ; i < (plan.objectForKey("premises")as NSArray).count ; i++ {
+            sumRate += (plan.objectForKey("premises")as NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
+            
+        }
+        
+        for var i = 0 ; i < (plan.objectForKey("conclusion")as NSArray).count ; i++ {
+            sumRate += (plan.objectForKey("conclusion")as NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
+        }
+        
+        var countPremiese : Int = (plan.objectForKey("premises")as NSArray).count as Int
+        var countConclusion : Int = (plan.objectForKey("conclusion")as NSArray).count as Int
+        var rateAvg : Double = sumRate / (Double(countConclusion) + Double(countPremiese))
+        
+        return String(format: "%.2f",rateAvg)
+        
     }
     
     
