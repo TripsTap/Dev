@@ -19,9 +19,9 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         
-        var locationFrist : NSDictionary = self.listInfo.objectAtIndex(0).objectForKey("location") as NSDictionary
-        var latFrist : Double = locationFrist.objectForKey("lat") as Double
-        var lngFrist : Double = locationFrist.objectForKey("lng") as Double
+        var locationFrist : NSDictionary = self.listInfo.objectAtIndex(0).objectForKey("location") as! NSDictionary
+        var latFrist : Double = locationFrist.objectForKey("lat") as! Double
+        var lngFrist : Double = locationFrist.objectForKey("lng") as! Double
         
         
         var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:10)
@@ -34,10 +34,10 @@ class MapViewController: UIViewController {
         
         for(var i = 0 ; i < self.listInfo!.count ; i++ ){
             
-            var location : NSDictionary = self.listInfo!.objectAtIndex(i).objectForKey("location") as NSDictionary
+            var location : NSDictionary = self.listInfo!.objectAtIndex(i).objectForKey("location") as! NSDictionary
             
-            var lat : Double = location.objectForKey("lat") as Double
-            var lng : Double = location.objectForKey("lng") as Double
+            var lat : Double = location.objectForKey("lat") as! Double
+            var lng : Double = location.objectForKey("lng") as! Double
             
             
             path.addLatitude(lat, longitude:lng)
@@ -46,7 +46,7 @@ class MapViewController: UIViewController {
             var position : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             var marker = GMSMarker()
             marker.position = position
-            marker.snippet = self.listInfo!.objectAtIndex(i).objectForKey("name") as String
+            marker.snippet = self.listInfo!.objectAtIndex(i).objectForKey("name") as! String
             marker.appearAnimation = kGMSMarkerAnimationPop
             
         

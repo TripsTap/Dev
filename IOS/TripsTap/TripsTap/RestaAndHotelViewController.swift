@@ -35,7 +35,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         
         self.navigationController?.navigationBar.hidden = true
         var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
 
         self.connection = Connection.sharedInstance
@@ -45,10 +45,10 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         if(self.pageType == "restaurant"){
             self.labTitle.text = "Restaurant"
             var ll = "2,3"
-            connection.getRestaurant(ll,{ (result, error) -> () in
+            connection.getRestaurant(ll,completion: { (result, error) -> () in
                 self.viewLoader.hidden = true
                 if (error == nil){
-                    self.listOfTable = (result.objectForKey("response") as NSDictionary).objectForKey("venues") as NSMutableArray
+                    self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
                     self.table.reloadData()
                 }
                 else{
@@ -60,10 +60,10 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
             self.labTitle.text = "Hotel"
             
             var ll = "2,3"
-            connection.getHotel(ll,{ (result, error) -> () in
+            connection.getHotel(ll,completion: { (result, error) -> () in
                 if (error == nil){
                     self.viewLoader.hidden = true
-                    self.listOfTable = (result.objectForKey("response") as NSDictionary).objectForKey("venues") as NSMutableArray
+                    self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
                     self.table.reloadData()
                 }
                 
@@ -94,10 +94,10 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : RestaAndHotelTableViewCell = table.dequeueReusableCellWithIdentifier("RestaAndHotelTableViewCell", forIndexPath: indexPath) as RestaAndHotelTableViewCell
+        var cell : RestaAndHotelTableViewCell = table.dequeueReusableCellWithIdentifier("RestaAndHotelTableViewCell", forIndexPath: indexPath) as! RestaAndHotelTableViewCell
         
-        cell.labName.text = listOfTable.objectAtIndex(indexPath.row).objectForKey("name") as String
-        var cateShortName : String = (self.listOfTable.objectAtIndex(indexPath.row) as NSDictionary).objectForKey("categories")?.objectAtIndex(0).objectForKey("shortName") as String!
+        cell.labName.text = listOfTable.objectAtIndex(indexPath.row).objectForKey("name") as? String
+        var cateShortName : String = (self.listOfTable.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("categories")?.objectAtIndex(0).objectForKey("shortName") as! String!
         
         // bakery
         if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
@@ -116,11 +116,11 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as String
+        var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as! String
         connection.getInfoFromFoursquare(idStr) { (result, error) -> () in
             var storyBroad = UIStoryboard(name: "Main", bundle: nil)
-            var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as InfoViewController
-            infoView.info = (result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary
+            var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as! InfoViewController
+            infoView.info = (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary
             infoView.pageType = self.labTitle.text
             self.navigationController?.pushViewController(infoView, animated: true)
             

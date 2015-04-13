@@ -104,9 +104,9 @@ class TripForYouViewController: UIViewController {
             self.category.removeAllObjects()
             self.table.reloadData()
             if(error == nil){
-                if(  ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSArray).count != 0){
+                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
                     
-                    self.category = ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSMutableArray).mutableCopy() as NSMutableArray
+                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
                     self.table.reloadData()
                 }
                 else{

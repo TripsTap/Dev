@@ -45,7 +45,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         
         
         
-        let tripForYouViewController = storyboards.instantiateViewControllerWithIdentifier("TripForYouViewController") as TripForYouViewController
+        let tripForYouViewController = storyboards.instantiateViewControllerWithIdentifier("TripForYouViewController") as! TripForYouViewController
         self.tripForYouViewController = UINavigationController(rootViewController: tripForYouViewController)
         
     }
@@ -93,12 +93,12 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
             
                 println(result.description)
             
-            var taggedPlaces : NSArray = (result as NSDictionary).objectForKey("tagged_places")?.objectForKey("data") as NSArray
+            var taggedPlaces : NSArray = (result as! NSDictionary).objectForKey("tagged_places")?.objectForKey("data") as! NSArray
             
             self.countTagPlace = taggedPlaces.count
             
             for(var i = 0 ; i < taggedPlaces.count ; i++){
-                self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as NSDictionary).objectForKey("id") as String)
+                self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
             }
             
         })
@@ -135,7 +135,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     @IBAction func clickTripMe(sender: AnyObject) {
         
-        let tripMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
+        let tripMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as! TripMeViewController
         tripMeViewController.pageType = "Menu"
         self.tripMeViewController = UINavigationController(rootViewController: tripMeViewController)
         
@@ -149,7 +149,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     @IBAction func clickRes(sender: AnyObject) {
         
 
-        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as RestaAndHotelViewController
+        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as! RestaAndHotelViewController
         restaAndHotelViewController.pageType = "restaurant"
         self.restaAndHotelViewController = UINavigationController(rootViewController: restaAndHotelViewController)
         
@@ -159,7 +159,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     
     @IBAction func clickHotel(sender: AnyObject) {
-        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as RestaAndHotelViewController
+        let restaAndHotelViewController = storyboards.instantiateViewControllerWithIdentifier("RestaAndHotelViewController") as! RestaAndHotelViewController
         restaAndHotelViewController.pageType = "hotel"
         self.restaAndHotelViewController = UINavigationController(rootViewController: restaAndHotelViewController)
         

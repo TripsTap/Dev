@@ -22,9 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //created slide menu
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        let mainView = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         let menuView = storyBoard.instantiateViewControllerWithIdentifier("MenuViewController")
-        as MenuViewController
+        as! MenuViewController
        
         let nvc: UINavigationController = UINavigationController(rootViewController: mainView)
         menuView.mainViewController = nvc
@@ -39,10 +39,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: NSString?, annotation: AnyObject) -> Bool {
-        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
     
-        return wasHandled
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool{
+            var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+            
+            return wasHandled
     }
     
     func applicationWillResignActive(application: UIApplication) {

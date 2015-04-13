@@ -42,7 +42,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         self.navigationController?.navigationBar.hidden = true
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
         listPlaceNotSelect = NSMutableArray()
@@ -58,36 +58,36 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         listImage = NSMutableArray()
         addTripAlready = false
         
-        for(var i = 0 ; i < (dicPlan.objectForKey("premises") as NSArray).count ; i++){
+        for(var i = 0 ; i < (dicPlan.objectForKey("premises") as! NSArray).count ; i++){
             // index of image when func call back
             let imageAtIndex : Int = i
             
             // load image
-            var urlFull : String = dicPlan.objectForKey("premises")?.objectAtIndex(i).objectForKey("image") as String
+            var urlFull : String = dicPlan.objectForKey("premises")?.objectAtIndex(i).objectForKey("image") as! String
             var url : String = getUrlImage(urlFull)
             if(url != ""){
              loadImage(url, index: imageAtIndex)
             }
             
             // load info
-            var venueID : String = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(i).objectForKey("venueId") as String
+            var venueID : String = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(i).objectForKey("venueId") as! String
             getInfoVenue(venueID)
             
         }
 
         
-        for(var i = 0 ; i < (dicPlan.objectForKey("conclusion") as NSArray).count ; i++){
+        for(var i = 0 ; i < (dicPlan.objectForKey("conclusion") as! NSArray).count ; i++){
             
-            let imageAtIndex : Int = i + (dicPlan.objectForKey("premises") as NSArray).count
+            let imageAtIndex : Int = i + (dicPlan.objectForKey("premises") as! NSArray).count
             
             // load image
-            var urlFull : String = dicPlan.objectForKey("conclusion")?.objectAtIndex(i).objectForKey("image") as String
+            var urlFull : String = dicPlan.objectForKey("conclusion")?.objectAtIndex(i).objectForKey("image") as! String
             var url : String = getUrlImage(urlFull)
             loadImage(url, index: imageAtIndex)
 
             
             // load info of eact place
-            var venueID : String = (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(i).objectForKey("venueId") as String
+            var venueID : String = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(i).objectForKey("venueId") as! String
             getInfoVenue(venueID)
             
         }
@@ -113,29 +113,29 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (dicPlan.objectForKey("premises") as NSArray).count + (dicPlan.objectForKey("conclusion") as NSArray).count
+        return (dicPlan.objectForKey("premises") as! NSArray).count + (dicPlan.objectForKey("conclusion") as! NSArray).count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as ListVenueTableViewCell
+        var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as! ListVenueTableViewCell
         
-        if(indexPath.row < (dicPlan.objectForKey("premises") as NSArray).count){
-            cell.labLocation.text = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
-            cell.labRate.text = String(format: "Rate : %@",(dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath.row).objectForKey("rate") as String!)
+        if(indexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count){
+            cell.labLocation.text = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
+            cell.labRate.text = String(format: "Rate : %@",(dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("rate") as! String!)
             
         }
         else{
-            cell.labLocation.text = (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as NSArray).count ).objectForKey("vunueName") as? String
+            cell.labLocation.text = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("vunueName") as? String
             
             
-            cell.labRate.text = String(format: "Rate : %@", (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as NSArray).count ).objectForKey("rate") as String!)
+            cell.labRate.text = String(format: "Rate : %@", (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("rate") as! String!)
         }
         
         
         for(var i = 0 ; i < self.listImage.count ; i++ )
         {
             
-            if ( listImage.objectAtIndex(i).objectForKey("index") as String == String(format: "%d",indexPath.row  as Int)){
+            if ( listImage.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d",indexPath.row  as Int)){
 //                cell.imagePlace.layer.cornerRadius = 5.0
 //                cell.imagePlace.clipsToBounds = true
                 cell.imagePlace?.image = listImage.objectAtIndex(i).objectForKey("image") as? UIImage
@@ -150,7 +150,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             cell.index = indexPath.row
             var checkSelect : Bool = false
             for(var i = 0 ; i < self.listPlaceNotSelect.count ; i++){
-                if( (listPlaceNotSelect.objectAtIndex(i) as Int) == indexPath.row){
+                if( (listPlaceNotSelect.objectAtIndex(i) as! Int) == indexPath.row){
                     checkSelect = true
                 }
             }
@@ -199,9 +199,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         
         // case 1 in premises
-        if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as NSArray).count ){
-            ((dicPlan.objectForKey("premises") as NSMutableArray).insertObject((dicPlan.objectForKey("premises") as NSMutableArray).objectAtIndex(sourceIndexPath.row), atIndex: destinationIndexPath.row))
-            (dicPlan.objectForKey("premises") as NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
+        if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
+            ((dicPlan.objectForKey("premises") as! NSMutableArray).insertObject((dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row), atIndex: destinationIndexPath.row))
+            (dicPlan.objectForKey("premises") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
             table.reloadData()
         }
         
@@ -247,17 +247,17 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         var url : String = ""
         
         println("------------------------")
-        var a : NSArray = ((imageArray.objectAtIndex(1)as String).componentsSeparatedByString("-") as NSArray)
+        var a : NSArray = ((imageArray.objectAtIndex(1) as! String).componentsSeparatedByString("-") as NSArray)
         
         for(var i = 0 ; i < a.count - 1 ; i++){
             if(i == 0){
-                url += a.objectAtIndex(i) as String
+                url += a.objectAtIndex(i) as! String
             }
             else if i == 1{
-                url += String(format: "100x100%@", a.objectAtIndex(i)as String)
+                url += String(format: "100x100%@", a.objectAtIndex(i) as! String)
             }
             else{
-                url += String(format: "-%@", a.objectAtIndex(i)as String)
+                url += String(format: "-%@", a.objectAtIndex(i) as! String)
             }
             
         }
@@ -267,9 +267,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     func getInfoVenue(venueID : String) -> (){
         
         connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
-            self.listInfo.addObject((result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary)
+            self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
             
-            if(self.listInfo.count == (self.dicPlan.objectForKey("premises") as NSArray).count + (self.dicPlan.objectForKey("conclusion") as NSArray).count){
+            if(self.listInfo.count == (self.dicPlan.objectForKey("premises") as! NSArray).count + (self.dicPlan.objectForKey("conclusion") as! NSArray).count){
                 
                 self.btnMap.enabled = true
             }
@@ -293,23 +293,23 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
         
         
-        var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as NSMutableArray)
-        var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as NSMutableArray)
+        var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as! NSMutableArray)
+        var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as! NSMutableArray)
         
         
         
         
         for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
-            if( (listPlaceNotSelectSort.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
-                premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as Int - i )
+            if( (listPlaceNotSelectSort.objectAtIndex(i) as! Int) < (dicPlan.objectForKey("premises") as! NSArray).count as Int){
+                premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as! Int - i )
                 
             }
         }
         
         var countDelete = 0
         for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
-            if( (listPlaceNotSelectSort.objectAtIndex(j) as Int) >= (dicPlan.objectForKey("premises") as NSArray).count as Int){
-                conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as Int - countDelete - (dicPlan.objectForKey("premises") as NSArray).count as Int )
+            if( (listPlaceNotSelectSort.objectAtIndex(j) as! Int) >= (dicPlan.objectForKey("premises") as! NSArray).count as Int){
+                conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as! Int - countDelete - (dicPlan.objectForKey("premises") as! NSArray).count as Int )
                 countDelete++
                 
             }
@@ -341,35 +341,35 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         // click cell
         if(segue.identifier == "InfoView"){
-            var infoView : InfoViewController = segue.destinationViewController as InfoViewController
+            var infoView : InfoViewController = segue.destinationViewController as! InfoViewController
             
             infoView.pageType = "TripMe"
             var indexPath = self.table.indexPathForSelectedRow()
             
             
-            if(indexPath!.row <  (self.dicPlan.objectForKey("premises") as NSArray).count as Int ){
+            if(indexPath!.row <  (self.dicPlan.objectForKey("premises") as! NSArray).count as Int ){
                 
                 // when load info not complete
-                infoView.infoOld = (dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath!.row) as NSDictionary
+                infoView.infoOld = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row) as! NSDictionary
                 
                 for(var i = 0 ; i < self.listInfo.count ; i++ ){
                     
-                    if((dicPlan.objectForKey("premises") as NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("id") as String){
+                    if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
                         
-                        infoView.info = listInfo.objectAtIndex(i) as NSDictionary
+                        infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
                     }
                 }
             }
                 
             else{
                 
-                infoView.infoOld = (dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count) as NSDictionary
+                infoView.infoOld = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count) as! NSDictionary
                 
                 for(var i = 0 ; i < self.listInfo.count ; i++ ){
                     
-                    if((dicPlan.objectForKey("conclusion") as NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count).objectForKey("venueId") as String == listInfo.objectAtIndex(i).objectForKey("id") as String){
+                    if((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
                         
-                        infoView.info = listInfo.objectAtIndex(i) as NSDictionary
+                        infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
                     }
                 }
             }
@@ -377,7 +377,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
             // click map button
         else if (segue.identifier == "MapViewController"){
-            var mapView : MapViewController = segue.destinationViewController as MapViewController
+            var mapView : MapViewController = segue.destinationViewController as! MapViewController
             mapView.listInfo = self.listInfo
             mapView.listImage = self.listImage
         }
@@ -389,17 +389,17 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     func getRating(plan : NSMutableDictionary) -> String{
         var sumRate : Double = 0.0
         
-        for var i = 0 ; i < (plan.objectForKey("premises")as NSArray).count ; i++ {
-            sumRate += (plan.objectForKey("premises")as NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
+        for var i = 0 ; i < (plan.objectForKey("premises")as! NSArray).count ; i++ {
+            sumRate += (plan.objectForKey("premises")as! NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
             
         }
         
-        for var i = 0 ; i < (plan.objectForKey("conclusion")as NSArray).count ; i++ {
-            sumRate += (plan.objectForKey("conclusion")as NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
+        for var i = 0 ; i < (plan.objectForKey("conclusion")as! NSArray).count ; i++ {
+            sumRate += (plan.objectForKey("conclusion")as! NSArray).objectAtIndex(i).objectForKey("rate")!.doubleValue
         }
         
-        var countPremiese : Int = (plan.objectForKey("premises")as NSArray).count as Int
-        var countConclusion : Int = (plan.objectForKey("conclusion")as NSArray).count as Int
+        var countPremiese : Int = (plan.objectForKey("premises")as! NSArray).count as Int
+        var countConclusion : Int = (plan.objectForKey("conclusion")as! NSArray).count as Int
         var rateAvg : Double = sumRate / (Double(countConclusion) + Double(countPremiese))
         
         return String(format: "%.2f",rateAvg)
@@ -412,7 +412,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     func clickCell(index: Int) {
         
         for(var i = 0 ; i < self.listPlaceNotSelect.count ; i++){
-            if( (listPlaceNotSelect.objectAtIndex(i) as Int) == index){
+            if( (listPlaceNotSelect.objectAtIndex(i) as! Int) == index){
                 listPlaceNotSelect.removeObjectAtIndex(i)
                 table.reloadData()
 

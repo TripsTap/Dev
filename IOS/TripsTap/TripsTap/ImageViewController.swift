@@ -29,7 +29,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         connection.getAllImageFromFS(venueID, completion: { (result, error) -> () in
             
 //            self.listUrl = result.
-            self.listUrl = ((result.objectForKey("response") as NSDictionary).objectForKey("photos") as NSDictionary).objectForKey("items") as NSMutableArray
+            self.listUrl = ((result.objectForKey("response") as! NSDictionary).objectForKey("photos") as! NSDictionary).objectForKey("items") as! NSMutableArray
             
             self.loadAllImage()
         })
@@ -39,10 +39,10 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     func loadAllImage(){
         
         for var i = 0 ; i < listUrl.count ; i++ {
-            var prefix : String = listUrl.objectAtIndex(i).objectForKey("prefix") as String
-            var suffix : String = listUrl.objectAtIndex(i).objectForKey("suffix") as String
-            var height : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("height") as Int))
-            var width : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("width") as Int))
+            var prefix : String = listUrl.objectAtIndex(i).objectForKey("prefix") as! String
+            var suffix : String = listUrl.objectAtIndex(i).objectForKey("suffix") as! String
+            var height : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("height") as! Int))
+            var width : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("width") as! Int))
             var urlImage : String = String(format: "%@%@x%@%@", prefix,  height ,width , suffix)
             
             var connection : Connection = Connection.sharedInstance
@@ -71,10 +71,10 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        var cell : UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        var cell : UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! UICollectionViewCell
         
-        var imageRecipe : UIImageView = cell.viewWithTag(100) as UIImageView
-        imageRecipe.image = listImage.objectAtIndex(indexPath.row) as UIImage
+        var imageRecipe : UIImageView = cell.viewWithTag(100) as! UIImageView
+        imageRecipe.image = listImage.objectAtIndex(indexPath.row) as? UIImage
 
         
         return cell
@@ -92,7 +92,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         currentIndexImage = indexPath.row
-        imagePlace.image = listImage!.objectAtIndex(indexPath.row) as UIImage
+        imagePlace.image = listImage!.objectAtIndex(indexPath.row) as? UIImage
         viewImage.hidden = false
         imagePlace.hidden = false
     }
@@ -109,7 +109,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     @IBAction func swipeRight(sender: AnyObject) {
         if currentIndexImage + 1 < listImage.count {
             currentIndexImage  = currentIndexImage + 1
-            imagePlace.image = listImage.objectAtIndex(currentIndexImage) as UIImage
+            imagePlace.image = listImage.objectAtIndex(currentIndexImage) as! UIImage
         }
     }
 
@@ -117,7 +117,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     @IBAction func swipeLeft(sender: AnyObject) {
         if currentIndexImage - 1 >= 0 {
             currentIndexImage = currentIndexImage - 1
-             imagePlace.image = listImage.objectAtIndex(currentIndexImage) as UIImage
+             imagePlace.image = listImage.objectAtIndex(currentIndexImage) as! UIImage
         }
     }
 

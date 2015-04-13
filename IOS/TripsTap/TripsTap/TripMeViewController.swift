@@ -52,7 +52,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 
         self.navigationController?.navigationBar.hidden = true
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
         
         self.selectCategory = NSMutableArray()
@@ -107,9 +107,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             self.category.removeAllObjects()
             self.table.reloadData()
             if(error == nil){
-                if(  ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSArray).count != 0){
+                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
                     
-                    self.category = ((result.objectAtIndex(0) as NSDictionary)["cats"] as NSMutableArray).mutableCopy() as NSMutableArray
+                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
                     self.table.reloadData()
                 }
                 else{
@@ -136,7 +136,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         cateSelectList = NSMutableArray()
         for (var i = 0 ; i < self.selectCategory.count ;i++){
-            cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as Int) as NSDictionary).objectForKey("catName") as String)
+            cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as! Int) as! NSDictionary).objectForKey("catName") as! String)
         }
         
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
@@ -160,9 +160,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                     
                     
                     var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                    var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+                    var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
                     mainView.pageType = "TripMe"
-                    mainView.listPlan = NSMutableArray(array: result as NSMutableArray)
+                    mainView.listPlan = NSMutableArray(array: result as! NSMutableArray)
                     mainView.location = self.textLocation.text
                     self.navigationController?.pushViewController(mainView, animated: true)
                 }
@@ -191,7 +191,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                     var listNewPlan : NSMutableArray = NSMutableArray()
                     
                     for var i = 0 ; i < result.count ; i++ {
-                        listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as NSMutableDictionary))
+                        listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as! NSMutableDictionary))
                         }
                     for var i = 0 ; i < result.count ; i++ {
                         
@@ -201,9 +201,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                         // add category of premiss
                         for var j = 0 ; j < result.objectAtIndex(i).objectForKey("premises")!.count ; j++ {
                             for var k = 0 ; k < self.cateSelectList.count ; k++ {
-                                if (((result.objectAtIndex(i).objectForKey("premises") as NSArray).objectAtIndex(j) as NSDictionary).objectForKey("catName") as String == self.cateSelectList.objectAtIndex(k) as String)
+                                if (((result.objectAtIndex(i).objectForKey("premises") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String)
                                 {
-                                    premises.addObject(((result.objectAtIndex(i) as NSDictionary).objectForKey("premises") as NSArray).objectAtIndex(j))
+                                    premises.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("premises") as! NSArray).objectAtIndex(j))
                                 }
                             }
 
@@ -213,8 +213,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                         for var j = 0 ; j < result.objectAtIndex(i).objectForKey("conclusion")!.count ; j++ {
 
                             for var k = 0 ; k < self.cateSelectList.count ; k++ {
-                                if (((result.objectAtIndex(i).objectForKey("conclusion") as NSArray).objectAtIndex(j) as NSDictionary).objectForKey("catName") as String == self.cateSelectList.objectAtIndex(k) as String ){
-                                    conclusion.addObject(((result.objectAtIndex(i) as NSDictionary).objectForKey("conclusion") as NSArray).objectAtIndex(j))
+                                if (((result.objectAtIndex(i).objectForKey("conclusion") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String ){
+                                    conclusion.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("conclusion") as! NSArray).objectAtIndex(j))
                                 }
                             }
                             
@@ -222,15 +222,15 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                         
                         
                         
-                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).removeObjectForKey("premises")
-                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).setObject(premises, forKey: "premises")
-                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).removeObjectForKey("conclusion")
-                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
+                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("premises")
+                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(premises, forKey: "premises")
+                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("conclusion")
+                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
                     }
                     
                     if(listNewPlan.count != 0 ){
                         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                        var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
+                        var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
                         mainView.pageType = "TripMe"
                         mainView.listPlan = listNewPlan as NSMutableArray
                         mainView.location = self.textLocation.text
@@ -284,11 +284,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell  = tableView.dequeueReusableCellWithIdentifier("TripMeTableViewCell" ,forIndexPath: indexPath) as TripMeTableViewCell
+        var cell  = tableView.dequeueReusableCellWithIdentifier("TripMeTableViewCell" ,forIndexPath: indexPath) as! TripMeTableViewCell
         
 
-        //  set information
-        cell.labCategoryName.text = (self.category[indexPath.row] as NSDictionary) ["catName"] as String
+        //  set information!
+        cell.labCategoryName.text = (self.category[indexPath.row] as! NSDictionary) ["catName"] as? String
         cell.delegate = self
         cell.index = indexPath.row
         
@@ -296,7 +296,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         // check select category
         var checkSelect : Bool = false
         for(var i = 0 ; i < self.selectCategory.count ; i++){
-            if( (selectCategory.objectAtIndex(i) as Int) == indexPath.row){
+            if( (selectCategory.objectAtIndex(i) as! Int) == indexPath.row){
                 checkSelect = true
             }
         }
@@ -326,7 +326,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     func clickCell(index: Int) {
 
         for(var i = 0 ; i < self.selectCategory.count ; i++){
-            if( (selectCategory.objectAtIndex(i) as Int) == index){
+            if( (selectCategory.objectAtIndex(i) as! Int) == index){
                 selectCategory.removeObjectAtIndex(i)
                 table.reloadData()
                 checkEnableTripMeBtn()
@@ -357,7 +357,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         for var i = 0 ; i < cateList.count ; i++ {
             var matchCat : Int = 0
             for var j = 0 ; j < self.cateSelectList.count ; j++ {
-                if (self.cateSelectList.objectAtIndex(j) as NSString == cateList.objectAtIndex(i) as NSString){
+                if (self.cateSelectList.objectAtIndex(j) as! NSString == cateList.objectAtIndex(i) as! NSString){
                     matchCat++
                 }
             }

@@ -42,7 +42,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             setLatAndLng()
             setMap()
             
-            listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
+            listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
             
             //load image
             loadImage(getUrlImage())
@@ -58,14 +58,14 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
                 self.viewIndicator.hidden = false
                 
                 //load info
-                var venueID : String = infoOld.objectForKey("venueId") as String
+                var venueID : String = infoOld.objectForKey("venueId") as! String
                 getInfoVenue(venueID)
 
             }
             else{
                 setLatAndLng()
                 setMap()
-                listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
+                listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
                 var urlImage : String = getUrlImage()
                 loadImage(urlImage)
                 
@@ -108,8 +108,8 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     
     
     func setLatAndLng(){
-        lat = ((info.objectForKey("location") as NSDictionary).objectForKey("lat") as NSNumber).doubleValue
-        lng = ((info.objectForKey("location") as NSDictionary).objectForKey("lng") as NSNumber).doubleValue
+        lat = ((info.objectForKey("location") as! NSDictionary).objectForKey("lat") as! NSNumber).doubleValue
+        lng = ((info.objectForKey("location") as! NSDictionary).objectForKey("lng") as! NSNumber).doubleValue
     }
     
     func setMap(){
@@ -135,29 +135,29 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     func getUrlImage()->String{
         
         
-        var prefix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("prefix") as String
-        var suffix : String = (info.objectForKey("bestPhoto") as NSDictionary).objectForKey("suffix") as String
+        var prefix : String = (info.objectForKey("bestPhoto") as! NSDictionary).objectForKey("prefix") as! String
+        var suffix : String = (info.objectForKey("bestPhoto") as! NSDictionary).objectForKey("suffix") as! String
         return String(format: "%@500x500%@", prefix,suffix )
     }
     
     
     func setInfoOfView(){
-        location = ((info.objectForKey("location") as NSDictionary).objectForKey("formattedAddress") as NSArray).componentsJoinedByString(", ")
+        location = ((info.objectForKey("location") as! NSDictionary).objectForKey("formattedAddress") as! NSArray).componentsJoinedByString(", ")
         
         
-        labRating.text = String(format: "%.2f", (info.objectForKey("rating") as NSNumber).doubleValue )
+        labRating.text = String(format: "%.2f", (info.objectForKey("rating") as! NSNumber).doubleValue )
         
-        if ( (info.objectForKey("contact") as NSDictionary).objectForKey("phone") == nil) {
+        if ( (info.objectForKey("contact") as! NSDictionary).objectForKey("phone") == nil) {
             phone = "-"
         }
         else{
-            phone = (info.objectForKey("contact") as NSDictionary).objectForKey("phone") as String
+            phone = (info.objectForKey("contact") as! NSDictionary).objectForKey("phone") as! String
         }
-        labName.text = info.objectForKey("name") as String
+        labName.text = info.objectForKey("name") as? String
         labName.sizeToFit()
         labPhone.text = String(format: "Phone : %@", phone)
         
-        var text = NSString(format: "%@", location) as String
+        var text = NSString(format: "%@", location) as! String
         labLocaton.text = text
         
     }
@@ -169,7 +169,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         
         connection.getInfoFromFoursquare(venueID  , completion: { (result, error) -> () in
             self.viewIndicator.hidden = true
-            self.info =  ((result.objectForKey("response") as NSDictionary).objectForKey("venue") as NSDictionary)
+            self.info =  ((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
             self.setInfoOfView()
             
             
@@ -180,7 +180,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             var imageUrl : String = self.getUrlImage()
             self.loadImage(imageUrl)
             
-            self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as NSMutableArray)
+            self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
             self.tableComment.reloadData()
         })
     }
@@ -191,8 +191,8 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : InfoTableViewCell! = tableView.dequeueReusableCellWithIdentifier("InfoTableViewCell") as InfoTableViewCell
-        cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as String
+        var cell : InfoTableViewCell! = tableView.dequeueReusableCellWithIdentifier("InfoTableViewCell") as! InfoTableViewCell
+        cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as! String
         
         return cell
         
@@ -213,13 +213,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             var infoArray : NSMutableArray = NSMutableArray()
             infoArray.addObject(self.info)
             
-            var mapView : MapViewController = segue.destinationViewController as MapViewController
+            var mapView : MapViewController = segue.destinationViewController as! MapViewController
             mapView.listInfo = infoArray as NSArray
         }
         
         else{
-            var imageView : ImageViewController = segue.destinationViewController as ImageViewController
-            imageView.venueID = infoOld.objectForKey("venueId") as String
+            var imageView : ImageViewController = segue.destinationViewController as! ImageViewController
+            imageView.venueID = infoOld.objectForKey("venueId") as! String
         }
         
 
