@@ -141,7 +141,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
             categorySort = cateSelectList.sortedArrayUsingDescriptors([descriptor])
-        
+        // start with
         if(self.segmentType.selectedSegmentIndex == 0 ){
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess")
@@ -169,7 +169,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                 
             }
         }
-        
+            
+        // interest in
         else{
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess")
@@ -177,7 +178,6 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                 
                 self.viewIndicator.hidden = true
                 
-                var listByCate : NSMutableArray = NSMutableArray()
                 
                 if(result.count == 0 ){
                     let alertController = UIAlertController(title: nil, message:
@@ -188,39 +188,51 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                 }
                 else{
                     
-
+                    var listNewPlan : NSMutableArray = NSMutableArray()
+                    
+                    for var i = 0 ; i < result.count ; i++ {
+                        listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as NSMutableDictionary))
+                        }
                     for var i = 0 ; i < result.count ; i++ {
                         
-                        var allCat : NSMutableArray = NSMutableArray()
-                        
+//                        var allCat : NSMutableArray = NSMutableArray()
+                        var premises : NSMutableArray = NSMutableArray()
+                        var conclusion : NSMutableArray = NSMutableArray()
                         // add category of premiss
-                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("catsPremiss")!.count ; j++ {
-                            
-                            allCat.addObject((result.objectAtIndex(i).objectForKey("catsPremiss") as NSArray).objectAtIndex(j).objectForKey("catName") as String)
+                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("premises")!.count ; j++ {
+                            for var k = 0 ; k < self.cateSelectList.count ; k++ {
+                                if (((result.objectAtIndex(i).objectForKey("premises") as NSArray).objectAtIndex(j) as NSDictionary).objectForKey("catName") as String == self.cateSelectList.objectAtIndex(k) as String)
+                                {
+                                    premises.addObject(((result.objectAtIndex(i) as NSDictionary).objectForKey("premises") as NSArray).objectAtIndex(j))
+                                }
+                            }
+
                         }
                         
                         // add category of conclusion
-                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("catsConclu")!.count ; j++ {
+                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("conclusion")!.count ; j++ {
 
-                        allCat.addObject((result.objectAtIndex(i).objectForKey("catsConclu") as NSArray).objectAtIndex(j).objectForKey("catName") as String)
+                            for var k = 0 ; k < self.cateSelectList.count ; k++ {
+                                if (((result.objectAtIndex(i).objectForKey("conclusion") as NSArray).objectAtIndex(j) as NSDictionary).objectForKey("catName") as String == self.cateSelectList.objectAtIndex(k) as String ){
+                                    conclusion.addObject(((result.objectAtIndex(i) as NSDictionary).objectForKey("conclusion") as NSArray).objectAtIndex(j))
+                                }
+                            }
                             
                         }
                         
-                        //check that cate of ewsult to match wiht select category
-                        if self.checkMatchCat(allCat){
-                            listByCate.addObject(result.objectAtIndex(i))
-                        }
                         
                         
-                        
-                        
-                        
+                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).removeObjectForKey("premises")
+                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).setObject(premises, forKey: "premises")
+                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).removeObjectForKey("conclusion")
+                        (listNewPlan.objectAtIndex(i) as NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
                     }
-                    if(listByCate.count != 0 ){
+                    
+                    if(listNewPlan.count != 0 ){
                         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
                         var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as MainViewController
                         mainView.pageType = "TripMe"
-                        mainView.listPlan = listByCate as NSMutableArray
+                        mainView.listPlan = listNewPlan as NSMutableArray
                         mainView.location = self.textLocation.text
                         self.navigationController?.pushViewController(mainView, animated: true)
                     }
@@ -230,23 +242,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         }
     }
 
-
-    func checkMatchCat(cateList : NSArray) -> Bool{
-        
-        for var i = 0 ; i < cateList.count ; i++ {
-            var matchCat : Int = 0
-            for var j = 0 ; j < self.cateSelectList.count ; j++ {
-                if (self.cateSelectList.objectAtIndex(j) as NSString == cateList.objectAtIndex(i) as NSString){
-                    matchCat++
-                }
-            }
-            if matchCat == 0 {
-                return false
-            }
-        }
-        return true
-        
+    @IBAction func clickDismiss(sender: AnyObject) {
+        viewPicker.hidden = true
     }
+
+    
 
 
 //MARK:-
@@ -338,6 +338,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         table.reloadData()
     }
     
+//MARK:-
+//MARK: function
+//MARK:-
     func checkEnableTripMeBtn(){
         if(selectCategory.count > 0){
             btnTripMe.enabled = true
@@ -347,10 +350,24 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         }
     }
 
-    @IBAction func clickDismiss(sender: AnyObject) {
-        viewPicker.hidden = true
-    }
+
     
+    func checkMatchCat(cateList : NSArray) -> Bool{
+        
+        for var i = 0 ; i < cateList.count ; i++ {
+            var matchCat : Int = 0
+            for var j = 0 ; j < self.cateSelectList.count ; j++ {
+                if (self.cateSelectList.objectAtIndex(j) as NSString == cateList.objectAtIndex(i) as NSString){
+                    matchCat++
+                }
+            }
+            if matchCat == 0 {
+                return false
+            }
+        }
+        return true
+        
+    }
    
 
 // MARK: - Navigation

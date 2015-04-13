@@ -21,14 +21,20 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
     var mainViewController: UIViewController!
     var tripMeViewController: UIViewController!
+    var tripForYouViewController: UIViewController!
     var restaAndHotelViewController: UIViewController!
     var storyboards = UIStoryboard(name: "Main", bundle: nil)
     var infoCateArr : NSMutableArray = NSMutableArray()
     var countTagPlace : Int!
+    
+    var FBID : String!
+    var FBName : String!
 
+    
 //MARK:-
 //MARK: cycle
 //MARK:-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,9 +43,10 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
         
         
-        let tripMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
-        tripMeViewController.pageType = "Menu"
-        self.tripMeViewController = UINavigationController(rootViewController: tripMeViewController)
+        
+        
+        let tripForYouViewController = storyboards.instantiateViewControllerWithIdentifier("TripForYouViewController") as TripForYouViewController
+        self.tripForYouViewController = UINavigationController(rootViewController: tripForYouViewController)
         
     }
     override func didReceiveMemoryWarning() {
@@ -59,10 +66,13 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         println("User: \(user)")
         println("User ID: \(user.objectID)")
         println("User Name: \(user.name)")
-        var userEmail = user.objectForKey("email") as String
-        println("User Email: \(userEmail)")
-        
-        getPlaceFromFB(user.objectID)
+
+        FBID = (user.objectID) as String
+        FBName = (user.name) as String
+        var planFile : PlanFile = PlanFile.sharedInstance
+        if(planFile.getBehaviour("behaviour.piyawut") as NSDictionary? == nil ){
+            getPlaceFromFB()
+        }
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
@@ -74,16 +84,12 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
     
-    
-    func getPlaceFromFB(userID : String){
+//MARK:-
+//MARK: function
+//MARK:-
+    func getPlaceFromFB(){
 
-        
-        FBRequestConnection.startWithGraphPath("/"+userID+"?fields=tagged_places.limit(200)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
-            
-//            var jsonFeeds = result as FBGraphObject
-            
-//            var jsonArray : Array = ((jsonFeeds["tagged_places"] as FBGraphObject)["data"] as NSMutableArray)
-//            for(var i = 0; i < jsonArray.count ; i++){
+        FBRequestConnection.startWithGraphPath("/"+FBID+"?fields=tagged_places.limit(200)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
                 println(result.description)
             
@@ -94,12 +100,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
             for(var i = 0 ; i < taggedPlaces.count ; i++){
                 self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as NSDictionary).objectForKey("id") as String)
             }
-//            }
             
-
         })
-
-        
 
     }
     
@@ -115,8 +117,12 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
             self.infoCateArr.addObject(infoCateDic)
 
             if self.countTagPlace == self.infoCateArr.count{
-                println("send request")
-                println(self.infoCateArr)
+                println("send load place complete")
+                var connection : Connection = Connection.sharedInstance
+                
+                connection.setBehaviour( self.infoCateArr, userID: self.FBID, completion: { (result, error) -> () in
+                    println("set behaviour success")
+                })
             }
         })
         
@@ -128,7 +134,16 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
     
     @IBAction func clickTripMe(sender: AnyObject) {
+        
+        let tripMeViewController = storyboards.instantiateViewControllerWithIdentifier("TirpMeViewController") as TripMeViewController
+        tripMeViewController.pageType = "Menu"
+        self.tripMeViewController = UINavigationController(rootViewController: tripMeViewController)
+        
         self.slideMenuController()?.changeMainViewController(self.tripMeViewController, close: true)
+    }
+    
+    @IBAction func clickTripForYou(sender: AnyObject) {
+        self.slideMenuController()?.changeMainViewController(self.tripForYouViewController, close: true)
     }
     
     @IBAction func clickRes(sender: AnyObject) {

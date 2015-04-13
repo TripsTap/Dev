@@ -50,6 +50,7 @@
 		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
 		83DA42F71AD2DADF00FA3F04 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */; };
 		83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */; };
+		83DA43021AD810B800FA3F04 /* TripForYouViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA43011AD810B800FA3F04 /* TripForYouViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,7 @@
 		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		83DA43011AD810B800FA3F04 /* TripForYouViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripForYouViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 				8347B8F91AC9267D0059487A /* ListVenueViewController.swift */,
 				83C279111AAE985900052269 /* MenuViewController.swift */,
 				831D88381AC1820D000C30DD /* RestaAndHotelViewController.swift */,
+				83DA43011AD810B800FA3F04 /* TripForYouViewController.swift */,
 				83C279131AAE9AAD00052269 /* MainViewController.swift */,
 				831587001ACB99910011F2B0 /* MapViewController.swift */,
 				831D883C1AC25E42000C30DD /* InfoViewController.swift */,
@@ -470,6 +473,7 @@
 				837D00A51AC2FD790016679D /* ImageLoader.swift in Sources */,
 				831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */,
 				8347B8FA1AC9267D0059487A /* ListVenueViewController.swift in Sources */,
+				83DA43021AD810B800FA3F04 /* TripForYouViewController.swift in Sources */,
 				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
 				831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */,
 				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,

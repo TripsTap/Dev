@@ -62,6 +62,22 @@ class PlanFile: NSObject {
         
     }
     
+    
+//    behaviour
+    func saveBehaviour(path : String , behaviour :NSDictionary){
+        var realPath = applicationDocumentsDirectory(path)
+        behaviour.writeToFile(realPath, atomically: true)
+    }
+    func getBehaviour(path : String) -> NSDictionary?{
+        var realPath : String = applicationDocumentsDirectory(path)
+        return NSDictionary(contentsOfFile: realPath)
+    }
+    
+    func deleteBehaviour(path : String){
+        var behaviour : NSDictionary = NSDictionary()
+        var realPath = applicationDocumentsDirectory(path)
+        behaviour.writeToFile(realPath, atomically: true)
+    }
 
     
     

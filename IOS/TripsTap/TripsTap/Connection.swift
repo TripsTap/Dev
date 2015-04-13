@@ -107,7 +107,26 @@ class Connection: NSObject {
         }
 
     }
+//MARK:-
+//MARK: trip for you
+//MARK:-
     
+    func setBehaviour(info : NSArray , userID : String! , completion : (result : AnyObject! , error : NSError!) -> ()){
+        
+        var url = "https://api.mongolab.com/api/1/databases/triptap_user_data/collections/user_data?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
+        
+
+        
+        Alamofire.request(.POST , url , parameters:["userID":userID , "info": info ], encoding: .JSON ).responseJSON { (request, response, data, error) -> Void in
+            println("---------------------")
+            println("set Behaviour ")
+            println(data)
+            completion(result: data, error: error)
+            
+        }
+        
+
+    }
     
 //MARK:-
 //MARK: Rstaurant and Hotel
@@ -141,6 +160,11 @@ class Connection: NSObject {
         }
         
     }
+    
+
+//MARK:-
+//MARK: Rstaurant and Hotel
+//MARK:-
     
     func getInfoFromFoursquare(idString : String, completion : (result : AnyObject! , error : NSError!) ->() ){
         

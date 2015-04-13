@@ -11,15 +11,18 @@ import UIKit
 class ImageViewController: UIViewController , UICollectionViewDataSource ,UICollectionViewDelegate {
 
     @IBOutlet var collection: UICollectionView!
+    @IBOutlet var viewImage: UIView!
+    @IBOutlet var imagePlace: UIImageView!
     
     var listUrl : NSMutableArray!
     var listImage : NSMutableArray!
     var venueID : String!
+    var currentIndexImage : Int! = 0
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.collection.registerClass(UICollectionViewCell() , forCellWithReuseIdentifier: "Cell")
+
         listImage = NSMutableArray()
         var connection : Connection = Connection.sharedInstance
         listUrl = NSMutableArray()
@@ -38,7 +41,9 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         for var i = 0 ; i < listUrl.count ; i++ {
             var prefix : String = listUrl.objectAtIndex(i).objectForKey("prefix") as String
             var suffix : String = listUrl.objectAtIndex(i).objectForKey("suffix") as String
-            var urlImage : String = String(format: "%@300x300%@", prefix, suffix)
+            var height : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("height") as Int))
+            var width : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("width") as Int))
+            var urlImage : String = String(format: "%@%@x%@%@", prefix,  height ,width , suffix)
             
             var connection : Connection = Connection.sharedInstance
             
@@ -60,6 +65,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
         return listImage.count
     }
     
@@ -83,11 +89,39 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         let leftRightInset = self.view.frame.size.width / 14.0
         return UIEdgeInsetsMake(0, leftRightInset, 0, leftRightInset)
     }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        currentIndexImage = indexPath.row
+        imagePlace.image = listImage!.objectAtIndex(indexPath.row) as UIImage
+        viewImage.hidden = false
+        imagePlace.hidden = false
+    }
 
+    @IBAction func clickCloseImage(sender: AnyObject) {
+        viewImage.hidden = true
+        imagePlace.hidden = true
+    }
     
     @IBAction func clickBace(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    @IBAction func swipeRight(sender: AnyObject) {
+        if currentIndexImage + 1 < listImage.count {
+            currentIndexImage  = currentIndexImage + 1
+            imagePlace.image = listImage.objectAtIndex(currentIndexImage) as UIImage
+        }
+    }
+
+    
+    @IBAction func swipeLeft(sender: AnyObject) {
+        if currentIndexImage - 1 >= 0 {
+            currentIndexImage = currentIndexImage - 1
+             imagePlace.image = listImage.objectAtIndex(currentIndexImage) as UIImage
+        }
+    }
+
+    
     /*
     // MARK: - Navigation
 

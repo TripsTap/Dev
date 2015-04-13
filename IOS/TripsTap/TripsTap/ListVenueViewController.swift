@@ -286,6 +286,53 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    @IBAction func clickAddTrip(sender: AnyObject) {
+        
+        addTripAlready = true
+        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
+        var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
+        
+        
+        var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as NSMutableArray)
+        var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as NSMutableArray)
+        
+        
+        
+        
+        for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
+            if( (listPlaceNotSelectSort.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
+                premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as Int - i )
+                
+            }
+        }
+        
+        var countDelete = 0
+        for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
+            if( (listPlaceNotSelectSort.objectAtIndex(j) as Int) >= (dicPlan.objectForKey("premises") as NSArray).count as Int){
+                conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as Int - countDelete - (dicPlan.objectForKey("premises") as NSArray).count as Int )
+                countDelete++
+                
+            }
+        }
+        
+        var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
+        newPlan.removeObjectForKey("premises")
+        newPlan.removeObjectForKey("conclusion")
+        newPlan.setObject(premiss, forKey: "premises")
+        newPlan.setObject(conclusion, forKey: "conclusion")
+        var rate: String! = getRating(newPlan)
+        newPlan.setObject(rate, forKey: "rate")
+        
+        
+        
+        var file : PlanFile = PlanFile.sharedInstance
+        file.listPlan.addObject(newPlan)
+        file.saveFile()
+        
+        
+        self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
+    }
+
 
 //MARK:-
 //MARK: Navigation
@@ -338,52 +385,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
 
-    @IBAction func clickAddTrip(sender: AnyObject) {
-        
-        addTripAlready = true
-        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
-        var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
-
-        
-        var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as NSMutableArray)
-        var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as NSMutableArray)
-        
-
-    
-        
-        for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
-            if( (listPlaceNotSelectSort.objectAtIndex(i) as Int) < (dicPlan.objectForKey("premises") as NSArray).count as Int){
-                premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as Int - i )
-
-            }
-        }
-        
-        var countDelete = 0
-        for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
-            if( (listPlaceNotSelectSort.objectAtIndex(j) as Int) >= (dicPlan.objectForKey("conclusion") as NSArray).count as Int){
-                conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as Int - countDelete - (dicPlan.objectForKey("premises") as NSArray).count as Int )
-                countDelete++
-                
-            }
-        }
-
-        var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
-        newPlan.removeObjectForKey("premises")
-        newPlan.removeObjectForKey("conclusion")
-        newPlan.setObject(premiss, forKey: "premises")
-        newPlan.setObject(conclusion, forKey: "conclusion")
-        var rate: String! = getRating(newPlan)
-        newPlan.setObject(rate, forKey: "rate")
-        
-        
-        
-        var file : PlanFile = PlanFile.sharedInstance
-        file.listPlan.addObject(newPlan)
-        file.saveFile()
-        
-        
-        self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
-    }
     
     func getRating(plan : NSMutableDictionary) -> String{
         var sumRate : Double = 0.0
@@ -405,7 +406,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
     
-    
+//MARK:-
+//MARK: delegate cell
+//MARK:-
     func clickCell(index: Int) {
         
         for(var i = 0 ; i < self.listPlaceNotSelect.count ; i++){

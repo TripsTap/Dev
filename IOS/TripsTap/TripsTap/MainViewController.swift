@@ -47,8 +47,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
         else{
             btnBackAndMenu.setTitle("Back", forState: UIControlState.Normal)
-            
-
+            // sort by rateing
             for(var i = 0 ; i < listPlan?.count  ; i++ ){
                 var rate : String? = getRating(listPlan?.objectAtIndex(i) as NSMutableDictionary)
                 var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: listPlan?.objectAtIndex(i) as NSMutableDictionary)
@@ -56,73 +55,92 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 listPlan?.removeObjectAtIndex(i)
                 listPlan?.insertObject(newPlan, atIndex: i)
             }
+            // update listPlan
             var planForSort : NSArray = NSArray(array: listPlan!)
             var descriptor: NSSortDescriptor = NSSortDescriptor(key: "rate", ascending: false)
             var listPlanSort : NSArray = planForSort.sortedArrayUsingDescriptors([descriptor])
             listPlan?.removeAllObjects()
             listPlan = NSMutableArray(array: listPlanSort )
-            
+            deleteSameCat()
         }
         
+        
+        for(var i = 0 ; i < listPlan?.count  ; i++ ){
+            
+            var data: NSDictionary = self.listPlan?.objectAtIndex(i) as NSDictionary
+            var conclusion : NSArray = data.objectForKey("conclusion") as NSArray
+            var premises : NSArray = data.objectForKey("premises") as NSArray
+            
+            var loadImageCount :Int = 0
+            let imageAtIndex : Int = i
+            // load image of each place
+            for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
 
-                for(var i = 0 ; i < listPlan?.count  ; i++ ){
-                
-                var data: NSDictionary = self.listPlan?.objectAtIndex(i) as NSDictionary
-                var conclusion : NSArray = data.objectForKey("conclusion") as NSArray
-                var premises : NSArray = data.objectForKey("premises") as NSArray
-                
-                var loadImageCount :Int = 0
-                let imageAtIndex : Int = i
-                
-                for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
-                    loadImageCount++
-                    
-                    var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
-                    var imageUrl : String = getUrlImage(imageUrlFull , index: i)
-                    if(imageUrl == ""){
-                        loadImageCount--
-                    }
-                        
-                    else  {
-                        connection.getImage(imageUrl, completion: { (image) -> () in
-                            if(image != nil){
-                                var imageDic : NSMutableDictionary = NSMutableDictionary()
-                                imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                                imageDic.setObject(image as UIImage, forKey: "image")
-                                self.listImage?.addObject(imageDic)
-                                self.table.reloadData()
-                            }
-                        })
-                    }
-                    
+                loadImageCount++
+
+                var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as String)
+                var imageUrl : String = getUrlImage(imageUrlFull , index: i)
+                if(imageUrl == ""){
+                    loadImageCount--
                 }
-                
-                for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
-                    loadImageCount++
-                    var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
-                    var imageUrl : String = getUrlImage(imageUrlFull , index : i)
-                    if(imageUrl == ""){
-                        loadImageCount--
-                    }
-                    else{
-                        connection.getImage(imageUrl, completion: { (image) -> () in
-                            if(image != nil){
-                                var imageDic : NSMutableDictionary = NSMutableDictionary()
-                                imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                                imageDic.setObject(image as UIImage, forKey: "image")
-                                self.listImage?.addObject(imageDic)
-                                
-                                self.table.reloadData()
-                            }
-                        })
-                    }
                     
+                else  {
+                    connection.getImage(imageUrl, completion: { (image) -> () in
+                        if(image != nil){
+                            var imageDic : NSMutableDictionary = NSMutableDictionary()
+                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                            imageDic.setObject(image as UIImage, forKey: "image")
+                            self.listImage?.addObject(imageDic)
+                            self.table.reloadData()
+                        }
+                    })
                 }
                 
             }
             
-//        }
+            for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
+                loadImageCount++
+                var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as String)
+                var imageUrl : String = getUrlImage(imageUrlFull , index : i)
+                if(imageUrl == ""){
+                    loadImageCount--
+                }
+                else{
+                    connection.getImage(imageUrl, completion: { (image) -> () in
+                        if(image != nil){
+                            var imageDic : NSMutableDictionary = NSMutableDictionary()
+                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                            imageDic.setObject(image as UIImage, forKey: "image")
+                            self.listImage?.addObject(imageDic)
+                            
+                            self.table.reloadData()
+                        }
+                    })
+                }
+                
+            }
+            
+        }
 
+    }
+    
+    func deleteSameCat(){
+        
+        for var i = 0 ; i < self.listPlan?.count ; i++ {
+            
+            for var j = i + 1 ; j < self.listPlan?.count ; j++ {
+                var countI : Int = (listPlan?.objectAtIndex(i).objectForKey("premises") as NSArray).count as Int + (listPlan?.objectAtIndex(i).objectForKey("conclusion") as NSArray).count as Int
+                var countJ : Int = (listPlan?.objectAtIndex(j).objectForKey("premises") as NSArray).count as Int + (listPlan?.objectAtIndex(j).objectForKey("conclusion") as NSArray).count as Int
+                
+                var rateI : String = listPlan?.objectAtIndex(i).objectForKey("rate") as String
+                var rateJ : String = listPlan?.objectAtIndex(j).objectForKey("rate") as String
+                if i !=  j && countI == countJ && rateI == rateJ {
+                    listPlan?.removeObjectAtIndex(j)
+                    j--
+                }
+            }
+        }
+        
     }
     
     func getRating(plan : NSMutableDictionary) -> String{

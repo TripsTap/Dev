@@ -10,16 +10,16 @@ import UIKit
 
 class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource {
 
-    //MARK:-
-    //MARK: IBOutlet
-    //MARK:-
+//MARK:-
+//MARK: IBOutlet
+//MARK:-
     @IBOutlet var labTitle: UILabel!
     @IBOutlet var table: UITableView!
     @IBOutlet var viewLoader: UIView!
     
-    //MARK:-
-    //MARK: variable
-    //MARK:-
+//MARK:-
+//MARK: variable
+//MARK:-
     var connection : Connection!
     var pageType : String!
     var latitude : String!
@@ -27,9 +27,9 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     var mainViewController: UIViewController!
     var listOfTable : NSMutableArray!
     
-    //MARK:-
-    //MARK: cycle
-    //MARK:-
+//MARK:-
+//MARK: cycle
+//MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,9 +81,9 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     
 
     
-    //MARK:-
-    //MARK:  table delegate
-    //MARK:-
+//MARK:-
+//MARK:  table delegate
+//MARK:-
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 80
@@ -97,13 +97,21 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         var cell : RestaAndHotelTableViewCell = table.dequeueReusableCellWithIdentifier("RestaAndHotelTableViewCell", forIndexPath: indexPath) as RestaAndHotelTableViewCell
         
         cell.labName.text = listOfTable.objectAtIndex(indexPath.row).objectForKey("name") as String
+        var cateShortName : String = (self.listOfTable.objectAtIndex(indexPath.row) as NSDictionary).objectForKey("categories")?.objectAtIndex(0).objectForKey("shortName") as String!
         
-        //var cateID = (self.listOfTable.objectAtIndex(indexPath.row) as NSDictionary).objectForKey("categories")?.objectForKey("id")
+        // bakery
+        if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
+            cell.imagePlace.backgroundColor = UIColor.greenColor()
+        }
+        // coffee
+        else if(cateShortName.rangeOfString("Coffee") != nil ){
+                        cell.imagePlace.backgroundColor = UIColor.redColor()
+        }
+        // food
+        else{
+            cell.imagePlace.backgroundColor = UIColor.blackColor()
+        }
         
-//        if (cateID == "4bf58dd8d48988d1e0931735"){
-//            cell.imagePlace.backgroundColor = UIColor.greenColor()
-//        }
-//        else if(cateID)
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
