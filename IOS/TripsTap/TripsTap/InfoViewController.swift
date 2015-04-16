@@ -51,7 +51,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         }
         
             
-        else if (pageType == "TripMe"){
+        else if (pageType == "TripMe" || pageType == "TripForYou"){
             if(info == nil){
                 connection = Connection.sharedInstance
                 listComment = NSMutableArray()
@@ -154,7 +154,6 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             phone = (info.objectForKey("contact") as! NSDictionary).objectForKey("phone") as! String
         }
         labName.text = info.objectForKey("name") as? String
-        labName.sizeToFit()
         labPhone.text = String(format: "Phone : %@", phone)
         
         var text = NSString(format: "%@", location) as! String
@@ -219,7 +218,12 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         
         else{
             var imageView : ImageViewController = segue.destinationViewController as! ImageViewController
-            imageView.venueID = infoOld.objectForKey("venueId") as! String
+            if infoOld.objectForKey("venueId") != nil {
+                imageView.venueID = infoOld.objectForKey("venueId") as! String
+            }
+            else{
+                imageView.venueID = info.objectForKey("id") as! String
+            }
         }
         
 

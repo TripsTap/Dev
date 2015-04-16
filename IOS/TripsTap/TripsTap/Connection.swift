@@ -48,6 +48,23 @@ class Connection: NSObject {
 //MARK: -
 //
 
+    func test(){
+        
+        var url = "http://www.easytorecipe.com/c2"
+        
+        //        var parameter : NSMutableDictionary! = NSMutableDictionary()
+        //        parameter.setObject(location, forKey: "state_init")
+        
+        
+        
+        Alamofire.request(.GET, url, parameters: nil ).responseJSON { (request, response, data, error) -> Void in
+            
+            println("---------------------")
+            println("get category")
+            println("---------------------")
+        }
+        
+    }
     func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
@@ -111,7 +128,7 @@ class Connection: NSObject {
 //MARK: trip for you
 //MARK:-
     
-    func setBehaviour(info : NSArray , userID : String! , completion : (result : AnyObject! , error : NSError!) -> ()){
+    func setBehaviour(info : NSArray , userID : String! ){
         
         var url = "https://api.mongolab.com/api/1/databases/triptap_user_data/collections/user_data?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
         
@@ -125,8 +142,6 @@ class Connection: NSObject {
             self.getSameBehaviour(userIDDupicate)
             
             
-            completion(result: data, error: error)
-            
         }
         
     }
@@ -134,20 +149,43 @@ class Connection: NSObject {
     func getSameBehaviour(userID : String!){
         
         println("userID : \(userID)")
-        var url = "http://128.199.130.63:3000/triptap?userId=\(userID)"
+        var url = "http://128.199.130.63:3000/triptap"
         println("url : \(url)")
         
         
         
-        Alamofire.request(.POST , url , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
+        
+        
+        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("get same Behaviour ")
             println(data)
-            
+            if error == nil {
+                var planFile : PlanFile = PlanFile.sharedInstance
+                planFile.behaviour.setObject(data!, forKey: "info")
+                planFile.saveBehaviour()
+            }
         }
 
         
     }
+    
+    
+    func getImageFacebook(userID : String!){
+        
+        
+        var url = "https://graph.facebook.com/\(userID)/picture?type=large"
+        ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
+            if image != nil {
+                var planFile : PlanFile = PlanFile.sharedInstance
+                planFile.behaviour.setObject(image!, forKey: "image")
+                planFile.saveBehaviour()
+            }
+
+        }
+        
+    }
+
     
 //MARK:-
 //MARK: Rstaurant and Hotel

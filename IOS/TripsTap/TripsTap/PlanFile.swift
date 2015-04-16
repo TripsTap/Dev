@@ -12,6 +12,8 @@ class PlanFile: NSObject {
    
     var listPlan : NSMutableArray!
     var fileName : String = "plan.peach"
+    var fileBehaviour : String = "behaviour.peach"
+    var behaviour : NSMutableDictionary!
     
     class var sharedInstance: PlanFile {
         struct Static {
@@ -33,11 +35,26 @@ class PlanFile: NSObject {
         
         if(NSFileManager.defaultManager().fileExistsAtPath(realPath)){
             listPlan = NSMutableArray(contentsOfFile: realPath)
+
+            
         }
         else{
             listPlan = NSMutableArray()
             saveFile()
         }
+        
+        
+        realPath = applicationDocumentsDirectory(fileBehaviour)
+        if(NSFileManager.defaultManager().fileExistsAtPath(realPath)){
+            behaviour = NSMutableDictionary(contentsOfFile: realPath)
+            
+            
+        }
+        else{
+            behaviour = NSMutableDictionary()
+            saveFile()
+        }
+        
         
     }
     
@@ -64,18 +81,18 @@ class PlanFile: NSObject {
     
     
 //    behaviour
-    func saveBehaviour(path : String , behaviour :NSDictionary){
-        var realPath = applicationDocumentsDirectory(path)
-        behaviour.writeToFile(realPath, atomically: true)
+    func saveBehaviour(){
+        var realPath = applicationDocumentsDirectory(fileBehaviour)
+        self.behaviour.writeToFile(realPath, atomically: true)
     }
-    func getBehaviour(path : String) -> NSDictionary?{
-        var realPath : String = applicationDocumentsDirectory(path)
+    func getBehaviour() -> NSDictionary?{
+        var realPath : String = applicationDocumentsDirectory(fileBehaviour)
         return NSDictionary(contentsOfFile: realPath)
     }
     
-    func deleteBehaviour(path : String){
+    func deleteBehaviour(){
         var behaviour : NSDictionary = NSDictionary()
-        var realPath = applicationDocumentsDirectory(path)
+        var realPath = applicationDocumentsDirectory(fileBehaviour)
         behaviour.writeToFile(realPath, atomically: true)
     }
 

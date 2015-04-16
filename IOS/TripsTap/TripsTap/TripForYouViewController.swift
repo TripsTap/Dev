@@ -14,31 +14,25 @@ class TripForYouViewController: UIViewController {
 //MARK: IBOutlet
 //MARK: -
     
-    @IBOutlet weak var textLocation: UITextField!
-    @IBOutlet weak var table: UITableView!
-    @IBOutlet weak var viewPicker: UIView!
-    @IBOutlet weak var viewIndicator: UIView!
-    @IBOutlet var segmentType: UISegmentedControl!
-    @IBOutlet var btnTripMe: UIButton!
+
+    @IBOutlet var labNameUser: UILabel!
+    @IBOutlet var imageUser: UIImageView!
+    @IBOutlet var table: UITableView!
     
 
-    
-    
 //MARK: -
 //MARK: variable
 //MARK: -
     
-    let location : Array<String> = ["Uthai Thani","Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
-    
     var connection : Connection!
-    var selectCategory : NSMutableArray!
-    var category : NSMutableArray! = NSMutableArray()
+
+
     var mainViewController: UIViewController!
-    var listPlan : NSMutableArray!
-    var categorySort: NSArray!
-    var cateSelectList : NSMutableArray!
     var pageType : String!
+    var info : NSMutableDictionary!
+
     
+    var planFile : PlanFile!
     
 //MARK:-
 //MARK: cycle
@@ -48,6 +42,17 @@ class TripForYouViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.hidden = true
+        
+        planFile = PlanFile.sharedInstance
+        
+        info = NSMutableDictionary(dictionary: planFile.behaviour as NSMutableDictionary)
+        
+        
+        labNameUser.text = info.objectForKey("FBName") as? String
+        imageUser.image = info.objectForKey("image") as? UIImage
+        
+        
+        
 
     }
 
@@ -57,27 +62,7 @@ class TripForYouViewController: UIViewController {
     }
     
 
-//MARK:-
-//MARK:  picker function
-//MARK:-
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return location.count
-        
-    }
-    
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-        return location[row]
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        textLocation.text = location[row]
-    }
     
     
 //MARK: -
@@ -85,38 +70,38 @@ class TripForYouViewController: UIViewController {
 //MARK: -
     
     @IBAction func clickSelectLocation(sender: AnyObject) {
-        viewPicker.hidden = false
+
         
     }
     
-    @IBAction func clickDonePicker(sender: AnyObject) {
-        selectCategory.removeAllObjects()
-        viewPicker.hidden = true
-        
-        viewIndicator.hidden = false
-        
-        // send request
-        self.connection = Connection.sharedInstance
-        
-        connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
-            
-            self.viewIndicator.hidden = true
-            self.category.removeAllObjects()
-            self.table.reloadData()
-            if(error == nil){
-                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
-                    
-                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
-                    self.table.reloadData()
-                }
-                else{
-                    println("cate == 0")
-                }
-                
-            }
-        }
-        
-    }
+//    @IBAction func clickDonePicker(sender: AnyObject) {
+//        selectCategory.removeAllObjects()
+//        viewPicker.hidden = true
+//        
+//        viewIndicator.hidden = false
+//        
+//        // send request
+//        self.connection = Connection.sharedInstance
+//        
+//        connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
+//            
+//            self.viewIndicator.hidden = true
+//            self.category.removeAllObjects()
+//            self.table.reloadData()
+//            if(error == nil){
+//                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
+//                    
+//                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
+//                    self.table.reloadData()
+//                }
+//                else{
+//                    println("cate == 0")
+//                }
+//                
+//            }
+//        }
+//        
+//    }
 
     //MARK:-
     //MARK:  table function
@@ -166,14 +151,45 @@ class TripForYouViewController: UIViewController {
     }
 
     
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
+        if segue.identifier == "user1" {
+            var listTripForU : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
+            listTripForU.pageType = "TripForYou"
+            
+            var planFile : PlanFile = PlanFile.sharedInstance
+            
+            listTripForU.dicPlan = planFile.behaviour.objectForKey("info")?.objectForKey("data")?.objectAtIndex(0) as! NSMutableDictionary
+        }
+        
+    }
+
+
+    @IBAction func clickBack(sender: AnyObject) {
+        
+        self.navigationController?.navigationBar.hidden = true
+        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
+        self.mainViewController = UINavigationController(rootViewController: mainViewController)
+        
+        
+        self.navigationController?.popViewControllerAnimated(true)
+        self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
+    }
+
+    
+    
+    
+    @IBAction func clickUser2(sender: AnyObject) {
+        
+    }
+    
+    @IBAction func clickUser3(sender: AnyObject) {
+        
+    }
+    
 }

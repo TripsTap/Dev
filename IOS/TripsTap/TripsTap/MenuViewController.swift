@@ -66,13 +66,19 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         println("User: \(user)")
         println("User ID: \(user.objectID)")
         println("User Name: \(user.name)")
-
+        
+        
         FBID = (user.objectID) as String
         FBName = (user.name) as String
         var planFile : PlanFile = PlanFile.sharedInstance
-        if(planFile.getBehaviour("behaviour.piyawut") as NSDictionary? == nil ){
-            getPlaceFromFB()
-        }
+        
+        planFile.behaviour.setObject(FBID, forKey: "FBID")
+        planFile.behaviour.setObject(FBName, forKey: "FBName")
+        planFile.saveBehaviour()
+        
+        getProfileImage()
+        getPlaceFromFB()
+        
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
@@ -120,12 +126,18 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
                 println("send load place complete")
                 var connection : Connection = Connection.sharedInstance
                 
-                connection.setBehaviour( self.infoCateArr, userID: self.FBID, completion: { (result, error) -> () in
-                    println("set behaviour success")
-                })
+                connection.setBehaviour( self.infoCateArr, userID: self.FBID)
+                
             }
         })
         
+    }
+    
+    func getProfileImage(){
+        
+        var connection : Connection = Connection.sharedInstance
+         
+        connection.getImageFacebook(FBID)
     }
     
     

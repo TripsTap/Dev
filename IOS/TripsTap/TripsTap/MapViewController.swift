@@ -48,19 +48,6 @@ class MapViewController: UIViewController {
             marker.position = position
             marker.snippet = self.listInfo!.objectAtIndex(i).objectForKey("name") as! String
             marker.appearAnimation = kGMSMarkerAnimationPop
-            
-        
-//            for(var j = 0 ; j < self.listImage.count ; j++){
-//                var indexImage : Int = (self.listImage.objectAtIndex(j).objectForKey("index") as String).toInt()!
-//                if indexImage == i{
-//                    
-//                    var imagefull = (self.listImage.objectAtIndex(j).objectForKey("image") as UIImage)
-//                    marker.icon = RBResizeImage(imagefull, CGSize(width: 70, height: 70))
-//                    break
-//                }
-//                
-//            }
-            
             marker.map = mapView
             
 

@@ -66,63 +66,106 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         
         for(var i = 0 ; i < listPlan?.count  ; i++ ){
+            if pageType == "TripMe" {
+                setViewMain(i)
+            }
             
-            var data: NSDictionary = self.listPlan?.objectAtIndex(i) as! NSDictionary
-            var conclusion : NSArray = data.objectForKey("conclusion") as! NSArray
-            var premises : NSArray = data.objectForKey("premises") as! NSArray
-            
-            var loadImageCount :Int = 0
-            let imageAtIndex : Int = i
-            // load image of each place
-            for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
-
-                loadImageCount++
-
-                var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as! String)
-                var imageUrl : String = getUrlImage(imageUrlFull , index: i)
-                if(imageUrl == ""){
-                    loadImageCount--
+            else{
+                if self.listPlan?.objectAtIndex(i).objectForKey("type") as! String == "TripForYou" {
+                    
+                    var loadImageCount :Int = 0
+                    let imageAtIndex : Int = i
+                    // load image of each place
+                    for(var j = 0 ; j < self.listPlan?.objectAtIndex(i).objectForKey("user_checkin")?.count && loadImageCount < 3 ; j++  ){
+                        
+                        loadImageCount++
+                        
+                        var imageUrlFull : String = self.listPlan?.objectAtIndex(i).objectForKey("user_checkin")?.objectAtIndex(j).objectForKey("PHOTO")! as! String
+                        var imageUrl : String = getUrlImage(imageUrlFull , index: i)
+                        if(imageUrl == ""){
+                            loadImageCount--
+                        }
+                            
+                        else  {
+                            connection.getImage(imageUrl, completion: { (image) -> () in
+                                if(image != nil){
+                                    var imageDic : NSMutableDictionary = NSMutableDictionary()
+                                    imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                                    imageDic.setObject(image as UIImage, forKey: "image")
+                                    self.listImage?.addObject(imageDic)
+                                    self.table.reloadData()
+                                }
+                            })
+                        }
+                        
+                    }
+                    
                 }
                     
-                else  {
-                    connection.getImage(imageUrl, completion: { (image) -> () in
-                        if(image != nil){
-                            var imageDic : NSMutableDictionary = NSMutableDictionary()
-                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                            imageDic.setObject(image as UIImage, forKey: "image")
-                            self.listImage?.addObject(imageDic)
-                            self.table.reloadData()
-                        }
-                    })
+                else {
+                    setViewMain(i)
                 }
-                
             }
-            
-            for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
-                loadImageCount++
-                var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as! String)
-                var imageUrl : String = getUrlImage(imageUrlFull , index : i)
-                if(imageUrl == ""){
-                    loadImageCount--
-                }
-                else{
-                    connection.getImage(imageUrl, completion: { (image) -> () in
-                        if(image != nil){
-                            var imageDic : NSMutableDictionary = NSMutableDictionary()
-                            imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
-                            imageDic.setObject(image as UIImage, forKey: "image")
-                            self.listImage?.addObject(imageDic)
-                            
-                            self.table.reloadData()
-                        }
-                    })
-                }
-                
-            }
-            
         }
 
     }
+    
+    func setViewMain(i : Int){
+        var data: NSDictionary = self.listPlan?.objectAtIndex(i) as! NSDictionary
+        var conclusion : NSArray = data.objectForKey("conclusion") as! NSArray
+        var premises : NSArray = data.objectForKey("premises") as! NSArray
+        
+        var loadImageCount :Int = 0
+        let imageAtIndex : Int = i
+        // load image of each place
+        for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
+            
+            loadImageCount++
+            
+            var imageUrlFull : String = (conclusion.objectAtIndex(j).objectForKey("image") as! String)
+            var imageUrl : String = getUrlImage(imageUrlFull , index: i)
+            if(imageUrl == ""){
+                loadImageCount--
+            }
+                
+            else  {
+                connection.getImage(imageUrl, completion: { (image) -> () in
+                    if(image != nil){
+                        var imageDic : NSMutableDictionary = NSMutableDictionary()
+                        imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                        imageDic.setObject(image as UIImage, forKey: "image")
+                        self.listImage?.addObject(imageDic)
+                        self.table.reloadData()
+                    }
+                })
+            }
+            
+        }
+        
+        for(var j = 0 ; j < premises.count && loadImageCount < 3 ; j++){
+            loadImageCount++
+            var imageUrlFull : String = (premises.objectAtIndex(j).objectForKey("image") as! String)
+            var imageUrl : String = getUrlImage(imageUrlFull , index : i)
+            if(imageUrl == ""){
+                loadImageCount--
+            }
+            else{
+                connection.getImage(imageUrl, completion: { (image) -> () in
+                    if(image != nil){
+                        var imageDic : NSMutableDictionary = NSMutableDictionary()
+                        imageDic.setObject(String(format: "%d", imageAtIndex), forKey: "index")
+                        imageDic.setObject(image as UIImage, forKey: "image")
+                        self.listImage?.addObject(imageDic)
+                        
+                        self.table.reloadData()
+                    }
+                })
+            }
+            
+        }
+    }
+    
+    
     
     func deleteSameCat(){
         
@@ -190,7 +233,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     
     override func viewWillAppear(animated: Bool) {
-       
+       table.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -215,107 +258,184 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
-        var conclusionCount : Int = (data.objectForKey("conclusion") as! NSArray).count
-        var premisesCount : Int = (data.objectForKey("premises") as! NSArray).count
-        
-        var rate : String! = data.objectForKey("rate") as! String
-        
-//        if pageType == "Main"{
-//         rate = 
-//        }
-//        else{
-//            
-//        }
-        
-        if (conclusionCount + premisesCount  == 2 ){
+        if self.listPlan?.objectAtIndex(indexPath.row).objectForKey("type") as? String == "TripForYou" {
+         
+            var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
+            var user_checkin : NSMutableArray = self.listPlan?.objectAtIndex(indexPath.row).objectForKey("user_checkin") as! NSMutableArray
+            var rate : String! = "2.4"
+//            data.objectForKey("rate") as! String
             
-            var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
-            var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
-            cell.labCountRate.text = locat
-            var countIamge = 0
-            for (var i = 0 ; i < self.listImage!.count ; i++){
-                if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
-                    if(countIamge == 0){
-//                        cell.imageOne.layer.cornerRadius = 10.0
-//                        cell.imageOne.clipsToBounds = true
-                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+            if user_checkin.count == 2 {
+                
+                var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
+                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                cell.labCountRate.text = locat
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
                     }
-                    else if(countIamge == 1){
-//                        cell.imageTwo.layer.cornerRadius = 10.0
-//                        cell.imageOne.clipsToBounds = true
-                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                    }
-                    countIamge++
                 }
+                
+                return cell
+
             }
+            else if (indexPath.row % 2 == 0 )
+            {
+                var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
+                
+                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                cell.labCountRate.text = locat
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else{
+                            cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
+                    }
+                }
+                
+                return cell
+            }
+            else{
+                var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
+                
+                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                cell.labCountRate.text = locat
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else{
+                            cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
+                    }
+                }
+                
+                return cell
+            }
+
             
-            return cell
-    
-            
+
         }
-            
-        else if (indexPath.row % 2 == 0 )
+        
+        else
         {
-            var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
+            var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
+            var conclusionCount : Int = (data.objectForKey("conclusion") as! NSArray).count
+            var premisesCount : Int = (data.objectForKey("premises") as! NSArray).count
             
-            var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
-            cell.labCountRate.text = locat
-            
-            var countIamge = 0
-            for (var i = 0 ; i < self.listImage!.count ; i++){
-                if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
-                    if(countIamge == 0){
-//                        cell.imageOne.layer.cornerRadius = 10.0
-//                        cell.imageOne.clipsToBounds = true
-                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+            var rate : String! = data.objectForKey("rate") as! String
+            if (conclusionCount + premisesCount  == 2 ){
+                
+                var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
+                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                cell.labCountRate.text = locat
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            //                        cell.imageOne.layer.cornerRadius = 10.0
+                            //                        cell.imageOne.clipsToBounds = true
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            //                        cell.imageTwo.layer.cornerRadius = 10.0
+                            //                        cell.imageOne.clipsToBounds = true
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
                     }
-                    else if(countIamge == 1){
-//                        cell.imageTwo.layer.cornerRadius = 10.0
-//                        cell.imageTwo.clipsToBounds = true
-                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                    }
-                    else{
-//                        cell.imageThree.layer.cornerRadius = 10.0
-//                        cell.imageThree.clipsToBounds = true
-                        cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                    }
-                    countIamge++
                 }
+                
+                return cell
+                
+                
             }
-            
-            return cell
-        }
-        
-        else{
-            var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
-            
-            var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
-            cell.labCountRate.text = locat
-            
-            var countIamge = 0
-            for (var i = 0 ; i < self.listImage!.count ; i++){
-                if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
-                    if(countIamge == 0){
-//                        cell.imageOne.layer.cornerRadius = 10.0
-//                        cell.imageOne.clipsToBounds = true
-                        cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                
+            else if (indexPath.row % 2 == 0 )
+            {
+                var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
+                
+                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                cell.labCountRate.text = locat
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            //                        cell.imageOne.layer.cornerRadius = 10.0
+                            //                        cell.imageOne.clipsToBounds = true
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            //                        cell.imageTwo.layer.cornerRadius = 10.0
+                            //                        cell.imageTwo.clipsToBounds = true
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else{
+                            //                        cell.imageThree.layer.cornerRadius = 10.0
+                            //                        cell.imageThree.clipsToBounds = true
+                            cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
                     }
-                    else if(countIamge == 1){
-//                        cell.imageTwo.layer.cornerRadius = 10.0
-//                        cell.imageTwo.clipsToBounds = true
-                        cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                    }
-                    else{
-//                        cell.imageThree.layer.cornerRadius = 10.0
-//                        cell.imageThree.clipsToBounds = true
-                        cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
-                    }
-                    countIamge++
                 }
+                
+                return cell
             }
-            
-            return cell
+                
+            else{
+                var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
+                
+                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                cell.labCountRate.text = locat
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count ; i++){
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            //                        cell.imageOne.layer.cornerRadius = 10.0
+                            //                        cell.imageOne.clipsToBounds = true
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else if(countIamge == 1){
+                            //                        cell.imageTwo.layer.cornerRadius = 10.0
+                            //                        cell.imageTwo.clipsToBounds = true
+                            cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        else{
+                            //                        cell.imageThree.layer.cornerRadius = 10.0
+                            //                        cell.imageThree.clipsToBounds = true
+                            cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        countIamge++
+                    }
+                }
+                
+                return cell
+            }
         }
         
 
@@ -367,8 +487,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if segue.identifier == "ListVenue"{
             let listVenue : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
             let indexPath = self.table.indexPathForSelectedRow()
-            listVenue.dicPlan = self.listPlan?.objectAtIndex(indexPath!.row as! Int) as! NSMutableDictionary
-            listVenue.location = self.location
+            listVenue.dicPlan = self.listPlan?.objectAtIndex(indexPath!.row) as! NSMutableDictionary
+//            listVenue.location = self.location
             if(pageType == nil){
                 listVenue.pageType = "Main"
             }

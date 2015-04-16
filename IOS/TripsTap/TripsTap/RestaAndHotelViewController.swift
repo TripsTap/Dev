@@ -99,17 +99,23 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         cell.labName.text = listOfTable.objectAtIndex(indexPath.row).objectForKey("name") as? String
         var cateShortName : String = (self.listOfTable.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("categories")?.objectAtIndex(0).objectForKey("shortName") as! String!
         
-        // bakery
-        if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
-            cell.imagePlace.backgroundColor = UIColor.greenColor()
+        if pageType == "restaurant"{
+            // bakery
+            if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
+                cell.imagePlace.backgroundColor = UIColor.greenColor()
+            }
+                // coffee
+            else if(cateShortName.rangeOfString("Coffee") != nil ){
+                cell.imagePlace.backgroundColor = UIColor.redColor()
+            }
+                // food
+            else{
+                cell.imagePlace.backgroundColor = UIColor.blackColor()
+            }
         }
-        // coffee
-        else if(cateShortName.rangeOfString("Coffee") != nil ){
-                        cell.imagePlace.backgroundColor = UIColor.redColor()
-        }
-        // food
-        else{
-            cell.imagePlace.backgroundColor = UIColor.blackColor()
+        
+        else {
+            
         }
         
         return cell

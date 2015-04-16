@@ -100,6 +100,10 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 
         // send request
          self.connection = Connection.sharedInstance
+        if(textLocation.text == ""){
+            textLocation.text = location[0] as String
+        }
+        
         
         connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
             
