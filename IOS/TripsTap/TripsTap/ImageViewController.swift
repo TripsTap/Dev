@@ -109,15 +109,20 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     @IBAction func swipeRight(sender: AnyObject) {
         if currentIndexImage + 1 < listImage.count {
             currentIndexImage  = currentIndexImage + 1
-            imagePlace.image = listImage.objectAtIndex(currentIndexImage) as! UIImage
+            
+            self.imagePlace.image = self.listImage.objectAtIndex(self.currentIndexImage) as! UIImage
+            
         }
     }
 
     
     @IBAction func swipeLeft(sender: AnyObject) {
+        
+
         if currentIndexImage - 1 >= 0 {
             currentIndexImage = currentIndexImage - 1
              imagePlace.image = listImage.objectAtIndex(currentIndexImage) as! UIImage
+
         }
     }
 

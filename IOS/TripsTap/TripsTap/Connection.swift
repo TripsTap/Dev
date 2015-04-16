@@ -115,17 +115,38 @@ class Connection: NSObject {
         
         var url = "https://api.mongolab.com/api/1/databases/triptap_user_data/collections/user_data?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
         
-
+        var userIDDupicate = userID
         
         Alamofire.request(.POST , url , parameters:["userID":userID , "info": info ], encoding: .JSON ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("set Behaviour ")
             println(data)
+            
+            self.getSameBehaviour(userIDDupicate)
+            
+            
             completion(result: data, error: error)
             
         }
         
+    }
+    
+    func getSameBehaviour(userID : String!){
+        
+        println("userID : \(userID)")
+        var url = "http://128.199.130.63:3000/triptap?userId=\(userID)"
+        println("url : \(url)")
+        
+        
+        
+        Alamofire.request(.POST , url , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
+            println("---------------------")
+            println("get same Behaviour ")
+            println(data)
+            
+        }
 
+        
     }
     
 //MARK:-
