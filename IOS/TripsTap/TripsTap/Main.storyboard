@@ -1376,6 +1376,8 @@
                     <connections>
                         <outlet property="imageUser" destination="XTh-xT-m91" id="UZV-aU-auS"/>
                         <outlet property="labNameUser" destination="Tjz-fB-pic" id="fLK-sA-OFB"/>
+                        <outlet property="viewBarChart" destination="FPA-di-lur" id="j8p-mI-qGc"/>
+                        <outlet property="viewPieChart" destination="8BQ-fd-8p6" id="fd8-hn-evB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vaR-N5-hNZ" sceneMemberID="firstResponder"/>

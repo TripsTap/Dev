@@ -18,6 +18,8 @@ class TripForYouViewController: UIViewController {
     @IBOutlet var labNameUser: UILabel!
     @IBOutlet var imageUser: UIImageView!
     @IBOutlet var table: UITableView!
+    @IBOutlet var viewPieChart: UIView!
+    @IBOutlet var viewBarChart: UIView!
     
 
 //MARK: -
@@ -52,6 +54,7 @@ class TripForYouViewController: UIViewController {
         imageUser.image = info.objectForKey("image") as? UIImage
         
         
+
         
 
     }
