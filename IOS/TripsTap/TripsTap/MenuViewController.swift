@@ -40,7 +40,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         
         // facebook login
         fbView.delegate = self
-        fbView.readPermissions = ["public_profile", "email", "user_friends","user_tagged_places"]
+        fbView.readPermissions = ["public_profile", "email","user_tagged_places" ,"publish_actions"]
         
         
         
@@ -68,13 +68,18 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         println("User Name: \(user.name)")
         
         
+
         FBID = (user.objectID) as String
         FBName = (user.name) as String
         var planFile : PlanFile = PlanFile.sharedInstance
         
         planFile.behaviour.setObject(FBID, forKey: "FBID")
         planFile.behaviour.setObject(FBName, forKey: "FBName")
+        planFile.behaviour.setObject(user.objectForKey("email"), forKey: "FBMail")
+        planFile.behaviour.setObject(user.objectForKey("gender"), forKey: "FBGender")
+        
         planFile.saveBehaviour()
+        Connection.sharedInstance.getSameBehaviour(FBID)
         
         getProfileImage()
         getPlaceFromFB()
@@ -82,6 +87,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
+        PlanFile.sharedInstance.behaviour.removeAllObjects()
+        PlanFile.sharedInstance.saveBehaviour()
         println("User Logged Out")
     }
     
@@ -94,6 +101,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK: function
 //MARK:-
     func getPlaceFromFB(){
+        
+        self.infoCateArr.removeAllObjects()
 
         FBRequestConnection.startWithGraphPath("/"+FBID+"?fields=tagged_places.limit(200)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
@@ -104,6 +113,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
             self.countTagPlace = taggedPlaces.count
             
             for(var i = 0 ; i < taggedPlaces.count ; i++){
+               
                 self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
             }
             
@@ -155,7 +165,21 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
     @IBAction func clickTripForYou(sender: AnyObject) {
-        self.slideMenuController()?.changeMainViewController(self.tripForYouViewController, close: true)
+        PlanFile.sharedInstance.saveBehaviour()
+        
+        if PlanFile.sharedInstance.behaviour.objectForKey("info") != nil{
+            self.slideMenuController()?.changeMainViewController(self.tripForYouViewController, close: true)
+        }
+        else{
+            // must login before
+            if PlanFile.sharedInstance.behaviour.objectForKey("FBID") == nil{
+                UIAlertView(title: nil, message: "Please login with Facebook before!", delegate: self, cancelButtonTitle: "OK").show()
+            }
+            // wait info
+            else{
+                
+            }
+        }
     }
     
     @IBAction func clickRes(sender: AnyObject) {

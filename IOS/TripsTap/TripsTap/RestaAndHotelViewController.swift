@@ -115,6 +115,21 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         }
         
         else {
+            // hotel
+            if (cateShortName.rangeOfString("Hotel") != nil ){
+                cell.imagePlace.backgroundColor = UIColor.greenColor()
+            }
+                // Resort
+            else if(cateShortName.rangeOfString("Resort") != nil ){
+                cell.imagePlace.backgroundColor = UIColor.redColor()
+            }
+            else if cateShortName.rangeOfString("Hostel") != nil{
+                cell.imagePlace.backgroundColor = UIColor.purpleColor()
+            }
+                //
+            else{
+                cell.imagePlace.backgroundColor = UIColor.blackColor()
+            }
             
         }
         

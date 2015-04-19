@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListVenueViewController: UIViewController, UITableViewDelegate,UITableViewDataSource ,ListVenueCellDelegate {
+class ListVenueViewController: UIViewController, UITableViewDelegate,UITableViewDataSource ,ListVenueCellDelegate , UIAlertViewDelegate {
 
 //MARK:-
 //MARK:  IBOutlet
@@ -23,7 +23,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
 //MARK:-
     // info from page before
     var dicPlan : NSMutableDictionary!
-//    var location : String!
     // load info from FS
     var listInfo : NSMutableArray!
     var listImage : NSMutableArray!
@@ -32,6 +31,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     var mainViewController : UIViewController?
     var listPlaceNotSelect : NSMutableArray!
     var addTripAlready : Bool!
+    var indexPlan : Int?
     
 //MARK:-
 //MARK:  cycle
@@ -64,7 +64,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         // get info from FS
         
-        if(pageType == "TripForYou" || dicPlan.objectForKey("type") as! String == "TripForYou"){
+        if(pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"){
         
             for(var i = 0 ; i < (dicPlan.objectForKey("user_checkin") as! NSArray).count ; i++){
                 // index of image when func call back
@@ -143,7 +143,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if pageType == "TripForYou" || dicPlan.objectForKey("type") as! String == "TripForYou"  {
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"  {
             return dicPlan.objectForKey("user_checkin")!.count 
         }
         else{
@@ -155,7 +155,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as! ListVenueTableViewCell
         
         
-        if pageType == "TripForYou" || dicPlan.objectForKey("type") as! String == "TripForYou" {
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou" {
             
             cell.labLocation.text = dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("VENUE_NAME") as? String
             cell.labRate.text = String(format: "Rate : %@", dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("RATE") as! String )
@@ -259,74 +259,84 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         
-        
-        // case 1 in premises
-        if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
-            
-            var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
-            
-            
-            (dicPlan.objectForKey("premises") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
-            
-            (dicPlan.objectForKey("premises") as! NSMutableArray).insertObject(clone, atIndex: destinationIndexPath.row)
-            
-            table.reloadData()
-            
-            
-            
-        }
-        
-
-        // case 2 premiss to conclusion
-        
-        else if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count ){
-            
-            
-            var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
-            
-            (dicPlan.objectForKey("premises") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
-
-            (dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row - dicPlan.objectForKey("premises")!.count )
-
-            
-            
-            table.reloadData()
-            
+        if sourceIndexPath.row as Int == destinationIndexPath.row as Int {
+            return
         }
         
         
-        // case 3 in counclusion
-        
-        else if(sourceIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count ){
+        if dicPlan.objectForKey("type") as? String == "TripForYou" {
+            (dicPlan.objectForKey("user_checkin") as! NSMutableArray).exchangeObjectAtIndex(sourceIndexPath.row, withObjectAtIndex: destinationIndexPath.row)
+        }
             
-             var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("conclusion") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
+        else{
             
-            (dicPlan.objectForKey("conclusion") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row - dicPlan.objectForKey("premises")!.count )
-            
-              ((dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row - dicPlan.objectForKey("premises")!.count ))
-            
-            
-            table.reloadData()
-            
+            // case 1 in premises
+            if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
+                
+                var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
+                
+                
+                (dicPlan.objectForKey("premises") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
+                
+                (dicPlan.objectForKey("premises") as! NSMutableArray).insertObject(clone, atIndex: destinationIndexPath.row)
+                
+                table.reloadData()
+                
+                
+                
+            }
+                
+                
+                // case 2 premiss to conclusion
+                
+            else if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count ){
+                
+                
+                var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
+                
+                (dicPlan.objectForKey("premises") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row)
+                
+                (dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row - dicPlan.objectForKey("premises")!.count )
+                
+                
+                
+                table.reloadData()
+                
+            }
+                
+                
+                // case 3 in counclusion
+                
+            else if(sourceIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count ){
+                
+                var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("conclusion") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
+                
+                (dicPlan.objectForKey("conclusion") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row - dicPlan.objectForKey("premises")!.count )
+                
+                ((dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row - dicPlan.objectForKey("premises")!.count ))
+                
+                
+                table.reloadData()
+                
+            }
+                
+                // case 4 conclusion to premiss
+                
+                
+            else if(sourceIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
+                
+                var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("conclusion") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
+                
+                (dicPlan.objectForKey("conclusion") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row - dicPlan.objectForKey("premises")!.count)
+                
+                
+                (dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row)
+                table.reloadData()
+                
+            }
         }
         
-        // case 4 conclusion to premiss
-        
-        
-        else if(sourceIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
-            
-            var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("conclusion") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
-            
-            (dicPlan.objectForKey("conclusion") as! NSMutableArray).removeObjectAtIndex(sourceIndexPath.row - dicPlan.objectForKey("premises")!.count)
-            
-            
-            (dicPlan.objectForKey("conclusion") as! NSMutableArray).insertObject( clone , atIndex: destinationIndexPath.row)
-            
-            
-            
-            table.reloadData()
-            
-        }
+        PlanFile.sharedInstance.listPlan.replaceObjectAtIndex(indexPlan!, withObject: dicPlan)
         
     }
     
@@ -382,7 +392,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     func getInfoVenue(venueID : String) -> (){
         
-        if pageType == "TripForYou" || dicPlan.objectForKey("type") as! String == "TripForYou"{
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
             
             connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
                 self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
@@ -420,11 +430,60 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     
     @IBAction func clickAddTrip(sender: AnyObject) {
         
+        var inputTextField: UITextField?
+        if let gotModernAlert: AnyClass = NSClassFromString("UIAlertController") {
+            let actionSheetController: UIAlertController = UIAlertController(title: nil, message: "Please fill trip's name" , preferredStyle: .Alert)
+            
+            //Create and add the Cancel action
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+                //Do some stuff
+            }
+            actionSheetController.addAction(cancelAction)
+            
+            
+            //Create and an option action
+            let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .Default) { action -> Void in
+                
+                self.saveTrip(inputTextField?.text)
+                
+            }
+            actionSheetController.addAction(okAction)
+            //Add a text field
+            actionSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
+                //TextField configuration
+                textField.placeholder = "Trip's name"
+                inputTextField = textField
+            }
+            
+            //Present the AlertController
+            self.presentViewController(actionSheetController, animated: true, completion: nil)
+        }
+        else {
+            var alert : UIAlertView = UIAlertView(title: nil, message: "Please fill trip's name", delegate: self, cancelButtonTitle: "Cancle")
+            alert.addButtonWithTitle("OK")
+            alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+            alert.show()
+
+
+        }
+        
+        
+        
+    }
+
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == 1 {
+            var tripName : String? = alertView.textFieldAtIndex(0)!.text
+            saveTrip(tripName)
+        }
+    }
+    
+    func saveTrip(tripName : String?){
         addTripAlready = true
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
         var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
         
-        if pageType == "TripForYou" || dicPlan.objectForKey("type") as! String == "TripForYou"{
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
             var user_checkin : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("user_checkin") as! NSMutableArray)
             
             for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
@@ -446,7 +505,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             var file : PlanFile = PlanFile.sharedInstance
             file.listPlan.addObject(newPlan)
             file.saveFile()
-
+            
         }
         else{
             var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as! NSMutableArray)
@@ -477,6 +536,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             newPlan.setObject(premiss, forKey: "premises")
             newPlan.setObject(conclusion, forKey: "conclusion")
             newPlan.setObject("TripMe", forKey: "type")
+            newPlan.setObject(tripName!, forKey: "tripname")
             var rate: String! = getRating(newPlan)
             newPlan.setObject(rate, forKey: "rate")
             
@@ -489,8 +549,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         
         self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
-    }
 
+    }
 
 //MARK:-
 //MARK: Navigation
@@ -503,7 +563,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             
             var indexPath = self.table.indexPathForSelectedRow()
             
-            if pageType == "TripForYou"{
+            if pageType == "TripForYou"  || dicPlan.objectForKey("type") as? String == "TripForYou"{
                 
                 infoView.pageType = "TripForYou"
                 
@@ -612,8 +672,83 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     }
 
     @IBAction func longPressEditCell(sender: AnyObject) {
-        if (pageType == "Main"){
+        if (pageType == "Main" && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
             self.table.setEditing(!self.table.editing, animated: true)
         }
+    }
+    
+    @IBAction func clickPostFacebook(sender: AnyObject) {
+        
+        
+        var message : String = "ทริปนี้ของฉัน "
+        
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou" {
+            
+            
+            for var i = 0 ; i < dicPlan.objectForKey("user_checkin")!.count ; i++ {
+                
+                var namePlace : String = (dicPlan.objectForKey("user_checkin")?.objectAtIndex(i).objectForKey("VENUE_NAME") as? String)!
+                
+                message += "\(i+1). \(namePlace) "
+                
+            }
+            
+        }
+            
+        else {
+            
+            var countVenue : Int = (dicPlan.objectForKey("premises") as! NSArray).count + (dicPlan.objectForKey("conclusion") as! NSArray).count
+            
+            for var i = 0 ; i < countVenue ; i++ {
+                var namePlace : String! = ""
+                
+                if(i < (dicPlan.objectForKey("premises") as! NSArray).count){
+                    if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(i).objectForKey("venueName") as? String == nil){
+                        namePlace = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(i).objectForKey("vunueName") as? String
+                    }
+                    else{
+                        namePlace = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(i).objectForKey("venueName") as? String
+                    }
+                    
+                   
+                    
+                }
+                else{
+                    if ((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(i - (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("vunueName") as? String == nil){
+                        
+                        namePlace = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(i  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("venueName") as? String
+                        
+                    }
+                    else{
+                        namePlace = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(i  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("vunueName") as? String
+                    }
+                }
+                
+                message += "\(i+1). \(namePlace) "
+            }
+            
+        }
+        
+        message += "by #TripsTap"
+        
+        
+        var conFB : FBRequestConnection = FBRequestConnection()
+        var dicPost : NSMutableDictionary = NSMutableDictionary()
+        dicPost.setValue(UIImage(named: "logo_02_circle-2.png"), forKey: "picture")
+        dicPost.setValue(message, forKey: "message")
+        
+        var request : FBRequest = FBRequest(graphPath: "me/photos", parameters: dicPost as [NSObject : AnyObject] , HTTPMethod: "POST")
+        conFB.addRequest(request, completionHandler: { (fbResCon, data, error) -> Void in
+            
+            
+        })
+        
+        conFB.start()
+        
+        
+
+        
+        
+        
     }
 }

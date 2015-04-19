@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TripForYouViewController: UIViewController {
+class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieChartDelegate   {
 
 //MARK: -
 //MARK: IBOutlet
@@ -16,11 +16,12 @@ class TripForYouViewController: UIViewController {
     
 
     @IBOutlet var labNameUser: UILabel!
+    @IBOutlet var labMail: UILabel!
+    @IBOutlet var labGender: UILabel!
     @IBOutlet var imageUser: UIImageView!
-    @IBOutlet var table: UITableView!
-    @IBOutlet var viewPieChart: UIView!
-    @IBOutlet var viewBarChart: UIView!
+    @IBOutlet var viewPieChart: XYPieChart!
     
+   
 
 //MARK: -
 //MARK: variable
@@ -32,9 +33,22 @@ class TripForYouViewController: UIViewController {
     var mainViewController: UIViewController!
     var pageType : String!
     var info : NSMutableDictionary!
-
+    var desRegion : NSMutableArray!
     
+    var desType : NSMutableArray!
+    var sumDesType : Int = 0
     var planFile : PlanFile!
+    var sliceColors : NSArray!
+    
+    
+    @IBOutlet var progressArt: UIProgressView!
+    @IBOutlet var progressEntertain: UIProgressView!
+    @IBOutlet var progressHistoric: UIProgressView!
+    @IBOutlet var progressNutual: UIProgressView!
+    @IBOutlet var progressOutdoor: UIProgressView!
+    @IBOutlet var progressThemepark: UIProgressView!
+    @IBOutlet var progressSea : UIProgressView!
+    
     
 //MARK:-
 //MARK: cycle
@@ -49,14 +63,124 @@ class TripForYouViewController: UIViewController {
         
         info = NSMutableDictionary(dictionary: planFile.behaviour as NSMutableDictionary)
         
+        self.sliceColors = NSArray(array: [UIColor(red:246/255.0 ,green:155/255.0 ,blue:0/255.0 ,alpha:1) ,
+        UIColor(red:129/255.0 , green:195/255.0 , blue:29/255.0  , alpha:1) ,
+        UIColor(red:62/255.0  , green:173/255.0 , blue:219/255.0 , alpha:1) ,
+        UIColor(red:229/255.0 , green:66/255.0  , blue:115/255.0 , alpha:1) ,
+        UIColor(red:148/255.0 , green:141/255.0 , blue:139/255.0 , alpha:1) ])
+            
+        desRegion = NSMutableArray()
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_1") as! String).toInt()!)
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_2") as! String).toInt()!)
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_3") as! String).toInt()!)
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_4") as! String).toInt()!)
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_5") as! String).toInt()!)
+        desRegion.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("region_6") as! String).toInt()!)
+        
+        
         
         labNameUser.text = info.objectForKey("FBName") as? String
-        imageUser.image = info.objectForKey("image") as? UIImage
+        labMail.text = info.objectForKey("FBMail") as? String
+        labGender.text = info.objectForKey("FBGender") as? String
+        imageUser.image = UIImage( data : info.objectForKey("image") as! NSData)
+        
+        self.viewPieChart.delegate = self
+        self.viewPieChart.dataSource = self
+        self.viewPieChart.showPercentage = false
+        self.viewPieChart.center = CGPointMake(150, 150)
+        self.viewPieChart.labelColor = UIColor.blackColor()
+
+        
+        desType = NSMutableArray()
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!)
+        desType.addObject((info.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!)
+
+
+
+
         
         
+        
+        for var i = 0 ; i < desType.count ; i++ {
+            sumDesType += desType.objectAtIndex(i) as! Int
+        }
+        
+        
+        progressArt.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!) / Float(sumDesType)
+        
+        progressEntertain.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!) / Float(sumDesType)
+        
+        progressHistoric.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!) / Float(sumDesType)
+        
+        progressNutual.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!) / Float(sumDesType)
+        
+        progressOutdoor.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) / Float(sumDesType)
+        
+        progressThemepark.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) / Float(sumDesType)
+        
+        progressSea.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!) / Float(sumDesType)
+        
+       
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        self.viewBarChart.delegate = self
+//        self.viewBarChart.dataSource = self
+//        self.viewBarChart.showPercentage = false
 
         
 
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.viewPieChart.reloadData()
+//        self.viewBarChart.reloadData()
+    }
+    
+    func numberOfSlicesInPieChart(pieChart: XYPieChart!) -> UInt {
+        if pieChart == viewPieChart{
+            return UInt(desRegion.count)
+        }
+        else {
+            return UInt(desType.count)
+        }
+    }
+    
+    func pieChart(pieChart: XYPieChart!, valueForSliceAtIndex index: UInt) -> CGFloat {
+        
+        if pieChart == viewPieChart{
+            return CGFloat(desRegion.objectAtIndex(Int(index)) as! Int)
+        }
+        else {
+            return CGFloat(desType.objectAtIndex(Int(index)) as! Int)
+        }
+
+    }
+    
+    func pieChart(pieChart: XYPieChart!, colorForSliceAtIndex index: UInt) -> UIColor! {
+        return nil
+//            self.sliceColors.objectAtIndex(Int(index) % self.sliceColors.count) as! UIColor
+    }
+    
+    func pieChart(pieChart: XYPieChart!, textForSliceAtIndex index: UInt) -> String! {
+        return "test"
     }
 
     override func didReceiveMemoryWarning() {
@@ -167,6 +291,23 @@ class TripForYouViewController: UIViewController {
             var planFile : PlanFile = PlanFile.sharedInstance
             
             listTripForU.dicPlan = planFile.behaviour.objectForKey("info")?.objectForKey("data")?.objectAtIndex(0) as! NSMutableDictionary
+        }
+        
+        else if segue.identifier == "user2" {
+            var listTripForU : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
+            listTripForU.pageType = "TripForYou"
+            
+            var planFile : PlanFile = PlanFile.sharedInstance
+            
+            listTripForU.dicPlan = planFile.behaviour.objectForKey("info")?.objectForKey("data")?.objectAtIndex(1) as! NSMutableDictionary
+        }
+        else if segue.identifier == "user3" {
+            var listTripForU : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
+            listTripForU.pageType = "TripForYou"
+            
+            var planFile : PlanFile = PlanFile.sharedInstance
+            
+            listTripForU.dicPlan = planFile.behaviour.objectForKey("info")?.objectForKey("data")?.objectAtIndex(2) as! NSMutableDictionary
         }
         
     }

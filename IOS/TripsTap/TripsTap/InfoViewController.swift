@@ -120,15 +120,11 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         
         var marker = GMSMarker()
         marker.position = camera.target
-//        marker.snippet = info.objectForKey("name") as String
         marker.appearAnimation = kGMSMarkerAnimationPop
         marker.map = mapView
         self.viewMap.addSubview(mapView)
         
         self.viewMap.contentMode = UIViewContentMode.ScaleAspectFill
-//        self.viewMap.layer.cornerRadius = 10.0
-//        self.viewMap.clipsToBounds = true
-        
         
     }
     

@@ -154,18 +154,32 @@ class Connection: NSObject {
         
         
         
-        
-        
-        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
+        Alamofire.request(.GET , "https://api.mongolab.com/api/1/databases/knn_result/collections/user_id?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N" , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("get same Behaviour ")
             println(data)
             if error == nil {
                 var planFile : PlanFile = PlanFile.sharedInstance
-                planFile.behaviour.setObject(data!, forKey: "info")
+                var trip : NSDictionary! = NSDictionary(dictionary: data?.objectAtIndex(1) as! NSDictionary)
+                planFile.behaviour.setObject( trip , forKey: "info")
                 planFile.saveBehaviour()
             }
         }
+
+        
+        
+        
+//        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
+//            println("---------------------")
+//            println("get same Behaviour ")
+//            println(data)
+//            if error == nil {
+//                var planFile : PlanFile = PlanFile.sharedInstance
+//                var trip : NSMutableDictionary! = NSMutableDictionary(dictionary: data as! [NSObject : AnyObject])
+//                planFile.behaviour.setObject( trip , forKey: "info")
+//                planFile.saveBehaviour()
+//            }
+//        }
 
         
     }
@@ -178,7 +192,9 @@ class Connection: NSObject {
         ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
             if image != nil {
                 var planFile : PlanFile = PlanFile.sharedInstance
-                planFile.behaviour.setObject(image!, forKey: "image")
+                var imageData : NSData = UIImagePNGRepresentation(image)
+                
+                planFile.behaviour.setObject(imageData, forKey: "image")
                 planFile.saveBehaviour()
             }
 

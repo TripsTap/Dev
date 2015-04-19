@@ -488,7 +488,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             let listVenue : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
             let indexPath = self.table.indexPathForSelectedRow()
             listVenue.dicPlan = self.listPlan?.objectAtIndex(indexPath!.row) as! NSMutableDictionary
-//            listVenue.location = self.location
+            listVenue.indexPlan = indexPath!.row
             if(pageType == nil){
                 listVenue.pageType = "Main"
             }

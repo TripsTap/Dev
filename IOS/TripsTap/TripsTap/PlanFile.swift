@@ -31,24 +31,19 @@ class PlanFile: NSObject {
         super.init()
         
         println("init planfile class")
-        var realPath : String = applicationDocumentsDirectory(fileName)
+        var realPathPlan : String = applicationDocumentsDirectory(fileName)
         
-        if(NSFileManager.defaultManager().fileExistsAtPath(realPath)){
-            listPlan = NSMutableArray(contentsOfFile: realPath)
-
-            
+        if(NSFileManager.defaultManager().fileExistsAtPath(realPathPlan)){
+            listPlan = NSMutableArray(contentsOfFile: realPathPlan)
         }
         else{
             listPlan = NSMutableArray()
             saveFile()
         }
         
-        
-        realPath = applicationDocumentsDirectory(fileBehaviour)
-        if(NSFileManager.defaultManager().fileExistsAtPath(realPath)){
-            behaviour = NSMutableDictionary(contentsOfFile: realPath)
-            
-            
+        var realPathBehaviour : String = applicationDocumentsDirectory(fileBehaviour)
+        if(NSFileManager.defaultManager().fileExistsAtPath(realPathBehaviour)){
+            behaviour = NSMutableDictionary(contentsOfFile: realPathBehaviour)
         }
         else{
             behaviour = NSMutableDictionary()
