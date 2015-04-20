@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         menuView.mainViewController = nvc
         
         let slideMenuController = SlideMenuController(mainViewController: nvc , leftMenuViewController: menuView)
-//        slideMenuController.navigationController?.navigationBar.hidden = true
+        slideMenuController.navigationController?.navigationBar.hidden = true
         
         
         

@@ -20,6 +20,7 @@
 		8357A99A1AB07A0A00957BB9 /* TripMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */; };
 		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835F35D31ABC0594009BFF71 /* Main.storyboard */; };
+		836724E91AE553C400620A3D /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836724E81AE553C400620A3D /* SlideMenuController.swift */; };
 		836BDAA51AE0E8BC00010ADC /* XYPieChart in Resources */ = {isa = PBXBuildFile; fileRef = 836BDAA41AE0E8BC00010ADC /* XYPieChart */; };
 		836BDAAA1AE104E400010ADC /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 836BDAA91AE104E400010ADC /* XYPieChart.m */; };
 		837C660A1ACD890900E96FA2 /* MainThreeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837C66091ACD890900E96FA2 /* MainThreeTableViewCell.swift */; };
@@ -47,7 +48,6 @@
 		839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */; };
 		83AB5F601ADB7587004E512D /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB5F5F1ADB7587004E512D /* Alamofire.swift */; };
 		83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */ = {isa = PBXBuildFile; fileRef = 83BED4161AC05E4700FB19C3 /* phuketlist.text */; };
-		83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2790B1AAE00C200052269 /* SlideMenuController.swift */; };
 		83C279121AAE985900052269 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279111AAE985900052269 /* MenuViewController.swift */; };
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
 		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
@@ -115,6 +115,7 @@
 		8357A9991AB07A0A00957BB9 /* TripMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMeViewController.swift; sourceTree = "<group>"; };
 		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		835F35D31ABC0594009BFF71 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		836724E81AE553C400620A3D /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		836BDAA41AE0E8BC00010ADC /* XYPieChart */ = {isa = PBXFileReference; lastKnownFileType = folder; path = XYPieChart; sourceTree = "<group>"; };
 		836BDAA91AE104E400010ADC /* XYPieChart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XYPieChart.m; path = TripsTap/XYPieChart/XYPieChart.m; sourceTree = "<group>"; };
 		837C66091ACD890900E96FA2 /* MainThreeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainThreeTableViewCell.swift; sourceTree = "<group>"; };
@@ -148,7 +149,6 @@
 		83AB5F4C1ADB65D7004E512D /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../Downloads/Alamofire-master-3/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		83AB5F5F1ADB7587004E512D /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		83BED4161AC05E4700FB19C3 /* phuketlist.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = phuketlist.text; sourceTree = "<group>"; };
-		83C2790B1AAE00C200052269 /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		83C279111AAE985900052269 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
@@ -330,8 +330,8 @@
 			isa = PBXGroup;
 			children = (
 				836BDAA41AE0E8BC00010ADC /* XYPieChart */,
-				83C2790B1AAE00C200052269 /* SlideMenuController.swift */,
 				837C66101ACD994200E96FA2 /* RBResizer.swift */,
+				836724E81AE553C400620A3D /* SlideMenuController.swift */,
 				83AB5F5F1ADB7587004E512D /* Alamofire.swift */,
 				837D00A41AC2FD790016679D /* ImageLoader.swift */,
 				83AB5F4C1ADB65D7004E512D /* Alamofire.xcodeproj */,
@@ -489,7 +489,6 @@
 				831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */,
 				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,
 				83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */,
-				83C2790C1AAE00C200052269 /* SlideMenuController.swift in Sources */,
 				837C660F1ACD908B00E96FA2 /* ListVenueTableViewCell.swift in Sources */,
 				831ACAC31AD2709100FD1056 /* PlanFile.swift in Sources */,
 				8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */,
@@ -497,6 +496,7 @@
 				831D88371AC17F7D000C30DD /* MainOneTableViewCell.swift in Sources */,
 				839B90781AA6C8C4002E0A01 /* AppDelegate.swift in Sources */,
 				831D883D1AC25E42000C30DD /* InfoViewController.swift in Sources */,
+				836724E91AE553C400620A3D /* SlideMenuController.swift in Sources */,
 				831587011ACB99910011F2B0 /* MapViewController.swift in Sources */,
 				8333098A1AE49C7000124668 /* MainFourTableViewCellTableViewCell.swift in Sources */,
 				837C66111ACD994200E96FA2 /* RBResizer.swift in Sources */,

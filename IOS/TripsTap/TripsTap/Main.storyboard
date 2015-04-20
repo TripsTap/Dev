@@ -184,11 +184,11 @@
                                                             <constraint firstAttribute="height" constant="120" id="ufi-jj-fyH"/>
                                                             <constraint firstAttribute="width" constant="120" id="vlZ-ae-Xpt"/>
                                                         </constraints>
-                                                        <state key="normal" title="Map">
+                                                        <state key="normal" title="Hotel">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="clickMap:" destination="B2U-kX-6VF" eventType="touchUpInside" id="Jcq-Ze-0TD"/>
+                                                            <action selector="clickHotel:" destination="B2U-kX-6VF" eventType="touchUpInside" id="N7K-Ea-dF7"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -227,9 +227,12 @@
                                                             <constraint firstAttribute="height" constant="120" id="6Ue-bF-BuE"/>
                                                             <constraint firstAttribute="width" constant="120" id="nxQ-cQ-PFE"/>
                                                         </constraints>
-                                                        <state key="normal" title="Button">
+                                                        <state key="normal" title="Map">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="clickMap:" destination="B2U-kX-6VF" eventType="touchUpInside" id="uoK-Fg-KW7"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -309,12 +312,9 @@
                                                             <constraint firstAttribute="height" constant="120" id="ayE-ms-fFP"/>
                                                             <constraint firstAttribute="width" constant="120" id="uIG-lD-HjI"/>
                                                         </constraints>
-                                                        <state key="normal" title="Hotel">
+                                                        <state key="normal">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="clickHotel:" destination="B2U-kX-6VF" eventType="touchUpInside" id="t3g-ba-j3z"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1005,7 +1005,7 @@
                                                         <constraint firstAttribute="width" constant="70" id="5st-6P-vUi"/>
                                                         <constraint firstAttribute="width" constant="40" id="bxk-Il-gom"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -1354,7 +1354,7 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QzL-kQ-X9x">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QzL-kQ-X9x">
                                                     <rect key="frame" x="0.0" y="239" width="600" height="1"/>
                                                     <color key="backgroundColor" red="0.72549019609999998" green="0.72549019609999998" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
@@ -1395,6 +1395,7 @@
                                                 <constraint firstItem="4Sb-pB-oCs" firstAttribute="leading" secondItem="Ous-Fb-GCH" secondAttribute="leading" constant="5" id="kht-DV-FqY"/>
                                                 <constraint firstItem="QzL-kQ-X9x" firstAttribute="leading" secondItem="Ous-Fb-GCH" secondAttribute="leading" id="lHe-Tv-7CN"/>
                                                 <constraint firstAttribute="trailing" secondItem="QzL-kQ-X9x" secondAttribute="trailing" id="mtR-U8-FOI"/>
+                                                <constraint firstItem="QzL-kQ-X9x" firstAttribute="top" secondItem="d8G-Ss-h3n" secondAttribute="bottom" constant="33" id="qR0-nd-6Tr"/>
                                                 <constraint firstItem="4Sb-pB-oCs" firstAttribute="top" secondItem="d8G-Ss-h3n" secondAttribute="bottom" id="t6q-3U-EKI"/>
                                             </constraints>
                                             <variation key="default">
@@ -1411,7 +1412,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="imageOne" destination="d8G-Ss-h3n" id="wNa-Z1-15x"/>
-                                            <outlet property="labCountRate" destination="4Sb-pB-oCs" id="bTp-rs-Ub0"/>
                                             <outlet property="labName" destination="4Sb-pB-oCs" id="Siy-lQ-J7b"/>
                                             <outlet property="labRate" destination="Kg7-c2-zKD" id="hdB-nv-yGj"/>
                                         </connections>

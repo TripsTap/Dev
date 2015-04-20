@@ -499,12 +499,12 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return 240
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if pageType != "TripMe"{
-            return true
-        }
-        return false
-    }
+//    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+//        if pageType != "TripMe"{
+//            return true
+//        }
+//        return false
+//    }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete{

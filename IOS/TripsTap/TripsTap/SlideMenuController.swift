@@ -10,21 +10,20 @@ import UIKit
 
 class SlideMenuOption {
     
-    let leftViewWidth: CGFloat = 300.0
-    let leftBezelWidth: CGFloat = 10.0
-    let contentViewScale: CGFloat = 0.96
-    let contentViewOpacity: CGFloat = 0.5
-    let shadowOpacity: CGFloat = 0.0
-    let shadowRadius: CGFloat = 0.0
-    let shadowOffset: CGSize = CGSizeMake(0,0)
-    let panFromBezel: Bool = true
-    let animationDuration: CGFloat = 0.4
-    let rightViewWidth: CGFloat = 270.0
-    let rightBezelWidth: CGFloat = 16.0
-    let rightPanFromBezel: Bool = true
-    let hideStatusBar: Bool = true
-    let pointOfNoReturnWidth: CGFloat = 44.0
-
+    var leftViewWidth: CGFloat = 300.0
+    var leftBezelWidth: CGFloat = 16.0
+    var contentViewScale: CGFloat = 0.96
+    var contentViewOpacity: CGFloat = 0.5
+    var shadowOpacity: CGFloat = 0.0
+    var shadowRadius: CGFloat = 0.0
+    var shadowOffset: CGSize = CGSizeMake(0,0)
+    var panFromBezel: Bool = true
+    var animationDuration: CGFloat = 0.4
+    var rightViewWidth: CGFloat = 270.0
+    var rightBezelWidth: CGFloat = 16.0
+    var rightPanFromBezel: Bool = true
+    var hideStatusBar: Bool = true
+    var pointOfNoReturnWidth: CGFloat = 44.0
     
     init() {
         
@@ -65,8 +64,6 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     var rightPanGesture: UIPanGestureRecognizer?
     var rightTapGesture: UITapGestureRecognizer?
     var options = SlideMenuOption()
-
-    
 
     
     required init(coder aDecoder: NSCoder) {
@@ -197,11 +194,13 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     override func closeLeft() {
+        self.leftViewController?.beginAppearanceTransition(self.isLeftHidden(), animated: true)
         self.closeLeftWithVelocity(0.0)
         self.setCloseWindowLebel()
     }
     
     override func closeRight() {
+        self.rightViewController?.beginAppearanceTransition(self.isRightHidden(), animated: true)
         self.closeRightWithVelocity(0.0)
         self.setCloseWindowLebel()
     }
@@ -314,15 +313,20 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                 self.applyLeftContentViewScale()
             case UIGestureRecognizerState.Ended:
                 
-                self.leftViewController?.beginAppearanceTransition(!LeftPanState.wasHiddenAtStartOfPan, animated: true)
                 var velocity:CGPoint = panGesture.velocityInView(panGesture.view)
                 var panInfo: PanInfo = self.panLeftResultInfoForVelocity(velocity)
                 
                 if panInfo.action == .Open {
+                    if !LeftPanState.wasHiddenAtStartOfPan {
+                        self.leftViewController?.beginAppearanceTransition(true, animated: true)
+                    }
                     self.openLeftWithVelocity(panInfo.velocity)
                     self.track(.FlickOpen)
                     
                 } else {
+                    if LeftPanState.wasHiddenAtStartOfPan {
+                        self.leftViewController?.beginAppearanceTransition(false, animated: true)
+                    }
                     self.closeLeftWithVelocity(panInfo.velocity)
                     self.setCloseWindowLebel()
                     
@@ -372,13 +376,18 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             
         case UIGestureRecognizerState.Ended:
             
-            self.rightViewController?.beginAppearanceTransition(!RightPanState.wasHiddenAtStartOfPan, animated: true)
             var velocity: CGPoint = panGesture.velocityInView(panGesture.view)
             var panInfo: PanInfo = self.panRightResultInfoForVelocity(velocity)
             
             if panInfo.action == .Open {
+                if !RightPanState.wasHiddenAtStartOfPan {
+                    self.rightViewController?.beginAppearanceTransition(true, animated: true)
+                }
                 self.openRightWithVelocity(panInfo.velocity)
             } else {
+                if RightPanState.wasHiddenAtStartOfPan {
+                    self.rightViewController?.beginAppearanceTransition(false, animated: true)
+                }
                 self.closeRightWithVelocity(panInfo.velocity)
                 self.setCloseWindowLebel()
             }
@@ -408,6 +417,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             self.mainContainerView.transform = CGAffineTransformMakeScale(self.options.contentViewScale, self.options.contentViewScale)
         }) { (Bool) -> Void in
             self.disableContentInteraction()
+            self.leftViewController?.endAppearanceTransition()
         }
     }
     
@@ -434,6 +444,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             self.mainContainerView.transform = CGAffineTransformMakeScale(self.options.contentViewScale, self.options.contentViewScale)
             }) { (Bool) -> Void in
                 self.disableContentInteraction()
+                self.rightViewController?.endAppearanceTransition()
         }
     }
     
@@ -458,6 +469,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             }) { (Bool) -> Void in
                 self.removeShadow(self.leftContainerView)
                 self.enableContentInteraction()
+                self.leftViewController?.endAppearanceTransition()
         }
     }
     
@@ -483,6 +495,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             }) { (Bool) -> Void in
                 self.removeShadow(self.rightContainerView)
                 self.enableContentInteraction()
+                self.rightViewController?.endAppearanceTransition()
         }
     }
     
@@ -795,10 +808,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func slideLeftForGestureRecognizer( gesture: UIGestureRecognizer, point:CGPoint) -> Bool{
-        
-        var slide = self.isLeftOpen()
-        slide || self.options.panFromBezel && self.isLeftPointContainedWithinBezelRect(point)
-        return slide
+        return self.isLeftOpen() || self.options.panFromBezel && self.isLeftPointContainedWithinBezelRect(point)
     }
     
     private func isLeftPointContainedWithinBezelRect(point: CGPoint) -> Bool{
@@ -817,10 +827,7 @@ class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     
     private func slideRightViewForGestureRecognizer(gesture: UIGestureRecognizer, withTouchPoint point: CGPoint) -> Bool {
-        
-        var slide: Bool = self.isRightOpen()
-        slide || self.options.rightPanFromBezel && self.isRightPointContainedWithinBezelRect(point)
-        return slide
+        return self.isRightOpen() || self.options.rightPanFromBezel && self.isRightPointContainedWithinBezelRect(point)
     }
     
     private func isRightPointContainedWithinBezelRect(point: CGPoint) -> Bool {
@@ -854,15 +861,15 @@ extension UIViewController {
         return nil;
     }
     
-//    func addLeftBarButtonWithImage(buttonImage: UIImage) {
-//        var leftButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleLeft")
-//        self.navigationItem.leftBarButtonItem = leftButton;
-//    }
-//    
-//    func addRightBarButtonWithImage(buttonImage: UIImage) {
-//        var rightButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleRight")
-//        self.navigationItem.rightBarButtonItem = rightButton;
-//    }
+    func addLeftBarButtonWithImage(buttonImage: UIImage) {
+        var leftButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleLeft")
+        self.navigationItem.leftBarButtonItem = leftButton;
+    }
+    
+    func addRightBarButtonWithImage(buttonImage: UIImage) {
+        var rightButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.Bordered, target: self, action: "toggleRight")
+        self.navigationItem.rightBarButtonItem = rightButton;
+    }
     
     func toggleLeft() {
         self.slideMenuController()?.toggleLeft()
