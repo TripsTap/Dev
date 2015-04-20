@@ -45,7 +45,7 @@
 		839B90B01AA76669002E0A01 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B90AF1AA76669002E0A01 /* SystemConfiguration.framework */; };
 		839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */; };
 		83AB5F601ADB7587004E512D /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB5F5F1ADB7587004E512D /* Alamofire.swift */; };
-		83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */ = {isa = PBXBuildFile; fileRef = 83BED4161AC05E4700FB19C3 /* phuketlist.text */; };
+		83BED4171AC05E4700FB19C3 /* location.text in Sources */ = {isa = PBXBuildFile; fileRef = 83BED4161AC05E4700FB19C3 /* location.text */; };
 		83C279121AAE985900052269 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279111AAE985900052269 /* MenuViewController.swift */; };
 		83C279141AAE9AAD00052269 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C279131AAE9AAD00052269 /* MainViewController.swift */; };
 		83C279161AAF1EC100052269 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C279151AAF1EC100052269 /* FacebookSDK.framework */; };
@@ -144,7 +144,7 @@
 		839B90B61AA76BC4002E0A01 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		83AB5F4C1ADB65D7004E512D /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../../../Downloads/Alamofire-master-3/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		83AB5F5F1ADB7587004E512D /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
-		83BED4161AC05E4700FB19C3 /* phuketlist.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = phuketlist.text; sourceTree = "<group>"; };
+		83BED4161AC05E4700FB19C3 /* location.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = location.text; sourceTree = "<group>"; };
 		83C279111AAE985900052269 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83C279131AAE9AAD00052269 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		83C279151AAF1EC100052269 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
@@ -294,7 +294,7 @@
 		83BED41B1AC05E5300FB19C3 /* file */ = {
 			isa = PBXGroup;
 			children = (
-				83BED4161AC05E4700FB19C3 /* phuketlist.text */,
+				83BED4161AC05E4700FB19C3 /* location.text */,
 			);
 			name = file;
 			sourceTree = "<group>";
@@ -479,7 +479,7 @@
 				83DA43021AD810B800FA3F04 /* TripForYouViewController.swift in Sources */,
 				839807E61AB1D27B00A70CBC /* TripMeTableViewCell.swift in Sources */,
 				831D88391AC1820D000C30DD /* RestaAndHotelViewController.swift in Sources */,
-				83BED4171AC05E4700FB19C3 /* phuketlist.text in Sources */,
+				83BED4171AC05E4700FB19C3 /* location.text in Sources */,
 				83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */,
 				837C660F1ACD908B00E96FA2 /* ListVenueTableViewCell.swift in Sources */,
 				831ACAC31AD2709100FD1056 /* PlanFile.swift in Sources */,

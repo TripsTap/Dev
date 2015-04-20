@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieChartDelegate   {
+class TripForYouViewController: UIViewController  {
 
 //MARK: -
 //MARK: IBOutlet
@@ -19,7 +19,6 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
     @IBOutlet var labMail: UILabel!
     @IBOutlet var labGender: UILabel!
     @IBOutlet var imageUser: UIImageView!
-    @IBOutlet var viewPieChart: XYPieChart!
     
    
 
@@ -152,46 +151,6 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
 //        self.viewPieChart.reloadData()
 //        self.viewBarChart.reloadData()
     }
-    
-    func numberOfSlicesInPieChart(pieChart: XYPieChart!) -> UInt {
-        if pieChart == viewPieChart{
-            return UInt(desRegion.count)
-        }
-        else {
-            return UInt(desType.count)
-        }
-    }
-    
-    func pieChart(pieChart: XYPieChart!, valueForSliceAtIndex index: UInt) -> CGFloat {
-        
-        if pieChart == viewPieChart{
-            return CGFloat(desRegion.objectAtIndex(Int(index)) as! Int)
-        }
-        else {
-            return CGFloat(desType.objectAtIndex(Int(index)) as! Int)
-        }
-
-    }
-    
-    func pieChart(pieChart: XYPieChart!, colorForSliceAtIndex index: UInt) -> UIColor! {
-        return nil
-//            self.sliceColors.objectAtIndex(Int(index) % self.sliceColors.count) as! UIColor
-    }
-    
-    func pieChart(pieChart: XYPieChart!, textForSliceAtIndex index: UInt) -> String! {
-        return "test"
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    
-    
-    
-
     
 
 
