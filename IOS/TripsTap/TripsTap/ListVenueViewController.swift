@@ -65,7 +65,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         // get info from FS
         
         if(pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"){
-        
+            
+            allocArray((dicPlan.objectForKey("user_checkin") as! NSArray).count)
+            
             for(var i = 0 ; i < (dicPlan.objectForKey("user_checkin") as! NSArray).count ; i++){
                 // index of image when func call back
                 let imageAtIndex : Int = i
@@ -79,7 +81,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 // load info
                 var venueID : String = (dicPlan.objectForKey("user_checkin") as! NSArray).objectAtIndex(i).objectForKey("VENUE_ID") as! String
-                getInfoVenue(venueID)
+                getInfoVenue(venueID , index: i)
                 
             }
 
@@ -87,6 +89,11 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
         
         else{
+            
+            var countPlan : Int = (dicPlan.objectForKey("premises") as! NSArray).count + (dicPlan.objectForKey("conclusion") as! NSArray).count
+            
+            allocArray(countPlan)
+            
             for(var i = 0 ; i < (dicPlan.objectForKey("premises") as! NSArray).count ; i++){
                 // index of image when func call back
                 let imageAtIndex : Int = i
@@ -100,7 +107,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 // load info
                 var venueID : String = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(i).objectForKey("venueId") as! String
-                getInfoVenue(venueID)
+                getInfoVenue(venueID , index: i)
                 
             }
             
@@ -117,7 +124,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 // load info of eact place
                 var venueID : String = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(i).objectForKey("venueId") as! String
-                getInfoVenue(venueID)
+                getInfoVenue(venueID, index: imageAtIndex)
                 
             }
         }
@@ -152,13 +159,15 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+
         var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as! ListVenueTableViewCell
         
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou" {
             
             cell.labLocation.text = dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("VENUE_NAME") as? String
-            cell.labRate.text = String(format: "Rate : %@", dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("RATE") as! String )
+            cell.labRate.text = String(format: "Rating : %@", dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("RATE") as! String )
             
             
         }
@@ -174,7 +183,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                     cell.labLocation.text = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String
                 }
                 
-                cell.labRate.text = String(format: "Rate : %@",(dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("rate") as! String!)
+                cell.labRate.text = String(format: "Rating : %@",(dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("rate") as! String!)
                 
             }
             else{
@@ -188,7 +197,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 }
                 
                 
-                cell.labRate.text = String(format: "Rate : %@", (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("rate") as! String!)
+                cell.labRate.text = String(format: "Rating : %@", (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("rate") as! String!)
             }
             
         }
@@ -263,9 +272,12 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             return
         }
         
+        listInfo.exchangeObjectAtIndex(sourceIndexPath.row, withObjectAtIndex: destinationIndexPath.row)
         
         if dicPlan.objectForKey("type") as? String == "TripForYou" {
             (dicPlan.objectForKey("user_checkin") as! NSMutableArray).exchangeObjectAtIndex(sourceIndexPath.row, withObjectAtIndex: destinationIndexPath.row)
+            
+
         }
             
         else{
@@ -337,6 +349,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
         
         PlanFile.sharedInstance.listPlan.replaceObjectAtIndex(indexPlan!, withObject: dicPlan)
+        PlanFile.sharedInstance.saveFile()
         
     }
     
@@ -390,31 +403,49 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         return url
     }
     
-    func getInfoVenue(venueID : String) -> (){
+    func getInfoVenue(venueID : String , index : Int) -> (){
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
             
             connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
-                self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
-                
-                if(self.listInfo.count == (self.dicPlan.objectForKey("user_checkin") as! NSArray).count ){
+               
+                if error == nil {
+//                    self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
                     
-                    self.btnMap.enabled = true
+                    self.listInfo.replaceObjectAtIndex(index, withObject: (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
                     
+                    if(self.listInfo.count == (self.dicPlan.objectForKey("user_checkin") as! NSArray).count ){
+                        
+                        self.btnMap.enabled = true
+                        
+                    }
                 }
+
             })
         }
             
         else
         {
             connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
-                self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
-                
-                if(self.listInfo.count == (self.dicPlan.objectForKey("premises") as! NSArray).count + (self.dicPlan.objectForKey("conclusion") as! NSArray).count){
+                if error == nil {
                     
-                    self.btnMap.enabled = true
+                    self.listInfo.replaceObjectAtIndex(index, withObject: (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
+                    
+                    if(self.listInfo.count == (self.dicPlan.objectForKey("premises") as! NSArray).count + (self.dicPlan.objectForKey("conclusion") as! NSArray).count){
+                        
+                        self.btnMap.enabled = true
+                    }
                 }
+//                else {
+//                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+//                }
             })
+        }
+    }
+    
+    func allocArray(countOfArray : Int){
+        for var i = 0 ; i < countOfArray ; i++ {
+            listInfo.addObject("")
         }
     }
     
@@ -497,6 +528,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             newPlan.removeObjectForKey("user_checkin")
             newPlan.setObject(user_checkin, forKey: "user_checkin")
             newPlan.setObject("TripForYou", forKey: "type")
+            newPlan.setObject(tripName!, forKey: "tripname")
             var rate: String! = getRating(newPlan)
             newPlan.setObject(rate, forKey: "rate")
             
@@ -569,44 +601,62 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 infoView.infoOld = (dicPlan.objectForKey("user_checkin") as! NSArray).objectAtIndex(indexPath!.row) as! NSDictionary
                 
-                for(var i = 0 ; i < self.listInfo.count ; i++ ){
+                
+                if listInfo.objectAtIndex(indexPath!.row) is String {
                     
-                    if((dicPlan.objectForKey("user_checkin") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("VENUE_ID") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-                        
-                        infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-                    }
                 }
+                else{
+                    infoView.info = listInfo.objectAtIndex(indexPath!.row) as! NSDictionary
+                }
+                
+//                for(var i = 0 ; i < self.listInfo.count ; i++ ){
+//                    
+//                    if((dicPlan.objectForKey("user_checkin") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("VENUE_ID") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
+//                        
+//                        infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
+//                    }
+//                }
                 
             }
             else{
                 
                 infoView.pageType = "TripMe"
                 
+                
+                
+                if listInfo.objectAtIndex(indexPath!.row) is String {
+                    
+                }
+                else{
+                    infoView.info = listInfo.objectAtIndex(indexPath!.row) as! NSDictionary
+                }
+                
+                
                 if(indexPath!.row <  (self.dicPlan.objectForKey("premises") as! NSArray).count as Int ){
                     
                     // when load info not complete
                     infoView.infoOld = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row) as! NSDictionary
                     
-                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
-                        
-                        if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-                            
-                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-                        }
-                    }
+//                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
+//                        
+//                        if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
+//                            
+//                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
+//                        }
+//                    }
                 }
                     
                 else{
                     
                     infoView.infoOld = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count) as! NSDictionary
                     
-                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
-                        
-                        if((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-                            
-                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-                        }
-                    }
+//                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
+//                        
+//                        if((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
+//                            
+//                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
+//                        }
+//                    }
                 }
             }
         }
@@ -614,10 +664,13 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             // click map button
         else if (segue.identifier == "MapViewController"){
             var mapView : MapViewController = segue.destinationViewController as! MapViewController
+            
+            var newListByTbList : NSMutableArray = NSMutableArray()
+            
+            
             mapView.listInfo = self.listInfo
-            mapView.listImage = self.listImage
         }
-        
+
         
     }
 
@@ -631,7 +684,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 sumRate += (plan.objectForKey("user_checkin") as! NSArray).objectAtIndex(i).objectForKey("RATE")!.doubleValue
             }
             var rateAvg : Double = sumRate / Double((plan.objectForKey("user_checkin")as! NSArray).count as Int)
-            return String(format: "%.2f",rateAvg)
+            return String(format: "%.1f",rateAvg)
         }
         else{
             
@@ -647,7 +700,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             var countPremiese : Int = (plan.objectForKey("premises")as! NSArray).count as Int
             var countConclusion : Int = (plan.objectForKey("conclusion")as! NSArray).count as Int
             var rateAvg : Double = sumRate / (Double(countConclusion) + Double(countPremiese))
-            return String(format: "%.2f",rateAvg)
+            return String(format: "%.1f",rateAvg)
         }
 
         

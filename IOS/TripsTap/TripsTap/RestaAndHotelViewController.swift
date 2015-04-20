@@ -51,8 +51,8 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
                     self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
                     self.table.reloadData()
                 }
-                else{
-                    
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
                 }
             });
         }
@@ -65,6 +65,9 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
                     self.viewLoader.hidden = true
                     self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
                     self.table.reloadData()
+                }
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
                 }
                 
             });
@@ -136,19 +139,22 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        viewLoader.hidden = false
         var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as! String
         connection.getInfoFromFoursquare(idStr) { (result, error) -> () in
-            var storyBroad = UIStoryboard(name: "Main", bundle: nil)
-            var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as! InfoViewController
-            infoView.info = (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary
-            infoView.pageType = self.labTitle.text
-            self.navigationController?.pushViewController(infoView, animated: true)
+            self.viewLoader.hidden = true
+            if error == nil {
+                var storyBroad = UIStoryboard(name: "Main", bundle: nil)
+                var infoView : InfoViewController = storyBroad.instantiateViewControllerWithIdentifier("InfoViewController") as! InfoViewController
+                infoView.info = (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary
+                infoView.pageType = self.labTitle.text
+                self.navigationController?.pushViewController(infoView, animated: true)
+            }
+            else {
+                UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+            }
             
         }
-        
-        
-
     }
 
     //MARK:-

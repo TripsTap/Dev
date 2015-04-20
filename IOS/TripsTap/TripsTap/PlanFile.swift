@@ -14,6 +14,7 @@ class PlanFile: NSObject {
     var fileName : String = "plan.peach"
     var fileBehaviour : String = "behaviour.peach"
     var behaviour : NSMutableDictionary!
+    var fristOpenApp : Int!
     
     class var sharedInstance: PlanFile {
         struct Static {
@@ -30,6 +31,8 @@ class PlanFile: NSObject {
 
         super.init()
         
+        
+        fristOpenApp = 0
         println("init planfile class")
         var realPathPlan : String = applicationDocumentsDirectory(fileName)
         

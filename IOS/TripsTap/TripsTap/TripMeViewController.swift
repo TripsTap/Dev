@@ -110,7 +110,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             self.viewIndicator.hidden = true
             self.category.removeAllObjects()
             self.table.reloadData()
-            if(error == nil){
+            if(error == nil)
+            {
                 if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
                     
                     self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
@@ -119,7 +120,9 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                 else{
                     println("cate == 0")
                 }
-                
+            }
+            else {
+                UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
             }
         }
         
@@ -149,26 +152,36 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         if(self.segmentType.selectedSegmentIndex == 0 ){
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess")
-//                self.listPlan = NSMutableArray()
                 
                 self.viewIndicator.hidden = true
-                
-                if(result.count == 0 ){
-                    let alertController = UIAlertController(title: nil, message:
-                        "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
 
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                if error == nil {
+
+                    if(result.count == 0 ){
+                        
+//                        let alertController = UIAlertController(title: nil, message:
+//                            "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
+//                        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
+//                        
+//                        self.presentViewController(alertController, animated: true, completion: nil)
+                        
+                        
+                         UIAlertView(title: nil, message: "Please select the other category!", delegate: self, cancelButtonTitle: "OK").show()
+                    }
+                    else{
+                        
+                        
+                        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                        var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
+                        mainView.pageType = "TripMe"
+                        mainView.listPlan = NSMutableArray(array: result as! NSMutableArray)
+                        mainView.location = self.textLocation.text
+                        self.navigationController?.pushViewController(mainView, animated: true)
+                    }
                 }
-                else{
-                    
-                    
-                    var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                    var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
-                    mainView.pageType = "TripMe"
-                    mainView.listPlan = NSMutableArray(array: result as! NSMutableArray)
-                    mainView.location = self.textLocation.text
-                    self.navigationController?.pushViewController(mainView, animated: true)
+                
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
                 }
                 
             }
@@ -182,66 +195,72 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                 
                 self.viewIndicator.hidden = true
                 
-                
-                if(result.count == 0 ){
-                    let alertController = UIAlertController(title: nil, message:
-                        "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
+                if error == nil {
                     
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                }
-                else{
-                    
-                    var listNewPlan : NSMutableArray = NSMutableArray()
-                    
-                    for var i = 0 ; i < result.count ; i++ {
-                        listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as! NSMutableDictionary))
-                        }
-                    for var i = 0 ; i < result.count ; i++ {
+                    if(result.count == 0 ){
+                        let alertController = UIAlertController(title: nil, message:
+                            "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
+                        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
                         
-//                        var allCat : NSMutableArray = NSMutableArray()
-                        var premises : NSMutableArray = NSMutableArray()
-                        var conclusion : NSMutableArray = NSMutableArray()
-                        // add category of premiss
-                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("premises")!.count ; j++ {
-                            for var k = 0 ; k < self.cateSelectList.count ; k++ {
-                                if (((result.objectAtIndex(i).objectForKey("premises") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String)
-                                {
-                                    premises.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("premises") as! NSArray).objectAtIndex(j))
-                                }
-                            }
-
-                        }
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    }
+                    else{
                         
-                        // add category of conclusion
-                        for var j = 0 ; j < result.objectAtIndex(i).objectForKey("conclusion")!.count ; j++ {
-
-                            for var k = 0 ; k < self.cateSelectList.count ; k++ {
-                                if (((result.objectAtIndex(i).objectForKey("conclusion") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String ){
-                                    conclusion.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("conclusion") as! NSArray).objectAtIndex(j))
+                        var listNewPlan : NSMutableArray = NSMutableArray()
+                        
+                        for var i = 0 ; i < result.count ; i++ {
+                            listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as! NSMutableDictionary))
+                        }
+                        for var i = 0 ; i < result.count ; i++ {
+                            
+                            //                        var allCat : NSMutableArray = NSMutableArray()
+                            var premises : NSMutableArray = NSMutableArray()
+                            var conclusion : NSMutableArray = NSMutableArray()
+                            // add category of premiss
+                            for var j = 0 ; j < result.objectAtIndex(i).objectForKey("premises")!.count ; j++ {
+                                for var k = 0 ; k < self.cateSelectList.count ; k++ {
+                                    if (((result.objectAtIndex(i).objectForKey("premises") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String)
+                                    {
+                                        premises.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("premises") as! NSArray).objectAtIndex(j))
+                                    }
                                 }
+                                
                             }
                             
+                            // add category of conclusion
+                            for var j = 0 ; j < result.objectAtIndex(i).objectForKey("conclusion")!.count ; j++ {
+                                
+                                for var k = 0 ; k < self.cateSelectList.count ; k++ {
+                                    if (((result.objectAtIndex(i).objectForKey("conclusion") as! NSArray).objectAtIndex(j) as! NSDictionary).objectForKey("catName") as! String == self.cateSelectList.objectAtIndex(k) as! String ){
+                                        conclusion.addObject(((result.objectAtIndex(i) as! NSDictionary).objectForKey("conclusion") as! NSArray).objectAtIndex(j))
+                                    }
+                                }
+                                
+                            }
+                            
+                            
+                            
+                            (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("premises")
+                            (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(premises, forKey: "premises")
+                            (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("conclusion")
+                            (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
                         }
                         
-                        
-                        
-                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("premises")
-                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(premises, forKey: "premises")
-                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("conclusion")
-                        (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
+                        if(listNewPlan.count != 0 ){
+                            var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                            var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
+                            mainView.pageType = "TripMe"
+                            mainView.listPlan = listNewPlan as NSMutableArray
+                            mainView.location = self.textLocation.text
+                            self.navigationController?.pushViewController(mainView, animated: true)
+                        }
                     }
                     
-                    if(listNewPlan.count != 0 ){
-                        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                        var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
-                        mainView.pageType = "TripMe"
-                        mainView.listPlan = listNewPlan as NSMutableArray
-                        mainView.location = self.textLocation.text
-                        self.navigationController?.pushViewController(mainView, animated: true)
-                    }
                 }
                 
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+                }
             }
         }
     }
@@ -321,7 +340,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     
     func  tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        return 80;
+        return 60;
     }
     
 //MARK:-

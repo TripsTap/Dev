@@ -26,13 +26,16 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         listImage = NSMutableArray()
         var connection : Connection = Connection.sharedInstance
         listUrl = NSMutableArray()
-        connection.getAllImageFromFS(venueID, completion: { (result, error) -> () in
-            
-//            self.listUrl = result.
-            self.listUrl = ((result.objectForKey("response") as! NSDictionary).objectForKey("photos") as! NSDictionary).objectForKey("items") as! NSMutableArray
-            
-            self.loadAllImage()
-        })
+        if venueID != nil {
+            connection.getAllImageFromFS(venueID, completion: { (result, error) -> () in
+                
+                if error == nil {
+                    self.listUrl = ((result.objectForKey("response") as! NSDictionary).objectForKey("photos") as! NSDictionary).objectForKey("items") as! NSMutableArray
+                    
+                    self.loadAllImage()
+                }
+            })
+        }
         
     }
     

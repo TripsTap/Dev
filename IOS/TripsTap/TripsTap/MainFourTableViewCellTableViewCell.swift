@@ -10,6 +10,9 @@ import UIKit
 
 class MainFourTableViewCellTableViewCell: UITableViewCell {
 
+    @IBOutlet var imageOne: UIImageView!
+    @IBOutlet var labName: UILabel!
+    @IBOutlet var labRate: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

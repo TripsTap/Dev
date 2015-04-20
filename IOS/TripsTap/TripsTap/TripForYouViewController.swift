@@ -1,4 +1,4 @@
-//
+ //
 //  TripForYouViewController.swift
 //  TripsTap
 //
@@ -45,9 +45,17 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
     @IBOutlet var progressEntertain: UIProgressView!
     @IBOutlet var progressHistoric: UIProgressView!
     @IBOutlet var progressNutual: UIProgressView!
-    @IBOutlet var progressOutdoor: UIProgressView!
+    @IBOutlet var progressMesuem: UIProgressView!
     @IBOutlet var progressThemepark: UIProgressView!
     @IBOutlet var progressSea : UIProgressView!
+    
+    @IBOutlet var labPerArt: UILabel!
+    @IBOutlet var labperEntertain: UILabel!
+    @IBOutlet var labPerHistory: UILabel!
+    @IBOutlet var labPerMesuem: UILabel!
+    @IBOutlet var labPerNutual: UILabel!
+    @IBOutlet var labPerThemePark: UILabel!
+    @IBOutlet var labPerSea: UILabel!
     
     
 //MARK:-
@@ -80,15 +88,15 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
         
         
         labNameUser.text = info.objectForKey("FBName") as? String
-        labMail.text = info.objectForKey("FBMail") as? String
-        labGender.text = info.objectForKey("FBGender") as? String
+//        labMail.text = info.objectForKey("FBMail") as? String
+//        labGender.text = info.objectForKey("FBGender") as? String
         imageUser.image = UIImage( data : info.objectForKey("image") as! NSData)
         
-        self.viewPieChart.delegate = self
-        self.viewPieChart.dataSource = self
-        self.viewPieChart.showPercentage = false
-        self.viewPieChart.center = CGPointMake(150, 150)
-        self.viewPieChart.labelColor = UIColor.blackColor()
+//        self.viewPieChart.delegate = self
+//        self.viewPieChart.dataSource = self
+//        self.viewPieChart.showPercentage = false
+//        self.viewPieChart.center = CGPointMake(150, 150)
+//        self.viewPieChart.labelColor = UIColor.blackColor()
 
         
         desType = NSMutableArray()
@@ -112,45 +120,36 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
         
         
         progressArt.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!) / Float(sumDesType)
+        labPerArt.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String)
         
         progressEntertain.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!) / Float(sumDesType)
+        labperEntertain.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String)
+        
         
         progressHistoric.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!) / Float(sumDesType)
+        labPerHistory.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String)
         
         progressNutual.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!) / Float(sumDesType)
+        labPerNutual.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String)
         
-        progressOutdoor.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) / Float(sumDesType)
+        progressMesuem.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String).toInt()!) / Float(sumDesType)
+        labPerMesuem.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String)
         
-        progressThemepark.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) / Float(sumDesType)
+        progressThemepark.progress = (Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) + Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) ) / Float(sumDesType)
+        labPerThemePark.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String)
+        
+        
+//            ((info.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!)
         
         progressSea.progress = Float((info.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!) / Float(sumDesType)
-        
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        self.viewBarChart.delegate = self
-//        self.viewBarChart.dataSource = self
-//        self.viewBarChart.showPercentage = false
-
+        labPerSea.text = (info.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String)
         
 
 
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.viewPieChart.reloadData()
+//        self.viewPieChart.reloadData()
 //        self.viewBarChart.reloadData()
     }
     
@@ -192,92 +191,9 @@ class TripForYouViewController: UIViewController , XYPieChartDataSource , XYPieC
     
     
     
-//MARK: -
-//MARK: button event
-//MARK: -
-    
-    @IBAction func clickSelectLocation(sender: AnyObject) {
-
-        
-    }
-    
-//    @IBAction func clickDonePicker(sender: AnyObject) {
-//        selectCategory.removeAllObjects()
-//        viewPicker.hidden = true
-//        
-//        viewIndicator.hidden = false
-//        
-//        // send request
-//        self.connection = Connection.sharedInstance
-//        
-//        connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
-//            
-//            self.viewIndicator.hidden = true
-//            self.category.removeAllObjects()
-//            self.table.reloadData()
-//            if(error == nil){
-//                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
-//                    
-//                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
-//                    self.table.reloadData()
-//                }
-//                else{
-//                    println("cate == 0")
-//                }
-//                
-//            }
-//        }
-//        
-//    }
-
-    //MARK:-
-    //MARK:  table function
-    //MARK:-
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return category.count
-                return 30
-        
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-//        var cell  = tableView.dequeueReusableCellWithIdentifier("TripMeTableViewCell" ,forIndexPath: indexPath) as TripMeTableViewCell
-        
-        
-//        //  set information
-//        cell.labCategoryName.text = (self.category[indexPath.row] as NSDictionary) ["catName"] as String
-//        cell.delegate = self
-//        cell.index = indexPath.row
-//        
-//        
-//        // check select category
-//        var checkSelect : Bool = false
-//        for(var i = 0 ; i < self.selectCategory.count ; i++){
-//            if( (selectCategory.objectAtIndex(i) as Int) == indexPath.row){
-//                checkSelect = true
-//            }
-//        }
-//        
-//        // select already
-//        if (checkSelect){
-//            cell.imageSelect.backgroundColor = UIColor.greenColor()
-//        }
-//            
-//            // not select
-//        else{
-//            cell.imageSelect.backgroundColor = UIColor.redColor()
-//        }
-//        
-        return UITableViewCell()
-    }
-    
-    
-    func  tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        return 80;
-    }
 
     
+
 
     // MARK: - Navigation
 

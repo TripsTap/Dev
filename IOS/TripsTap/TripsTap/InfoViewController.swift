@@ -19,6 +19,9 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     @IBOutlet var labRating: UILabel!
     @IBOutlet var labPhone: UILabel!
     @IBOutlet var tableComment: UITableView!
+    @IBOutlet var btnMap: UIButton!
+    @IBOutlet var btnImage: UIButton!
+
     
     var connection : Connection!
     var info : NSDictionary!
@@ -53,12 +56,18 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             
         else if (pageType == "TripMe" || pageType == "TripForYou"){
             if(info == nil){
+                self.btnMap.enabled = false
                 connection = Connection.sharedInstance
                 listComment = NSMutableArray()
                 self.viewIndicator.hidden = false
-                
+                var venueID : String
                 //load info
-                var venueID : String = infoOld.objectForKey("venueId") as! String
+                if pageType == "TripMe" {
+                    venueID = infoOld.objectForKey("venueId") as! String
+                }
+                else {
+                   venueID = infoOld.objectForKey("VENUE_ID") as! String
+                }
                 getInfoVenue(venueID)
 
             }
@@ -72,6 +81,11 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
                 setInfoOfView()
                 
             }
+        }
+        
+        if info == nil {
+            btnMap.enabled = false
+            btnImage.enabled = false
         }
         
         
@@ -141,7 +155,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         location = ((info.objectForKey("location") as! NSDictionary).objectForKey("formattedAddress") as! NSArray).componentsJoinedByString(", ")
         
         
-        labRating.text = String(format: "%.2f", (info.objectForKey("rating") as! NSNumber).doubleValue )
+        labRating.text = String(format: "%.1f", (info.objectForKey("rating") as! NSNumber).doubleValue )
         
         if ( (info.objectForKey("contact") as! NSDictionary).objectForKey("phone") == nil) {
             phone = "-"
@@ -163,20 +177,31 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         
         
         connection.getInfoFromFoursquare(venueID  , completion: { (result, error) -> () in
-            self.viewIndicator.hidden = true
-            self.info =  ((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
-            self.setInfoOfView()
-            
-            
-            self.setLatAndLng()
-            self.setMap()
-            
-            // load image
-            var imageUrl : String = self.getUrlImage()
-            self.loadImage(imageUrl)
-            
-            self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
-            self.tableComment.reloadData()
+           
+            if error == nil {
+
+                self.btnMap.enabled = true
+                self.btnImage.enabled = true
+                self.viewIndicator.hidden = true
+                self.info =  ((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
+                self.setInfoOfView()
+                
+                
+                self.setLatAndLng()
+                self.setMap()
+                
+                // load image
+                var imageUrl : String = self.getUrlImage()
+                self.loadImage(imageUrl)
+                
+                self.listComment = NSMutableArray(array: self.info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
+                self.tableComment.reloadData()
+            }
+            else {
+                self.btnMap.enabled = false
+                self.viewIndicator.hidden = true
+                UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+            }
         })
     }
     
@@ -204,21 +229,29 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if(segue.identifier == "MapViewController"){
-            var infoArray : NSMutableArray = NSMutableArray()
-            infoArray.addObject(self.info)
-            
-            var mapView : MapViewController = segue.destinationViewController as! MapViewController
-            mapView.listInfo = infoArray as NSArray
-        }
-        
-        else{
-            var imageView : ImageViewController = segue.destinationViewController as! ImageViewController
-            if infoOld.objectForKey("venueId") != nil {
-                imageView.venueID = infoOld.objectForKey("venueId") as! String
+        if self.info != nil {
+            if(segue.identifier == "MapViewController" ){
+                
+                var infoArray : NSMutableArray = NSMutableArray()
+                infoArray.addObject(self.info)
+                
+                var mapView : MapViewController = segue.destinationViewController as! MapViewController
+                mapView.listInfo = infoArray as NSMutableArray
             }
+                
             else{
-                imageView.venueID = info.objectForKey("id") as! String
+                var imageView : ImageViewController = segue.destinationViewController as! ImageViewController
+                
+                if infoOld == nil{
+                    imageView.venueID = info.objectForKey("id") as! String
+                }
+                
+                else if infoOld.objectForKey("venueId") != nil {
+                    imageView.venueID = infoOld.objectForKey("venueId") as! String
+                }
+                else{
+                    imageView.venueID = info.objectForKey("id") as! String
+                }
             }
         }
         

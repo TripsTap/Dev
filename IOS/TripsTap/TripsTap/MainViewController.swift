@@ -30,10 +30,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     @IBOutlet var table: UITableView!
     @IBOutlet var btnBackAndMenu: UIButton!
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -202,7 +199,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         var countConclusion : Int = (plan.objectForKey("conclusion")as! NSArray).count as Int
         var rateAvg : Double = sumRate / (Double(countConclusion) + Double(countPremiese))
         
-        return String(format: "%.2f",rateAvg)
+        return String(format: "%.1f",rateAvg)
         
     }
     
@@ -258,18 +255,52 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        // 
+        // Trip for U form
+        //
+        
         if self.listPlan?.objectAtIndex(indexPath.row).objectForKey("type") as? String == "TripForYou" {
-         
+            
             var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
             var user_checkin : NSMutableArray = self.listPlan?.objectAtIndex(indexPath.row).objectForKey("user_checkin") as! NSMutableArray
-            var rate : String! = "2.4"
-//            data.objectForKey("rate") as! String
+            var rate : String! = String(format: "Rating %@",data.objectForKey("rate") as! String)
+            var tripName : String!
+            if data.objectForKey("tripname") == nil {
+                tripName = ""
+            }
+            else {
+                tripName = data.objectForKey("tripname") as! String
+            }
+            if user_checkin.count == 1{
+                
+                var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
+                var locat : String = String(format: "%@ %d place ",tripName,user_checkin.count  )
+                
+                
+                cell.labName.text = locat
+                cell.labRate.text = rate
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count && countIamge < 1; i++){
+                    
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        
+                        countIamge++
+                    }
+                }
+                
+                return cell
+            }
             
-            if user_checkin.count == 2 {
+            else if user_checkin.count == 2 {
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
-                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                var locat : String = String(format: "%@ %d place",tripName,user_checkin.count )
                 cell.labCountRate.text = locat
+                                cell.labRate.text = rate
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
                     if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
@@ -284,14 +315,15 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 }
                 
                 return cell
-
+                
             }
             else if (indexPath.row % 2 == 0 )
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
                 
-                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                var locat : String = String(format: "%@ %d place ",tripName,user_checkin.count  )
                 cell.labCountRate.text = locat
+                                cell.labRate.text = rate
                 
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
@@ -314,8 +346,9 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
-                var locat : String = String(format: "%d place & Avg rating %@",user_checkin.count , rate )
+                var locat : String = String(format: "%@ %d place",tripName ,user_checkin.count  )
                 cell.labCountRate.text = locat
+                cell.labRate.text = rate
                 
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
@@ -335,34 +368,67 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 
                 return cell
             }
-
             
-
+            
+            
         }
         
+        //
+        // Trip Me form
+        //
         else
         {
             var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
             var conclusionCount : Int = (data.objectForKey("conclusion") as! NSArray).count
             var premisesCount : Int = (data.objectForKey("premises") as! NSArray).count
+            var tripName : String!
+            if data.objectForKey("tripname") == nil {
+                tripName = ""
+            }
+            else {
+                tripName = data.objectForKey("tripname") as! String
+            }
             
-            var rate : String! = data.objectForKey("rate") as! String
-            if (conclusionCount + premisesCount  == 2 ){
+            var rate : String! = String(format: "Rating %@",data.objectForKey("rate") as! String)
+            
+            
+            if conclusionCount + premisesCount == 1{
+                
+                var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
+                var locat : String = String(format: "%@ %d place ",tripName, conclusionCount + premisesCount  )
+                
+                cell.labName.text = locat
+                cell.labRate.text = rate
+                
+                var countIamge = 0
+                for (var i = 0 ; i < self.listImage!.count && countIamge < 1; i++){
+                    
+                    if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
+                        if(countIamge == 0){
+                            cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
+                        }
+                        
+                        countIamge++
+                    }
+                }
+                
+                return cell
+            }
+            
+            
+            else if (conclusionCount + premisesCount  == 2 ){
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
-                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                var locat : String = String(format: "%@ %d place",tripName , conclusionCount + premisesCount )
                 cell.labCountRate.text = locat
+                cell.labRate.text = rate
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
                     if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
                         if(countIamge == 0){
-                            //                        cell.imageOne.layer.cornerRadius = 10.0
-                            //                        cell.imageOne.clipsToBounds = true
                             cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         else if(countIamge == 1){
-                            //                        cell.imageTwo.layer.cornerRadius = 10.0
-                            //                        cell.imageOne.clipsToBounds = true
                             cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         countIamge++
@@ -378,25 +444,19 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
                 
-                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                var locat : String = String(format: "%@ %d place ",tripName , conclusionCount + premisesCount  )
                 cell.labCountRate.text = locat
-                
+                cell.labRate.text = rate
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
                     if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
                         if(countIamge == 0){
-                            //                        cell.imageOne.layer.cornerRadius = 10.0
-                            //                        cell.imageOne.clipsToBounds = true
                             cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         else if(countIamge == 1){
-                            //                        cell.imageTwo.layer.cornerRadius = 10.0
-                            //                        cell.imageTwo.clipsToBounds = true
                             cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         else{
-                            //                        cell.imageThree.layer.cornerRadius = 10.0
-                            //                        cell.imageThree.clipsToBounds = true
                             cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         countIamge++
@@ -409,25 +469,19 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
-                var locat : String = String(format: "%d place & Avg rating %@",conclusionCount + premisesCount , rate )
+                var locat : String = String(format: "%@ %d place ",tripName , conclusionCount + premisesCount )
                 cell.labCountRate.text = locat
-                
+                cell.labRate.text = rate
                 var countIamge = 0
                 for (var i = 0 ; i < self.listImage!.count ; i++){
                     if(listImage!.objectAtIndex(i).objectForKey("index") as! String == String(format: "%d", indexPath.row)){
                         if(countIamge == 0){
-                            //                        cell.imageOne.layer.cornerRadius = 10.0
-                            //                        cell.imageOne.clipsToBounds = true
                             cell.imageOne.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         else if(countIamge == 1){
-                            //                        cell.imageTwo.layer.cornerRadius = 10.0
-                            //                        cell.imageTwo.clipsToBounds = true
                             cell.imageTwo.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         else{
-                            //                        cell.imageThree.layer.cornerRadius = 10.0
-                            //                        cell.imageThree.clipsToBounds = true
                             cell.imageThree.image = listImage!.objectAtIndex(i).objectForKey("image") as? UIImage
                         }
                         countIamge++
@@ -475,6 +529,55 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             table.reloadData()
         }
     }
+    
+    
+    @IBAction func longPressEditCell(sender: AnyObject) {
+        if (pageType == nil && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
+            self.table.setEditing(!self.table.editing, animated: true)
+        }
+    }
+    
+    
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+
+        if self.table.editing {
+            return UITableViewCellEditingStyle.None
+        }
+        return UITableViewCellEditingStyle.Delete
+        
+    }
+    
+    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        
+        if pageType  == nil {
+            
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        
+        if sourceIndexPath.row as Int == destinationIndexPath.row as Int {
+            return
+        }
+        
+        listPlan!.exchangeObjectAtIndex(sourceIndexPath.row, withObjectAtIndex: destinationIndexPath.row)
+        
+    
+        PlanFile.sharedInstance.listPlan = listPlan
+        PlanFile.sharedInstance.saveFile()
+        
+    }
+
     
 
     // MARK: - Navigation

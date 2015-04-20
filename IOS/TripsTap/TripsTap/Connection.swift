@@ -42,64 +42,30 @@ class Connection: NSObject {
     let CLIENT_ID = "VQFA1NFZFVHNCSQL1GTBVAOWBDQOHSQEHOW5YZKU1IS1JRFO"
     let CLIENT_SECRET = "KMIYI5FXHQFHCQYKRE35EKX125UEH4AQERSJRXMAZXDRFLDF"
     
+    
 //
 //MARK: -
 //MARK: Trip me
 //MARK: -
-//
-
-    func test(){
-        
-        var url = "http://www.easytorecipe.com/c2"
-        
-        //        var parameter : NSMutableDictionary! = NSMutableDictionary()
-        //        parameter.setObject(location, forKey: "state_init")
-        
-        
-        
-        Alamofire.request(.GET, url, parameters: nil ).responseJSON { (request, response, data, error) -> Void in
-            
-            println("---------------------")
-            println("get category")
-            println("---------------------")
-        }
-        
-    }
+    
     func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
         var url = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/category"
-
-//        var parameter : NSMutableDictionary! = NSMutableDictionary()
-//        parameter.setObject(location, forKey: "state_init")
-        
         var parameter : String = String(format:  "{  \"state_init\" : \"%@\"   }", location)
-
+        
         Alamofire.request(.GET, url, parameters: ["q": parameter , "apiKey" : apiKey ]  ).responseJSON { (request, response, data, error) -> Void in
-            
             println("---------------------")
             println("get category")
             println("---------------------")
             completion(result: data, error: error)
         }
-        
-        
-
     }
     
     func getRuleTripsMe(location: String , category : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
         var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
-        
-        
-        
-        
-        
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
         var categorySort: NSArray = category.sortedArrayUsingDescriptors([descriptor])
-        
-        
-//        var parameter : String = String(format: " { \"state_init\" : \"%@\" , \"catsPremiss.catName\" : {$all:[\"%@\"]} }", location,categorySort.componentsJoinedByString("\",\"") as String)
-        
         var parameter : String = String(format: "{\"state_init\":\"%@\",\"$or\":[{\"catsPremiss.catName\":{$all:[\"%@\"]}},{\"catsConclu.catName\":{$all:[\"%@\"]}}]}",location,categorySort.componentsJoinedByString("\",\"") as String , categorySort.componentsJoinedByString("\",\"") as String )
         
         Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
@@ -124,6 +90,7 @@ class Connection: NSObject {
         }
 
     }
+    
 //MARK:-
 //MARK: trip for you
 //MARK:-
@@ -187,7 +154,6 @@ class Connection: NSObject {
     
     func getImageFacebook(userID : String!){
         
-        
         var url = "https://graph.facebook.com/\(userID)/picture?type=large"
         ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
             if image != nil {
@@ -238,7 +204,7 @@ class Connection: NSObject {
     
 
 //MARK:-
-//MARK: Rstaurant and Hotel
+//MARK: info from FS
 //MARK:-
     
     func getInfoFromFoursquare(idString : String, completion : (result : AnyObject! , error : NSError!) ->() ){
@@ -247,7 +213,12 @@ class Connection: NSObject {
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
-            println("get info resraurant and hotel")
+            if error == nil {
+                println("get info venue success")
+            }
+            else {
+                println("get info venue not success")
+            }
             println("---------------------")
             completion(result: data, error: error)
         }
@@ -258,7 +229,13 @@ class Connection: NSObject {
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
-            println("get all url of image")
+
+            if error == nil {
+                println("get all url of image ss")
+            }
+            else {
+                println("get all url of image n ss")
+            }
             println("---------------------")
             completion(result: data, error: error)
         }
@@ -269,7 +246,6 @@ class Connection: NSObject {
         ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
             completion(image: image)
         }
-        
     }
 
 }
