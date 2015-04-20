@@ -9,12 +9,22 @@
 import UIKit
 
 class PlanFile: NSObject {
-   
-    var listPlan : NSMutableArray!
-    var fileName : String = "plan.peach"
-    var fileBehaviour : String = "behaviour.peach"
-    var behaviour : NSMutableDictionary!
+
+    
+    //MARK:-
+    //MARK: variable
+    //MARK:-
+    
+    var listPlan : NSMutableArray!  // plan that user save already
+    var fileName : String = "plan.peach"  // path of file
+    var fileBehaviour : String = "behaviour.peach"  // path of file
+    var behaviour : NSMutableDictionary!  // behaviour of user (receive from fackbook)
     var fristOpenApp : Int!
+    
+    
+    //MARK:-
+    //MARK:  init
+    //MARK:-
     
     class var sharedInstance: PlanFile {
         struct Static {
@@ -31,9 +41,7 @@ class PlanFile: NSObject {
 
         super.init()
         
-        
         fristOpenApp = 0
-        println("init planfile class")
         var realPathPlan : String = applicationDocumentsDirectory(fileName)
         
         if(NSFileManager.defaultManager().fileExistsAtPath(realPathPlan)){
@@ -56,7 +64,24 @@ class PlanFile: NSObject {
         
     }
     
+    /*
+    des : get root path of file 
     
+    para : 
+            fileName : file name that will save data
+    
+    */
+    func applicationDocumentsDirectory(fileName : String) -> String{
+        let dirs: [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String]
+        let directories:[String] = dirs!
+        var realPath = String(format: "%@%@", directories[0] , fileName)
+        return realPath
+        
+    }
+    
+    //MARK:-
+    //MARK: Plan
+    //MARK:-
     
     func saveFile(){
         var realPath = applicationDocumentsDirectory(fileName)
@@ -69,16 +94,10 @@ class PlanFile: NSObject {
     }
     
     
-    func applicationDocumentsDirectory(fileName : String) -> String{
-        let dirs: [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String]
-        let directories:[String] = dirs!
-        var realPath = String(format: "%@%@", directories[0] , fileName)
-        return realPath
-        
-    }
+    //MARK:-
+    //MARK: Behaviour
+    //MARK:-
     
-    
-//    behaviour
     func saveBehaviour(){
         var realPath = applicationDocumentsDirectory(fileBehaviour)
         self.behaviour.writeToFile(realPath, atomically: true)
@@ -87,18 +106,6 @@ class PlanFile: NSObject {
         var realPath : String = applicationDocumentsDirectory(fileBehaviour)
         return NSDictionary(contentsOfFile: realPath)
     }
-    
-    func deleteBehaviour(){
-        var behaviour : NSDictionary = NSDictionary()
-        var realPath = applicationDocumentsDirectory(fileBehaviour)
-        behaviour.writeToFile(realPath, atomically: true)
-    }
-
-    
-    
-    
-    
-    
     
     
 }
