@@ -21,8 +21,6 @@
 		8357A99C1AB07ACD00957BB9 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8357A99B1AB07ACD00957BB9 /* Connection.swift */; };
 		835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835F35D31ABC0594009BFF71 /* Main.storyboard */; };
 		836724E91AE553C400620A3D /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836724E81AE553C400620A3D /* SlideMenuController.swift */; };
-		836BDAA51AE0E8BC00010ADC /* XYPieChart in Resources */ = {isa = PBXBuildFile; fileRef = 836BDAA41AE0E8BC00010ADC /* XYPieChart */; };
-		836BDAAA1AE104E400010ADC /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 836BDAA91AE104E400010ADC /* XYPieChart.m */; };
 		837C660A1ACD890900E96FA2 /* MainThreeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837C66091ACD890900E96FA2 /* MainThreeTableViewCell.swift */; };
 		837C660F1ACD908B00E96FA2 /* ListVenueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837C660E1ACD908B00E96FA2 /* ListVenueTableViewCell.swift */; };
 		837C66111ACD994200E96FA2 /* RBResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837C66101ACD994200E96FA2 /* RBResizer.swift */; };
@@ -116,8 +114,6 @@
 		8357A99B1AB07ACD00957BB9 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		835F35D31ABC0594009BFF71 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		836724E81AE553C400620A3D /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
-		836BDAA41AE0E8BC00010ADC /* XYPieChart */ = {isa = PBXFileReference; lastKnownFileType = folder; path = XYPieChart; sourceTree = "<group>"; };
-		836BDAA91AE104E400010ADC /* XYPieChart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XYPieChart.m; path = TripsTap/XYPieChart/XYPieChart.m; sourceTree = "<group>"; };
 		837C66091ACD890900E96FA2 /* MainThreeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainThreeTableViewCell.swift; sourceTree = "<group>"; };
 		837C660E1ACD908B00E96FA2 /* ListVenueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListVenueTableViewCell.swift; path = ../ListVenueTableViewCell.swift; sourceTree = "<group>"; };
 		837C66101ACD994200E96FA2 /* RBResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBResizer.swift; sourceTree = "<group>"; };
@@ -224,7 +220,6 @@
 		839B90691AA6C8C3002E0A01 = {
 			isa = PBXGroup;
 			children = (
-				836BDAA91AE104E400010ADC /* XYPieChart.m */,
 				839B90741AA6C8C3002E0A01 /* TripsTap */,
 				839B908A1AA6C8C4002E0A01 /* TripsTapTests */,
 				839B90731AA6C8C3002E0A01 /* Products */,
@@ -329,7 +324,6 @@
 		83C2790A1AAE008600052269 /* library */ = {
 			isa = PBXGroup;
 			children = (
-				836BDAA41AE0E8BC00010ADC /* XYPieChart */,
 				837C66101ACD994200E96FA2 /* RBResizer.swift */,
 				836724E81AE553C400620A3D /* SlideMenuController.swift */,
 				83AB5F5F1ADB7587004E512D /* Alamofire.swift */,
@@ -462,7 +456,6 @@
 				839B907F1AA6C8C4002E0A01 /* Images.xcassets in Resources */,
 				839B90B71AA76BC4002E0A01 /* GoogleMaps.bundle in Resources */,
 				835F35D41ABC0594009BFF71 /* Main.storyboard in Resources */,
-				836BDAA51AE0E8BC00010ADC /* XYPieChart in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,7 +473,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				836BDAAA1AE104E400010ADC /* XYPieChart.m in Sources */,
 				837D00A51AC2FD790016679D /* ImageLoader.swift in Sources */,
 				831D883B1AC1824E000C30DD /* RestaAndHotelTableViewCell.swift in Sources */,
 				8347B8FA1AC9267D0059487A /* ListVenueViewController.swift in Sources */,

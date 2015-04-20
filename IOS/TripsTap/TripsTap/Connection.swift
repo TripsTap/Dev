@@ -48,7 +48,16 @@ class Connection: NSObject {
 //MARK: Trip me
 //MARK: -
     
-    func getCategoryTripsMe(location : String ,place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
+    /*
+        des :   request for get category of location
+    
+        para :
+                location : location that select
+    
+                completion : call back when request is finish
+
+    */
+    func getCategoryTripsMe(location : String , place : Int  , completion :((result : AnyObject! , error : NSError! ) ->()) )
     {
         
         var url = "https://api.mongolab.com/api/1/databases/triptap_location_category/collections/category"
@@ -62,6 +71,16 @@ class Connection: NSObject {
         }
     }
     
+    /*
+    des :
+            request for get get plan in category that select
+    
+    para :
+            location : location that select
+            category : category that select (must sort already)
+        
+            completion : call back when request is finish
+    */
     func getRuleTripsMe(location: String , category : NSArray , completion :((result : AnyObject! , error : NSError! ) ->())){
         var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
@@ -77,24 +96,48 @@ class Connection: NSObject {
         }
     }
     
+    /*
+    des :
+            request for get info of each place
+    
+    para :
+            location : location that select
+            venue : is id of place from FS
+    
+            completion : call back when request is finish
+    */
+
+    
     func getInfoVenue(location : String, venue : String , completion :(result : AnyObject! , error : NSError!) ->()){
         var url = "https://api.mongolab.com/api/1/databases/triptap_venue_information/collections/venues"
         
         var parameterQ : String = String(format: "{\"state_init\":\"%@\"}", location)
         var parameterF : String = String(format: "{venues:{$elemMatch:{venueId:\"%@\"}}}", venue)
-
+        
         Alamofire.request(.GET, url, parameters: ["q" : parameterQ , "f" : parameterF ,"apiKey" : apiKey]).responseJSON { (request, response , data , error) -> Void in
-            
+            println("---------------------")
             println("getInfoVenue")
+            println("---------------------")
             completion(result: data, error: error)
         }
-
+        
     }
     
 //MARK:-
 //MARK: trip for you
 //MARK:-
     
+    
+    /*
+    des :
+        POST request for save behaviour of user for find trip
+    
+    para :
+        info : place that user used to go already
+        userID : facebook ID
+    
+    */
+
     func setBehaviour(info : NSArray , userID : String! ){
         
         var url = "https://api.mongolab.com/api/1/databases/triptap_user_data/collections/user_data?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
@@ -102,30 +145,33 @@ class Connection: NSObject {
         var userIDDupicate = userID
         
         Alamofire.request(.POST , url , parameters:["userID":userID , "info": info ], encoding: .JSON ).responseJSON { (request, response, data, error) -> Void in
+
             println("---------------------")
             println("set Behaviour ")
-            println(data)
-            
+            println("---------------------")
             self.getSameBehaviour(userIDDupicate)
-            
             
         }
         
     }
     
+    /*
+    des :
+        Get trip that same with behaviour of user
+    
+    para :
+        userID : facebook ID
+    
+    */
+    
     func getSameBehaviour(userID : String!){
-        
-        println("userID : \(userID)")
-        var url = "http://128.199.130.63:3000/triptap"
-        println("url : \(url)")
-        
-        
         
         Alamofire.request(.GET , "https://api.mongolab.com/api/1/databases/knn_result/collections/user_id?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N" , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("get same Behaviour ")
             println(data)
             if error == nil {
+                // save plan
                 var planFile : PlanFile = PlanFile.sharedInstance
                 var trip : NSDictionary! = NSDictionary(dictionary: data?.objectAtIndex(1) as! NSDictionary)
                 planFile.behaviour.setObject( trip , forKey: "info")
@@ -151,7 +197,14 @@ class Connection: NSObject {
         
     }
     
+    /*
+    des :
+        load profile image from facebook
     
+    para :
+        userID : facebook ID
+    
+    */
     func getImageFacebook(userID : String!){
         
         var url = "https://graph.facebook.com/\(userID)/picture?type=large"
@@ -173,6 +226,17 @@ class Connection: NSObject {
 //MARK: Rstaurant and Hotel
 //MARK:-
     
+    /*
+    des :
+        GET request for ger list reataurant
+    
+    para :
+        ll : latatude and longtitude
+    
+        completion : call back
+    
+    */
+    
     func getRestaurant(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
         var url = "https://api.foursquare.com/v2/venues/search?near=phuket&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
@@ -188,6 +252,16 @@ class Connection: NSObject {
         
     }
     
+    /*
+    des :
+        GET request for ger list hotel
+    
+    para :
+        ll : latatude and longtitude
+    
+        completion : call back
+    
+    */
     func getHotel(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
         var url = "https://api.foursquare.com/v2/venues/search?near=phuket&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4bf58dd8d48988d1fa931735&v=20130815"
@@ -207,6 +281,17 @@ class Connection: NSObject {
 //MARK: info from FS
 //MARK:-
     
+    /*
+    des :
+        GET request for get info of each place
+    
+    para :
+        idString : id of place from FS
+    
+        completion : call back
+    
+    */
+    
     func getInfoFromFoursquare(idString : String, completion : (result : AnyObject! , error : NSError!) ->() ){
         
         var url = "https://api.foursquare.com/v2/venues/"+idString+"?&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&v=20130815"
@@ -224,6 +309,17 @@ class Connection: NSObject {
         }
     }
     
+    
+    /*
+    des :
+        GET request for get list URL image
+    
+    para :
+        venueID : venue id of place
+    
+        completion : call back
+    
+    */
     func getAllImageFromFS(venueID : String , completion : (result : AnyObject! , error : NSError!) -> () ){
         var url = String(format: "https://api.foursquare.com/v2/venues/%@/photos?client_id=%@&client_secret=%@&&v=20130815&limit=200", venueID, CLIENT_ID,CLIENT_SECRET)
         
@@ -242,6 +338,17 @@ class Connection: NSObject {
         
     }
     
+
+    /*
+    des :
+        load image
+    
+    para :
+        url : String url
+    
+        completion : call back
+    
+    */
     func getImage(url : String , completion : (image : UIImage! )->() ){
         ImageLoader.sharedLoader.imageForUrl(url) { (image, url) -> () in
             completion(image: image)
