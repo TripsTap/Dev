@@ -24,24 +24,23 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     @IBOutlet weak var viewPicker: UIView!
     @IBOutlet weak var viewIndicator: UIView!
     @IBOutlet var segmentType: UISegmentedControl!
-    
     @IBOutlet var btnTripMe: UIButton!
 
 //MARK: -
 //MARK: variable
 //MARK: -
     
-    let location : NSArray = NSArray(contentsOfFile: "location.text")!
+    let location : NSArray = ["Uthai Thani","Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
     
-
-    var connection : Connection!
-    var selectCategory : NSMutableArray!
-    var category : NSMutableArray! = NSMutableArray()
     var mainViewController: UIViewController!
-    var listPlan : NSMutableArray!
-    var categorySort: NSArray!
-    var cateSelectList : NSMutableArray!
-    var pageType : String!
+    
+    var connection : Connection! //HTTP request
+    var selectCategory : NSMutableArray! //
+    var category : NSMutableArray! = NSMutableArray() //cate of  location that selected
+    var listPlan : NSMutableArray! // Plan from server response
+    var categorySort: NSArray!  // sort category from that user select
+    var cateSelectList : NSMutableArray! // user select category
+    var pageType : String! // indentifile page
     
 //MARK:-
 //MARK: cycle
@@ -87,24 +86,31 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: button event
 //MARK: -
     
+    
+    // click button for select location
     @IBAction func clickSelectLocation(sender: AnyObject) {
         viewPicker.hidden = false
         
     }
     
+    /*
+    des : select location from picker
+    
+    */
     @IBAction func clickDonePicker(sender: AnyObject) {
+
         selectCategory.removeAllObjects()
         viewPicker.hidden = true
-        
         viewIndicator.hidden = false
-
-        // send request
-         self.connection = Connection.sharedInstance
+        
+        // dont slide picker
         if(textLocation.text == ""){
             textLocation.text = location[0] as! String
         }
+
         
-        
+        // send request get category
+         self.connection = Connection.sharedInstance
         connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
             
             self.viewIndicator.hidden = true
@@ -117,16 +123,21 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                     self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
                     self.table.reloadData()
                 }
+                    
                 else{
-                    println("cate == 0")
+                    UIAlertView(title: "Don't have Category!", message: "Please select other location", delegate: self, cancelButtonTitle: "OK").show()
                 }
             }
             else {
+                
                 UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+                
             }
         }
         
     }
+    
+    
     @IBAction func clickBack(sender: AnyObject) {
         self.selectCategory.removeAllObjects()
         self.category.removeAllObjects()
@@ -136,22 +147,25 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
     
-    
+    // Get plan
     @IBAction func clickTripMe(sender: AnyObject) {
         
+        // show loading
         self.viewIndicator.hidden = false
         
+        // sort category that user select
         cateSelectList = NSMutableArray()
         for (var i = 0 ; i < self.selectCategory.count ;i++){
             cateSelectList.addObject((category.objectAtIndex(self.selectCategory.objectAtIndex(i) as! Int) as! NSDictionary).objectForKey("catName") as! String)
         }
-        
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
-            categorySort = cateSelectList.sortedArrayUsingDescriptors([descriptor])
-        // start with
+        categorySort = cateSelectList.sortedArrayUsingDescriptors([descriptor])
+        
+        
+        // start with function
         if(self.segmentType.selectedSegmentIndex == 0 ){
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
-                println("getRuleTripsMe sucess")
+                println("getRuleTripsMe sucess (start with)")
                 
                 self.viewIndicator.hidden = true
 
@@ -159,17 +173,10 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 
                     if(result.count == 0 ){
                         
-//                        let alertController = UIAlertController(title: nil, message:
-//                            "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
-//                        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
-//                        
-//                        self.presentViewController(alertController, animated: true, completion: nil)
+                         UIAlertView(title: "Don't have trip!", message: "Please select the other category", delegate: self, cancelButtonTitle: "OK").show()
                         
-                        
-                         UIAlertView(title: nil, message: "Please select the other category!", delegate: self, cancelButtonTitle: "OK").show()
                     }
                     else{
-                        
                         
                         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
                         var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
@@ -177,6 +184,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                         mainView.listPlan = NSMutableArray(array: result as! NSMutableArray)
                         mainView.location = self.textLocation.text
                         self.navigationController?.pushViewController(mainView, animated: true)
+                        
                     }
                 }
                 
@@ -187,33 +195,30 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             }
         }
             
-        // interest in
+        // interest in Function
         else{
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
-                println("getRuleTripsMe sucess")
-//                self.listPlan = NSMutableArray()
-                
+                println("getRuleTripsMe sucess  (interest in)")
                 self.viewIndicator.hidden = true
                 
                 if error == nil {
                     
                     if(result.count == 0 ){
-                        let alertController = UIAlertController(title: nil, message:
-                            "Please select the other category", preferredStyle: UIAlertControllerStyle.Alert)
-                        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
                         
-                        self.presentViewController(alertController, animated: true, completion: nil)
+                        UIAlertView(title: "Don't have trip!", message: "Please select the other category", delegate: self, cancelButtonTitle: "OK").show()
+                        
                     }
                     else{
                         
+                        // add new list for delete place that dont use
                         var listNewPlan : NSMutableArray = NSMutableArray()
-                        
                         for var i = 0 ; i < result.count ; i++ {
                             listNewPlan.addObject(NSMutableDictionary(dictionary: result.objectAtIndex(i) as! NSMutableDictionary))
                         }
+                        
+                        // funcrtion for check save category that selected
                         for var i = 0 ; i < result.count ; i++ {
                             
-                            //                        var allCat : NSMutableArray = NSMutableArray()
                             var premises : NSMutableArray = NSMutableArray()
                             var conclusion : NSMutableArray = NSMutableArray()
                             // add category of premiss
@@ -238,14 +243,13 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                                 
                             }
                             
-                            
-                            
                             (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("premises")
                             (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(premises, forKey: "premises")
                             (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).removeObjectForKey("conclusion")
                             (listNewPlan.objectAtIndex(i) as! NSMutableDictionary).setObject(conclusion, forKey: "conclusion")
                         }
                         
+                        // check have plan
                         if(listNewPlan.count != 0 ){
                             var storyBoard = UIStoryboard(name: "Main", bundle: nil)
                             var mainView : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
@@ -253,6 +257,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                             mainView.listPlan = listNewPlan as NSMutableArray
                             mainView.location = self.textLocation.text
                             self.navigationController?.pushViewController(mainView, animated: true)
+                        }
+                        else{
+                            
+                            UIAlertView(title: "Don't have trip!", message: "Please select the other category", delegate: self, cancelButtonTitle: "OK").show()
+                            
                         }
                     }
                     
@@ -265,6 +274,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         }
     }
 
+    // dismiss picker
     @IBAction func clickDismiss(sender: AnyObject) {
         viewPicker.hidden = true
     }
@@ -285,7 +295,6 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
     }
     
-    
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         return location[row] as! String
     }
@@ -301,15 +310,16 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK:-
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return category.count
-//        return 30
-
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+       
+        
         var cell  = tableView.dequeueReusableCellWithIdentifier("TripMeTableViewCell" ,forIndexPath: indexPath) as! TripMeTableViewCell
         
-
         //  set information!
         cell.labCategoryName.text = (self.category[indexPath.row] as! NSDictionary) ["catName"] as? String
         cell.delegate = self
@@ -324,12 +334,12 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             }
         }
         
-        // select already
+        // set image select already
         if (checkSelect){
             cell.imageSelect.backgroundColor = UIColor.greenColor()
         }
             
-        // not select
+        // set image not select
         else{
             cell.imageSelect.backgroundColor = UIColor.redColor()
         }
@@ -341,11 +351,14 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     func  tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         return 60;
+        
     }
     
 //MARK:-
 //MARK:  cell delegate
 //MARK:-
+    
+    // select or dont select category when user click in cell
     func clickCell(index: Int) {
 
         for(var i = 0 ; i < self.selectCategory.count ; i++){
@@ -361,9 +374,12 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         table.reloadData()
     }
     
+    
 //MARK:-
 //MARK: function
 //MARK:-
+    
+    // enable get trip btn
     func checkEnableTripMeBtn(){
         if(selectCategory.count > 0){
             btnTripMe.enabled = true
@@ -374,7 +390,13 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     }
 
 
+    /*
     
+    des : check that category of place in pkan are same with category that user select
+    
+    para :
+            cateList : list of categorf of plan
+    */
     func checkMatchCat(cateList : NSArray) -> Bool{
         
         for var i = 0 ; i < cateList.count ; i++ {
@@ -392,13 +414,6 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
     }
    
-
-// MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-    }
-    
     
    
     
