@@ -21,33 +21,31 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
 //MARK:-
 //MARK:  variable
 //MARK:-
-    // info from page before
-    var dicPlan : NSMutableDictionary!
-    // load info from FS
-    var listInfo : NSMutableArray!
+    
+    var dicPlan : NSMutableDictionary!  // info from page before
+    var listInfo : NSMutableArray!      // load info from FS
     var listImage : NSMutableArray!
-    var connection : Connection = Connection.sharedInstance
+    var connection : Connection = Connection.sharedInstance //HTTP request
     var pageType : String!
     var mainViewController : UIViewController?
-    var listPlaceNotSelect : NSMutableArray!
-    var addTripAlready : Bool!
-    var indexPlan : Int?
+    var listPlaceNotSelect : NSMutableArray! // place that user dont choose
+    var addTripAlready : Bool!  // bool that check user add trip already
+    var indexPlan : Int? // index of plan that user select
     
 //MARK:-
 //MARK:  cycle
 //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-
-
         
         self.navigationController?.navigationBar.hidden = true
         var storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let mainViewController : MainViewController = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
+       
         
         listPlaceNotSelect = NSMutableArray()
+        // hide "get trip" btn
         if(pageType == "TripMe" || pageType == "TripForYou"){
             btnAddTrip.hidden = false
 
@@ -63,7 +61,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
         
         // get info from FS
-        
         if(pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"){
             
             allocArray((dicPlan.objectForKey("user_checkin") as! NSArray).count)
@@ -158,24 +155,26 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
     }
     
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-
         var cell : ListVenueTableViewCell = tableView.dequeueReusableCellWithIdentifier("ListVenueTableViewCell" , forIndexPath: indexPath) as! ListVenueTableViewCell
         
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou" {
             
-            cell.labLocation.text = dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("VENUE_NAME") as? String
-            cell.labRate.text = String(format: "Rating : %@", dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("RATE") as! String )
-            
+            var rate : String = String(format: "Rating : %@", dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("RATE") as! String )
+            var locationString : String = (dicPlan.objectForKey("user_checkin")?.objectAtIndex(indexPath.row).objectForKey("VENUE_NAME") as? String)!
+            cell.labLocation.text = locationString
+            cell.labRate.text = rate
             
         }
         
+            // Trip me plan
         else {
             
-            
             if(indexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count){
+                
                 if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("venueName") as? String == nil){
                     cell.labLocation.text = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath.row).objectForKey("vunueName") as? String
                 }
@@ -187,6 +186,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
             }
             else{
+                
                 if ((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("vunueName") as? String == nil){
                     
                     cell.labLocation.text = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath.row  -  (dicPlan.objectForKey("premises") as! NSArray).count ).objectForKey("venueName") as? String
@@ -201,6 +201,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             }
             
         }
+        
+        // load image
         for(var i = 0 ; i < self.listImage.count ; i++ )
         {
             
@@ -210,6 +212,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             }
         }
         
+        
+        // when request plan from server for add plan
         if pageType != "Main"{
             
             cell.delegate = self
@@ -240,21 +244,29 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         return cell
     }
     
+//MARK : move cell
+    
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        
         return UITableViewCellEditingStyle.None
         
     }
     
+    // dont show delete icon
     func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+       
         return false
+        
     }
     
 
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+       
         return true
+        
     }
 
-    
+    // can move cell from main page only
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         
         if pageType  == "Main"{
@@ -262,8 +274,11 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             return true
         }
         else{
+            
             return false
+            
         }
+        
     }
     
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
@@ -282,7 +297,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             
         else{
             
-            // case 1 in premises
+            // case 1  premises to premiss
             if(sourceIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row < (dicPlan.objectForKey("premises") as! NSArray).count ){
                 
                 var clone : NSMutableDictionary = NSMutableDictionary(dictionary: (dicPlan.objectForKey("premises") as! NSMutableArray).objectAtIndex(sourceIndexPath.row) as! NSMutableDictionary)
@@ -317,7 +332,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             }
                 
                 
-                // case 3 in counclusion
+                // case 3 in counclusion to conclusion
                 
             else if(sourceIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count && destinationIndexPath.row >= (dicPlan.objectForKey("premises") as! NSArray).count ){
                 
@@ -357,6 +372,93 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
 //MARK:  function
 //MARK:-
     
+    /*
+    des :   save trip to file
+    
+    para :
+    tirpName : trip name that user fill in
+    */
+    func saveTrip(tripName : String?){
+        addTripAlready = true
+        
+        //sort place
+        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
+        var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
+        
+        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
+            var user_checkin : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("user_checkin") as! NSMutableArray)
+            
+            // find  place that same with list that user select
+            for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
+                if( (listPlaceNotSelectSort.objectAtIndex(i) as! Int) < (dicPlan.objectForKey("user_checkin") as! NSArray).count as Int){
+                    user_checkin.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as! Int - i )
+                    
+                }
+            }
+            
+            // add nwe plan
+            var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
+            newPlan.removeObjectForKey("user_checkin")
+            newPlan.setObject(user_checkin, forKey: "user_checkin")
+            newPlan.setObject("TripForYou", forKey: "type")
+            newPlan.setObject(tripName!, forKey: "tripname")
+            var rate: String! = getRating(newPlan)
+            newPlan.setObject(rate, forKey: "rate")
+            
+            // save new plan
+            var file : PlanFile = PlanFile.sharedInstance
+            file.listPlan.addObject(newPlan)
+            file.saveFile()
+            
+        }
+        else{
+            
+            var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as! NSMutableArray)
+            var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as! NSMutableArray)
+            
+            // find  place that same with list that user select
+            for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
+                if( (listPlaceNotSelectSort.objectAtIndex(i) as! Int) < (dicPlan.objectForKey("premises") as! NSArray).count as Int){
+                    premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as! Int - i )
+                    
+                }
+            }
+            
+            var countDelete = 0
+            for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
+                if( (listPlaceNotSelectSort.objectAtIndex(j) as! Int) >= (dicPlan.objectForKey("premises") as! NSArray).count as Int){
+                    conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as! Int - countDelete - (dicPlan.objectForKey("premises") as! NSArray).count as Int )
+                    countDelete++
+                    
+                }
+            }
+            
+            // add new plan
+            var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
+            newPlan.removeObjectForKey("premises")
+            newPlan.removeObjectForKey("conclusion")
+            newPlan.setObject(premiss, forKey: "premises")
+            newPlan.setObject(conclusion, forKey: "conclusion")
+            newPlan.setObject("TripMe", forKey: "type")
+            newPlan.setObject(tripName!, forKey: "tripname")
+            var rate: String! = getRating(newPlan)
+            newPlan.setObject(rate, forKey: "rate")
+            
+            //save plan
+            var file : PlanFile = PlanFile.sharedInstance
+            file.listPlan.addObject(newPlan)
+            file.saveFile()
+        }
+        self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
+    }
+    
+
+    /*
+    des :
+
+    para : 
+            source
+    */
     func updateListImage( source : Int , dest : Int){
         
         for(var i = 0 ; i < listImage.count ; i++){
@@ -365,6 +467,13 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
     
+    /*
+        des :   load and show image from url
+    
+        para :
+                url : String url image
+                index : image at index
+    */
     
     func loadImage(url : String , index : Int){
         
@@ -381,6 +490,12 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         })
     }
     
+    /*
+    des :   find true url from list of image url
+    
+    para :
+            urlFull :  String full url   (...oooo...)
+    */
     func getUrlImage(urlFull : String)->String{
         var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
         var url : String = ""
@@ -403,6 +518,14 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         return url
     }
     
+    /*
+    des :   get info from FS by veune id
+    
+    para :
+            venueID : veune id of place
+            index : position of venue
+    */
+    
     func getInfoVenue(venueID : String , index : Int) -> (){
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
@@ -410,7 +533,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             connection.getInfoFromFoursquare(venueID , completion: { (result, error) -> () in
                
                 if error == nil {
-//                    self.listInfo.addObject((result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
                     
                     self.listInfo.replaceObjectAtIndex(index, withObject: (result.objectForKey("response") as! NSDictionary).objectForKey("venue") as! NSDictionary)
                     
@@ -436,9 +558,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                         self.btnMap.enabled = true
                     }
                 }
-//                else {
-//                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
-//                }
             })
         }
     }
@@ -459,6 +578,10 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    /*
+    des :   event that user click add trip
+    
+    */
     @IBAction func clickAddTrip(sender: AnyObject) {
         
         var inputTextField: UITextField?
@@ -502,6 +625,11 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
 
+    
+    //MARK:-
+    //MARK: alert view
+    //MARK:
+    
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex == 1 {
             var tripName : String? = alertView.textFieldAtIndex(0)!.text
@@ -509,81 +637,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
     }
     
-    func saveTrip(tripName : String?){
-        addTripAlready = true
-        var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
-        var listPlaceNotSelectSort : NSArray = NSArray(array: listPlaceNotSelect.sortedArrayUsingDescriptors([descriptor]))
-        
-        if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
-            var user_checkin : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("user_checkin") as! NSMutableArray)
-            
-            for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
-                if( (listPlaceNotSelectSort.objectAtIndex(i) as! Int) < (dicPlan.objectForKey("user_checkin") as! NSArray).count as Int){
-                    user_checkin.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as! Int - i )
-                    
-                }
-            }
-            
-            var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
-            newPlan.removeObjectForKey("user_checkin")
-            newPlan.setObject(user_checkin, forKey: "user_checkin")
-            newPlan.setObject("TripForYou", forKey: "type")
-            newPlan.setObject(tripName!, forKey: "tripname")
-            var rate: String! = getRating(newPlan)
-            newPlan.setObject(rate, forKey: "rate")
-            
-            
-            
-            var file : PlanFile = PlanFile.sharedInstance
-            file.listPlan.addObject(newPlan)
-            file.saveFile()
-            
-        }
-        else{
-            var premiss : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("premises") as! NSMutableArray)
-            var conclusion : NSMutableArray = NSMutableArray(array: dicPlan.objectForKey("conclusion") as! NSMutableArray)
-            
-            
-            
-            
-            for(var i = 0 ; i < listPlaceNotSelectSort.count ; i++){
-                if( (listPlaceNotSelectSort.objectAtIndex(i) as! Int) < (dicPlan.objectForKey("premises") as! NSArray).count as Int){
-                    premiss.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(i) as! Int - i )
-                    
-                }
-            }
-            
-            var countDelete = 0
-            for(var j = 0 ; j < listPlaceNotSelectSort.count ; j++){
-                if( (listPlaceNotSelectSort.objectAtIndex(j) as! Int) >= (dicPlan.objectForKey("premises") as! NSArray).count as Int){
-                    conclusion.removeObjectAtIndex(listPlaceNotSelectSort.objectAtIndex(j) as! Int - countDelete - (dicPlan.objectForKey("premises") as! NSArray).count as Int )
-                    countDelete++
-                    
-                }
-            }
-            
-            var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: dicPlan)
-            newPlan.removeObjectForKey("premises")
-            newPlan.removeObjectForKey("conclusion")
-            newPlan.setObject(premiss, forKey: "premises")
-            newPlan.setObject(conclusion, forKey: "conclusion")
-            newPlan.setObject("TripMe", forKey: "type")
-            newPlan.setObject(tripName!, forKey: "tripname")
-            var rate: String! = getRating(newPlan)
-            newPlan.setObject(rate, forKey: "rate")
-            
-            
-            
-            var file : PlanFile = PlanFile.sharedInstance
-            file.listPlan.addObject(newPlan)
-            file.saveFile()
-        }
-        
-        
-        self.slideMenuController()?.changeMainViewController(self.mainViewController!, close: true)
-
-    }
-
+    
 //MARK:-
 //MARK: Navigation
 //MARK:-
