@@ -10,15 +10,26 @@ import UIKit
 
 class MapViewController: UIViewController {
 
+    //MARK:-
+    //MARK: IBOutlet
+    //MARK:-
     @IBOutlet var viewMap: UIView!
     @IBOutlet var viewLoader: UIView!
     
-    var dicPlan : NSMutableDictionary!
-    var listInfo : NSMutableArray!
-    var pageType : String?
-    var countLoadSeccess : Int! = 0
     
+    //MARK:-
+    //MARK: varialbe
+    //MARK:-
+    var dicPlan : NSMutableDictionary! // info of plan
+    var listInfo : NSMutableArray!  // list of place
+    var pageType : String? // type of page before
+    var countLoadSeccess : Int! = 0 // load success
     var mainViewController: UIViewController!
+    
+    
+    //MARK:-
+    //MARK: cycle
+    //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
@@ -79,13 +90,25 @@ class MapViewController: UIViewController {
             
         }
         
-        
-        
-        
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    //MARK:-
+    //MARK: Function
+    //MARK:-
+    
+    /*
+    des : ser up view when pafe start
+    
+    */
     func setView(){
         
-                    viewLoader.hidden = true
+        viewLoader.hidden = true
         var locationFrist : NSDictionary = self.listInfo.objectAtIndex(0).objectForKey("location") as! NSDictionary
         var latFrist : Double = locationFrist.objectForKey("lat") as! Double
         var lngFrist : Double = locationFrist.objectForKey("lng") as! Double
@@ -129,21 +152,14 @@ class MapViewController: UIViewController {
 
     }
     
-
-    @IBAction func clickBack(sender: AnyObject) {
-        if pageType == nil {
-            self.navigationController?.popViewControllerAnimated(true)
-        }
-            
-        else{
-            self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
-        }
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
+    /*
+    des : get info if this page not receive data
+    
+    para:
+        venueID : veune id of FS
+        index : position of this veune
+    */
     func getInfoVenue(venueID : String , index : Int) -> (){
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"{
@@ -181,23 +197,26 @@ class MapViewController: UIViewController {
             })
         }
     }
-
+    
     
     func allocArray(countOfArray : Int){
         for var i = 0 ; i < countOfArray ; i++ {
             listInfo.addObject("")
         }
     }
+
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    //MARK:-
+    //MARK: event button
+    //MARK:-
+    @IBAction func clickBack(sender: AnyObject) {
+        if pageType == nil {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+            
+        else{
+            self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
+        }
     }
-    */
 
 }

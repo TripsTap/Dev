@@ -10,7 +10,9 @@ import UIKit
 
 class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
 
-
+    //MARK:-
+    //MARK: IBOutlet
+    //MARK:-
     @IBOutlet var labName: UILabel!
     @IBOutlet var image1: UIImageView!
     @IBOutlet var viewIndicator: UIView!
@@ -22,23 +24,25 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     @IBOutlet var btnMap: UIButton!
     @IBOutlet var btnImage: UIButton!
 
-    
+    //MARK:-
+    //MARK: Variable
+    //MARK:-
     var connection : Connection!
-    var info : NSDictionary!
-    var infoOld : NSDictionary!
-    var lat : Double!
-    var lng : Double!
-    var location : String!
-    var phone : String! = "Phone : "
-    var rating : String!
-    var pageType: String!
-    var listComment : NSMutableArray!
-    var listImageComment : NSMutableArray!
+    var info : NSDictionary! // info of place from FS
+    var infoOld : NSDictionary! // info of place from rule
+    var lat : Double! // latitude
+    var lng : Double! // longtitude
+    var location : String! //location thst user select
+    var phone : String! = "Phone : " //phone number of place
+    var rating : String! //rateing of place
+    var pageType: String! //type of page before
+    var listComment : NSMutableArray! //list of comment from FS
     
+    //MARK:-
+    //MARK: Cycel
+    //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         
         if(pageType == "Restaurant" || pageType == "Hotel"){
             
@@ -87,16 +91,33 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             btnMap.enabled = false
             btnImage.enabled = false
         }
-        
-        
-        
-        
-        
-        
-        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
     
+    //MARK:-
+    //MARK: Event button
+    //MARK:-
+    
+    @IBAction func clickBack(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    
+    //MARK:-
+    //MARK: Function
+    //MARK:-
+    
+    /*
+    des : load image
+    
+    para :
+        url : url string of image
+    */
     func loadImage(url : String){
         //         load image
         connection = Connection.sharedInstance
@@ -108,24 +129,24 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
                 self.setInfoOfView()
             }
         })
-        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    /*
+    des : set latitude and longtitude
     
-    @IBAction func clickBack(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    
+    para :
+
+    */
     func setLatAndLng(){
         lat = ((info.objectForKey("location") as! NSDictionary).objectForKey("lat") as! NSNumber).doubleValue
         lng = ((info.objectForKey("location") as! NSDictionary).objectForKey("lng") as! NSNumber).doubleValue
     }
     
+    /*
+    des : set map view
+    
+    para :
+    */
     func setMap(){
         
         var camera = GMSCameraPosition.cameraWithLatitude( lat , longitude: lng   , zoom:13)
@@ -142,8 +163,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         
     }
     
+    /*
+    des : get real image url
+    
+    para :
+
+    */
     func getUrlImage()->String{
-        
         
         var prefix : String = (info.objectForKey("bestPhoto") as! NSDictionary).objectForKey("prefix") as! String
         var suffix : String = (info.objectForKey("bestPhoto") as! NSDictionary).objectForKey("suffix") as! String
@@ -151,9 +177,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     
     
+    /*
+    des : set info of place
+    
+    para :
+    */
     func setInfoOfView(){
         location = ((info.objectForKey("location") as! NSDictionary).objectForKey("formattedAddress") as! NSArray).componentsJoinedByString(", ")
-        
         
         labRating.text = String(format: "%.1f", (info.objectForKey("rating") as! NSNumber).doubleValue )
         
@@ -172,9 +202,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     
     
+    /*
+    des : load in fo if it donthave data
+    
+    para :
+        venueID : venue id of palce from FS
+    */
     func getInfoVenue( venueID : String) -> (){
-        
-        
         
         connection.getInfoFromFoursquare(venueID  , completion: { (result, error) -> () in
            
@@ -205,7 +239,9 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         })
     }
     
-    
+    //MARK:-
+    //MARK: Table delegate
+    //MARK:-
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listComment.count
     }

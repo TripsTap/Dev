@@ -1549,7 +1549,6 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="clickUser2:" destination="ohv-69-SMh" eventType="touchUpInside" id="a3e-Um-TOC"/>
                                     <segue destination="lMP-kj-lIb" kind="push" identifier="user2" id="jEG-wx-ptx"/>
                                 </connections>
                             </button>
@@ -1568,7 +1567,6 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="clickUser3:" destination="ohv-69-SMh" eventType="touchUpInside" id="ofB-ja-kxy"/>
                                     <segue destination="lMP-kj-lIb" kind="push" identifier="user3" id="jEJ-jX-haj"/>
                                 </connections>
                             </button>
@@ -2589,7 +2587,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Sxo-OX-16d">
                                 <rect key="frame" x="0.0" y="70" width="600" height="530"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="oKd-gC-P6x">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oKd-gC-P6x">
                                     <size key="itemSize" width="130" height="130"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -2609,6 +2607,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" red="0.96862745100000003" green="1" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -3058,7 +3057,7 @@
         <image name="logo_02_circle-2.png" width="400" height="400"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UYb-W2-xFD"/>
+        <segue reference="uJZ-Le-hAg"/>
         <segue reference="Mx7-7R-JLc"/>
     </inferredMetricsTieBreakers>
 </document>

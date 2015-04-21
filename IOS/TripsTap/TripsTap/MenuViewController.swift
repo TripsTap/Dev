@@ -19,17 +19,16 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
 //MARK: variable
 //MARK:-
-    var mainViewController: UIViewController!
-    var tripMeViewController: UIViewController!
-    var tripForYouViewController: UIViewController!
-    var mapViewController: UIViewController!
-    var restaAndHotelViewController: UIViewController!
+    var mainViewController: UIViewController! // main view page
+    var tripMeViewController: UIViewController!  // trip me page
+    var tripForYouViewController: UIViewController!  // trip for u page
+    var mapViewController: UIViewController!  // map view page
+    var restaAndHotelViewController: UIViewController! // restaurant and hotel page
     var storyboards = UIStoryboard(name: "Main", bundle: nil)
-    var infoCateArr : NSMutableArray = NSMutableArray()
-    var countTagPlace : Int!
-    
-    var FBID : String!
-    var FBName : String!
+    var infoCateArr : NSMutableArray = NSMutableArray() // info of category that user used to check in from facebook
+    var countTagPlace : Int! // check place load all complete
+    var FBID : String! // user id of facebook
+    var FBName : String! // user name of facebook
 
     
 //MARK:-
@@ -39,11 +38,9 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // facebook login
+        // facebook login set premissions
         fbView.delegate = self
         fbView.readPermissions = ["public_profile", "email","user_tagged_places" ,"publish_actions"]
-        
-        
         
         
         let tripForYouViewController = storyboards.instantiateViewControllerWithIdentifier("TripForYouViewController") as! TripForYouViewController
@@ -59,6 +56,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
 //MARK: facebook delegate
 //MARK:-
+    
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
         println("User Logged In")
     }
@@ -68,17 +66,15 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         println("User ID: \(user.objectID)")
         println("User Name: \(user.name)")
         
-        
-
         FBID = (user.objectID) as String
         FBName = (user.name) as String
         var planFile : PlanFile = PlanFile.sharedInstance
         
+        // save info of user
         planFile.behaviour.setObject(FBID, forKey: "FBID")
         planFile.behaviour.setObject(FBName, forKey: "FBName")
         planFile.behaviour.setObject(user.objectForKey("email"), forKey: "FBMail")
         planFile.behaviour.setObject(user.objectForKey("gender"), forKey: "FBGender")
-        
         planFile.saveBehaviour()
         Connection.sharedInstance.getSameBehaviour(FBID)
         
@@ -101,6 +97,11 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 //MARK:-
 //MARK: function
 //MARK:-
+    
+    /*
+    des :   get place of user that used to cehck in with facebook
+    
+    */
     func getPlaceFromFB(){
         
         self.infoCateArr.removeAllObjects()
@@ -125,7 +126,13 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 
     }
     
+    /*
+    des :   get cate info of each plach
     
+    para :
+            cateID : catogory id of each place
+    
+    */
     func getInfoOfCategory(cateID : String){
 
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
@@ -151,6 +158,10 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         
     }
     
+    /*
+    des :   load image of user from facebook
+    
+    */
     func getProfileImage(){
         
         var connection : Connection = Connection.sharedInstance
@@ -222,15 +233,5 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     }
     
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

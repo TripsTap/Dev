@@ -10,16 +10,24 @@ import UIKit
 
 class ImageViewController: UIViewController , UICollectionViewDataSource ,UICollectionViewDelegate {
 
+    //MARK:-
+    //MARK: IBoutlet
+    //MARK:-
     @IBOutlet var collection: UICollectionView!
     @IBOutlet var viewImage: UIView!
     @IBOutlet var imagePlace: UIImageView!
     
-    var listUrl : NSMutableArray!
-    var listImage : NSMutableArray!
-    var venueID : String!
-    var currentIndexImage : Int! = 0
+    //MARK:-
+    //MARK: Variable
+    //MARK:-
+    var listUrl : NSMutableArray! // list of url
+    var listImage : NSMutableArray! //list of image
+    var venueID : String! // venue ud
+    var currentIndexImage : Int! = 0 //position of image
     
-    
+    //MARK:-
+    //MARK: cycle
+    //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,6 +47,14 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK:-
+    //MARK: Function
+    //MARK:-
     func loadAllImage(){
         
         for var i = 0 ; i < listUrl.count ; i++ {
@@ -62,11 +78,10 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
+    //MARK:-
+    //MARK: Collection delegate
+    //MARK:-
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
         return listImage.count
@@ -100,6 +115,10 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         imagePlace.hidden = false
     }
 
+    
+    //MARK:-
+    //MARK: event button
+    //MARK:-
     @IBAction func clickCloseImage(sender: AnyObject) {
         viewImage.hidden = true
         imagePlace.hidden = true
@@ -109,6 +128,10 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    /*
+    des :   slide right image
+    
+    */
     @IBAction func swipeRight(sender: AnyObject) {
         if currentIndexImage + 1 < listImage.count {
             currentIndexImage  = currentIndexImage + 1
@@ -117,8 +140,11 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
             
         }
     }
-
     
+    /*
+    des :   slide left image
+    
+    */
     @IBAction func swipeLeft(sender: AnyObject) {
         
 

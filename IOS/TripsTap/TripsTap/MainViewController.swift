@@ -10,41 +10,46 @@ import UIKit
 
 class MainViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
-
-    //MARK:-
-    //MARK: variable
-    //MARK:-
-    var connection : Connection = Connection.sharedInstance
-    var pageType : String?
-    var listPlan : NSMutableArray?
-    var listImage : NSMutableArray?
-    var location : String?
-    var planFile : PlanFile?
-    var mainViewController: UIViewController!
-    var storyboards = UIStoryboard(name: "Main", bundle: nil)
-    var stopLoad : Int?
-    
     //MARK:-
     //MARK: IBOutlet
     //MARK:-
     @IBOutlet var table: UITableView!
     @IBOutlet var btnBackAndMenu: UIButton!
     
+    
+    //MARK:-
+    //MARK: variable
+    //MARK:-
+    var connection : Connection = Connection.sharedInstance
+    var planFile : PlanFile?
+    var pageType : String? // type of page before
+    var listPlan : NSMutableArray? // list plan
+    var listImage : NSMutableArray? // list image
+    var location : String? // location that user select
+    var mainViewController: UIViewController! // main apge
+    var storyboards = UIStoryboard(name: "Main", bundle: nil)
 
 
+    //MARK:-
+    //MARK: cycle
+    //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
         
         planFile = PlanFile.sharedInstance
         
-            self.listImage = NSMutableArray()
+        self.listImage = NSMutableArray()
+        
+        //start with main
         if(pageType != "TripMe"){
             listPlan = NSMutableArray(array: planFile!.listPlan)
         }
+            
+        // push from another page
         else{
             btnBackAndMenu.setTitle("Back", forState: UIControlState.Normal)
-            // sort by rateing
+            // find rateing of each plan
             for(var i = 0 ; i < listPlan?.count  ; i++ ){
                 var rate : String? = getRating(listPlan?.objectAtIndex(i) as! NSMutableDictionary)
                 var newPlan : NSMutableDictionary = NSMutableDictionary(dictionary: listPlan?.objectAtIndex(i) as! NSMutableDictionary)
@@ -52,13 +57,15 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 listPlan?.removeObjectAtIndex(i)
                 listPlan?.insertObject(newPlan, atIndex: i)
             }
-            // update listPlan
+            // sort plan by rating
             var planForSort : NSArray = NSArray(array: listPlan!)
             var descriptor: NSSortDescriptor = NSSortDescriptor(key: "rate", ascending: false)
             var listPlanSort : NSArray = planForSort.sortedArrayUsingDescriptors([descriptor])
             listPlan?.removeAllObjects()
             listPlan = NSMutableArray(array: listPlanSort )
-            deleteSameCat()
+            
+            // delete same plan
+            deleteSamePlan()
         }
         
         
@@ -107,6 +114,25 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
     }
     
+    override func viewWillAppear(animated: Bool) {
+        table.reloadData()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    //MARK:-
+    //MARK: Function
+    //MARK:-
+    
+    /*
+        des : setup view when page start
+        
+        para :
+            i : index of cell
+    */
     func setViewMain(i : Int){
         var data: NSDictionary = self.listPlan?.objectAtIndex(i) as! NSDictionary
         var conclusion : NSArray = data.objectForKey("conclusion") as! NSArray
@@ -162,9 +188,13 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
     }
     
+    /*
+    des : delete same plan
     
-    
-    func deleteSameCat(){
+    para :
+
+    */
+    func deleteSamePlan(){
         
         for var i = 0 ; i < self.listPlan?.count ; i++ {
             
@@ -183,6 +213,12 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
     }
     
+    /*
+    des : get rating of each plan
+    
+    para :
+            plan : plan
+    */
     func getRating(plan : NSMutableDictionary) -> String{
         var sumRate : Double = 0.0
         
@@ -203,12 +239,18 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
     }
     
+    /*
+    des : get real url image frim full string
+    
+    para :
+    urlFull :   3 image url (.../oooo/...)
+    index   :   image index
+    */
     func getUrlImage(urlFull : String , index: Int )->String{
         var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
         var url : String = ""
         let diceRoll = Int(arc4random_uniform(3))
         
-//        println(diceRoll)
         var a : NSArray = ((imageArray.objectAtIndex(diceRoll)as! String).componentsSeparatedByString("-") as NSArray)
         
         for(var i = 0 ; i < a.count - 1 ; i++){
@@ -227,18 +269,9 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
     }
     
-    
-    
-    override func viewWillAppear(animated: Bool) {
-       table.reloadData()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
+    //MARK:-
+    //MARK: button event
+    //MARK:-
     @IBAction func clickMenu(sender: AnyObject) {
         if(pageType == "TripMe"){
             self.navigationController?.popViewControllerAnimated(true)
@@ -248,31 +281,44 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
     }
     
+    @IBAction func longPressEditCell(sender: AnyObject) {
+        if (pageType == nil && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
+            self.table.setEditing(!self.table.editing, animated: true)
+        }
+    }
     
+    
+    //MARK:-
+    //MARK:Table delegate
+    //MArk:-
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return self.listPlan!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        // 
+        //
         // Trip for U form
         //
-        
         if self.listPlan?.objectAtIndex(indexPath.row).objectForKey("type") as? String == "TripForYou" {
             
             var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
             var user_checkin : NSMutableArray = self.listPlan?.objectAtIndex(indexPath.row).objectForKey("user_checkin") as! NSMutableArray
             var rate : String! = String(format: "Rating %@",data.objectForKey("rate") as! String)
             var tripName : String!
+            
+            // set trip name
             if data.objectForKey("tripname") == nil {
                 tripName = ""
             }
             else {
                 tripName = data.objectForKey("tripname") as! String
             }
+            
+            
+            // For one place in plan
             if user_checkin.count == 1{
-                
+
                 var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
                 var locat : String = String(format: "%@ %d place ",tripName,user_checkin.count  )
                 
@@ -295,6 +341,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 return cell
             }
             
+            // For two place in plan
             else if user_checkin.count == 2 {
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
@@ -317,6 +364,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 return cell
                 
             }
+                
+            //For 3 image
             else if (indexPath.row % 2 == 0 )
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
@@ -341,8 +390,10 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     }
                 }
                 
-                return cell
+             return cell
             }
+                
+            //For 3 image
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
@@ -372,7 +423,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
             
         }
-        
+            
         //
         // Trip Me form
         //
@@ -381,7 +432,10 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             var data: NSDictionary = self.listPlan?.objectAtIndex(indexPath.row) as! NSDictionary
             var conclusionCount : Int = (data.objectForKey("conclusion") as! NSArray).count
             var premisesCount : Int = (data.objectForKey("premises") as! NSArray).count
+            var rate : String! = String(format: "Rating %@",data.objectForKey("rate") as! String)
             var tripName : String!
+            
+            //set trip name
             if data.objectForKey("tripname") == nil {
                 tripName = ""
             }
@@ -389,9 +443,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 tripName = data.objectForKey("tripname") as! String
             }
             
-            var rate : String! = String(format: "Rating %@",data.objectForKey("rate") as! String)
-            
-            
+            // For one place in trip
             if conclusionCount + premisesCount == 1{
                 
                 var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
@@ -415,7 +467,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 return cell
             }
             
-            
+            // For two place in trip
             else if (conclusionCount + premisesCount  == 2 ){
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
@@ -439,7 +491,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 
                 
             }
-                
+            
+            // For 3 image
             else if (indexPath.row % 2 == 0 )
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
@@ -465,7 +518,8 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 
                 return cell
             }
-                
+            
+            // For 3 image
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
@@ -499,12 +553,12 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return 240
     }
     
-//    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-//        if pageType != "TripMe"{
-//            return true
-//        }
-//        return false
-//    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if pageType != "TripMe"{
+            return true
+        }
+        return false
+    }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete{
@@ -529,14 +583,6 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             table.reloadData()
         }
     }
-    
-    
-    @IBAction func longPressEditCell(sender: AnyObject) {
-        if (pageType == nil && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
-            self.table.setEditing(!self.table.editing, animated: true)
-        }
-    }
-    
     
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
@@ -578,15 +624,9 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
     }
 
-    
-
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
+
         if segue.identifier == "ListVenue"{
             let listVenue : ListVenueViewController = segue.destinationViewController as! ListVenueViewController
             let indexPath = self.table.indexPathForSelectedRow()

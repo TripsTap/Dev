@@ -21,11 +21,11 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
 //MARK: variable
 //MARK:-
     var connection : Connection!
-    var pageType : String!
-    var latitude : String!
-    var longitude : String!
-    var mainViewController: UIViewController!
-    var listOfTable : NSMutableArray!
+    var pageType : String! // type of page before
+    var latitude : String! // latitude of user
+    var longitude : String! // longtitude of user
+    var mainViewController: UIViewController! //main page
+    var listOfTable : NSMutableArray! // array of place
     
 //MARK:-
 //MARK: cycle
@@ -38,10 +38,13 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
 
+        
         self.connection = Connection.sharedInstance
         self.listOfTable = NSMutableArray()
         
+        
         self.viewLoader.hidden = false
+        
         if(self.pageType == "restaurant"){
             self.labTitle.text = "Restaurant"
             var ll = "2,3"
@@ -57,8 +60,8 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
             });
         }
         else{
-            self.labTitle.text = "Hotel"
             
+            self.labTitle.text = "Hotel"
             var ll = "2,3"
             connection.getHotel(ll,completion: { (result, error) -> () in
                 if (error == nil){
@@ -126,10 +129,11 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
             else if(cateShortName.rangeOfString("Resort") != nil ){
                 cell.imagePlace.backgroundColor = UIColor.redColor()
             }
+                //Hostel
             else if cateShortName.rangeOfString("Hostel") != nil{
                 cell.imagePlace.backgroundColor = UIColor.purpleColor()
             }
-                //
+                // other
             else{
                 cell.imagePlace.backgroundColor = UIColor.blackColor()
             }
@@ -141,6 +145,8 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         viewLoader.hidden = false
         var idStr : String = self.listOfTable.objectAtIndex(indexPath.row).objectForKey("id") as! String
+        
+        // load info of place that user select
         connection.getInfoFromFoursquare(idStr) { (result, error) -> () in
             self.viewLoader.hidden = true
             if error == nil {
@@ -164,6 +170,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         self.navigationController?.popToRootViewControllerAnimated(true)
         self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
     }
+    
     
     //MARK:-
     //MARK: LocationManager
