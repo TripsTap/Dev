@@ -85,7 +85,9 @@ class Connection: NSObject {
         var url = "https://api.mongolab.com/api/1/databases/triptap_tripme_rules/collections/rules"
         var descriptor: NSSortDescriptor = NSSortDescriptor(key: "", ascending: true)
         var categorySort: NSArray = category.sortedArrayUsingDescriptors([descriptor])
-        var parameter : String = String(format: "{\"state_init\":\"%@\",\"$or\":[{\"catsPremiss.catName\":{$all:[\"%@\"]}},{\"catsConclu.catName\":{$all:[\"%@\"]}}]}",location,categorySort.componentsJoinedByString("\",\"") as String , categorySort.componentsJoinedByString("\",\"") as String )
+        
+//        {"state_init":"Phuket","catAll.catName":{$all:["Beach","Bridge","Buddhist%20Temple"]}}
+        var parameter : String = String(format: "{\"state_init\":\"%@\",\"catAll.catName\":{$all:[\"%@\"]}}",location,categorySort.componentsJoinedByString("\",\"") as String)
         
         Alamofire.request(.GET, url, parameters: ["q":parameter , "apiKey" : apiKey]  ).responseJSON { (request, response, data, error) -> Void in
             

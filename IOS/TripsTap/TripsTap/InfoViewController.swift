@@ -37,13 +37,14 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     var rating : String! //rateing of place
     var pageType: String! //type of page before
     var listComment : NSMutableArray! //list of comment from FS
-    
+    var listSizeOfCell : NSMutableArray!
     //MARK:-
     //MARK: Cycel
     //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        listSizeOfCell = NSMutableArray()
         if(pageType == "Restaurant" || pageType == "Hotel"){
             
             setLatAndLng()
@@ -249,13 +250,20 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell : InfoTableViewCell! = tableView.dequeueReusableCellWithIdentifier("InfoTableViewCell") as! InfoTableViewCell
         cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as! String
-        
+
+//        var dicSize : NSMutableDictionary = NSMutableDictionary()
+//        dicSize.setObject(indexPath.row, forKey: "index")
+//        dicSize.setObject(cell.labComment.frame.size.height, forKey: "size")
+//        listSizeOfCell.addObject(dicSize)
+
         return cell
         
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80
+
+        
+        return 50
     }
 
     

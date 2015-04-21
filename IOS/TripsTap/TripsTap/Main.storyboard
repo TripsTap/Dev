@@ -1414,6 +1414,7 @@
                                             <outlet property="imageOne" destination="d8G-Ss-h3n" id="wNa-Z1-15x"/>
                                             <outlet property="labName" destination="4Sb-pB-oCs" id="Siy-lQ-J7b"/>
                                             <outlet property="labRate" destination="Kg7-c2-zKD" id="hdB-nv-yGj"/>
+                                            <segue destination="lMP-kj-lIb" kind="push" identifier="ListVenue" id="8sc-cG-UR5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2294,7 +2295,7 @@
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e5H-es-LoE" id="wHl-pS-a0v">
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdfsdfsdfsdf" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Wn-d4-VJr">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdfsdfsdfsdf" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Wn-d4-VJr">
                                                             <rect key="frame" x="8" y="5" width="574" height="14"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="35" id="Fur-9B-iMS"/>
@@ -3057,7 +3058,7 @@
         <image name="logo_02_circle-2.png" width="400" height="400"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="uJZ-Le-hAg"/>
-        <segue reference="Mx7-7R-JLc"/>
+        <segue reference="8sc-cG-UR5"/>
+        <segue reference="Mj6-nm-4HH"/>
     </inferredMetricsTieBreakers>
 </document>
