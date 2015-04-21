@@ -64,6 +64,9 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
             var width : String = String(format: "%d",(listUrl.objectAtIndex(i).objectForKey("width") as! Int))
             var urlImage : String = String(format: "%@%@x%@%@", prefix,  height ,width , suffix)
             
+            if height < width{
+                continue
+            }
             var connection : Connection = Connection.sharedInstance
             
             connection.getImage(urlImage, completion: { (image) -> () in
