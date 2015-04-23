@@ -80,26 +80,26 @@ class TripForYouViewController: UIViewController  {
         
         // set up progress view
         progressArt.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!) / Float(sumDesType)
-        labPerArt.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String)
+       
         
         progressEntertain.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!) / Float(sumDesType)
-        labperEntertain.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String)
+       
         
         progressHistoric.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!) / Float(sumDesType)
-        labPerHistory.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String)
+       
         
         progressNutual.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!) / Float(sumDesType)
-        labPerNutual.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String)
+       
         
         progressMesuem.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String).toInt()!) / Float(sumDesType)
-        labPerMesuem.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String)
+       
         
 
         progressThemepark.progress = (Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) + Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) ) / Float(sumDesType)
-        labPerThemePark.text = String(format: "%d",(Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) + Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) ))
+       
     
         progressSea.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!) / Float(sumDesType)
-        labPerSea.text = (behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String)
+       
         
 
         

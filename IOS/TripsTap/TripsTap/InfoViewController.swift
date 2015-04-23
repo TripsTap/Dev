@@ -249,7 +249,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell : InfoTableViewCell! = tableView.dequeueReusableCellWithIdentifier("InfoTableViewCell") as! InfoTableViewCell
-        cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as! String
+        cell.labComment.text = listComment.objectAtIndex(indexPath.row).objectForKey("text") as? String
 
 //        var dicSize : NSMutableDictionary = NSMutableDictionary()
 //        dicSize.setObject(indexPath.row, forKey: "index")
@@ -285,6 +285,8 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
                 
             else{
                 var imageView : ImageViewController = segue.destinationViewController as! ImageViewController
+                
+                imageView.nameLocation = info.objectForKey("name") as? String
                 
                 if infoOld == nil{
                     imageView.venueID = info.objectForKey("id") as! String

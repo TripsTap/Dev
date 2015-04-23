@@ -22,10 +22,11 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
 //MARK:-
     var connection : Connection!
     var pageType : String! // type of page before
-    var latitude : String! // latitude of user
-    var longitude : String! // longtitude of user
+    var latitude : NSString!  = "7.884734708567935" // latitude of user
+    var longitude : NSString! = "98.3899876985871" // longtitude of user
     var mainViewController: UIViewController! //main page
     var listOfTable : NSMutableArray! // array of place
+    var listImageIcon : NSMutableArray! // list icon
     
 //MARK:-
 //MARK: cycle
@@ -41,7 +42,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         
         self.connection = Connection.sharedInstance
         self.listOfTable = NSMutableArray()
-        
+        listImageIcon = NSMutableArray()
         
         self.viewLoader.hidden = false
         
@@ -51,7 +52,13 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
             connection.getRestaurant(ll,completion: { (result, error) -> () in
                 self.viewLoader.hidden = true
                 if (error == nil){
-                    self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
+                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
+                    
+                    self.setDictanceToObject()
+                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
+                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
+                    
+                    self.getImageIcon()
                     self.table.reloadData()
                 }
                 else {
@@ -62,11 +69,17 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         else{
             
             self.labTitle.text = "Hotel"
-            var ll = "2,3"
+            var ll = String(format: "%@,%@",latitude,longitude)
             connection.getHotel(ll,completion: { (result, error) -> () in
+                self.viewLoader.hidden = true
                 if (error == nil){
-                    self.viewLoader.hidden = true
-                    self.listOfTable = (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray
+                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
+                    
+                    self.setDictanceToObject()
+                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
+                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
+
+                    self.getImageIcon()
                     self.table.reloadData()
                 }
                 else {
@@ -105,39 +118,50 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         cell.labName.text = listOfTable.objectAtIndex(indexPath.row).objectForKey("name") as? String
         var cateShortName : String = (self.listOfTable.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("categories")?.objectAtIndex(0).objectForKey("shortName") as! String!
         
-        if pageType == "restaurant"{
-            // bakery
-            if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
-                cell.imagePlace.backgroundColor = UIColor.greenColor()
-            }
-                // coffee
-            else if(cateShortName.rangeOfString("Coffee") != nil ){
-                cell.imagePlace.backgroundColor = UIColor.redColor()
-            }
-                // food
-            else{
-                cell.imagePlace.backgroundColor = UIColor.blackColor()
-            }
-        }
         
-        else {
-            // hotel
-            if (cateShortName.rangeOfString("Hotel") != nil ){
-                cell.imagePlace.backgroundColor = UIColor.greenColor()
+
+        cell.labKM.text = String(format: "%.2f km",(self.listOfTable.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("distance") as! Double)
+        
+//        if pageType == "restaurant"{
+//            // bakery
+//            if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
+//                cell.imagePlace.backgroundColor = UIColor.greenColor()
+//            }
+//                // coffee
+//            else if(cateShortName.rangeOfString("Coffee") != nil ){
+//                cell.imagePlace.backgroundColor = UIColor.redColor()
+//            }
+//                // food
+//            else{
+//                cell.imagePlace.backgroundColor = UIColor.blackColor()
+//            }
+//        }
+//        
+//        else {
+//            // hotel
+//            if (cateShortName.rangeOfString("Hotel") != nil ){
+//                cell.imagePlace.backgroundColor = UIColor.greenColor()
+//            }
+//                // Resort
+//            else if(cateShortName.rangeOfString("Resort") != nil ){
+//                cell.imagePlace.backgroundColor = UIColor.redColor()
+//            }
+//                //Hostel
+//            else if cateShortName.rangeOfString("Hostel") != nil{
+//                cell.imagePlace.backgroundColor = UIColor.purpleColor()
+//            }
+//                // other
+//            else{
+//                cell.imagePlace.backgroundColor = UIColor.blackColor()
+//            }
+//            
+//        }
+        
+        for var i = 0 ; i  < self.listImageIcon.count ; i++ {
+            if self.listImageIcon.objectAtIndex(i).objectForKey("index") as! Int == indexPath.row{
+                cell.imagePlace.image = self.listImageIcon.objectAtIndex(i).objectForKey("image") as! UIImage
+                break
             }
-                // Resort
-            else if(cateShortName.rangeOfString("Resort") != nil ){
-                cell.imagePlace.backgroundColor = UIColor.redColor()
-            }
-                //Hostel
-            else if cateShortName.rangeOfString("Hostel") != nil{
-                cell.imagePlace.backgroundColor = UIColor.purpleColor()
-            }
-                // other
-            else{
-                cell.imagePlace.backgroundColor = UIColor.blackColor()
-            }
-            
         }
         
         return cell
@@ -184,6 +208,54 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         println("longitude \(self.latitude)")
         println("latitude \(self.longitude)")
     }
+    
+    func setDictanceToObject(){
+    
+        for var i = 0 ; i < listOfTable.count ; i++ {
+            var oldDic : NSMutableDictionary = NSMutableDictionary(dictionary: (self.listOfTable.objectAtIndex(i) as! NSDictionary))
+            
+            var lat : Double = ((self.listOfTable.objectAtIndex(i) as! NSDictionary).objectForKey("location")!.objectForKey("lat") as! NSNumber!).doubleValue
+            
+            var lng : Double = ((self.listOfTable.objectAtIndex(i) as! NSDictionary).objectForKey("location")!.objectForKey("lng") as! NSNumber!).doubleValue
+            
+            var distance : Double = getDistance(lat, lng: lng)
+            
+            oldDic.setObject(distance, forKey: "distance")
+            listOfTable.replaceObjectAtIndex(i, withObject: oldDic)
+        }
+    }
+    
+    func getDistance(lat : Double , lng : Double) -> Double{
+        var localPlace : CLLocation = CLLocation(latitude: CLLocationDegrees(latitude.doubleValue)   , longitude: CLLocationDegrees(longitude.doubleValue))
+        
+        var destination : CLLocation = CLLocation(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+        return localPlace.distanceFromLocation(destination) / 1000
+        
+    }
+    
+    func getImageIcon(){
+
+        for var i = 0 ; i < self.listOfTable.count ;i++ {
+            var prefix : String = ((self.listOfTable.objectAtIndex(i).objectForKey("categories") as! NSArray).objectAtIndex(0).objectForKey("icon") as! NSDictionary).objectForKey("prefix") as! String
+            var suffix : String = ((self.listOfTable.objectAtIndex(i).objectForKey("categories") as! NSArray).objectAtIndex(0).objectForKey("icon") as! NSDictionary).objectForKey("suffix") as! String
+            
+            var url : String = String(format: "%@bg_64%@", prefix, suffix)
+            println(url)
+            let index : Int = i
+            Connection.sharedInstance.getImage(url, completion: { (image) -> () in
+                if image != nil{
+                    var dic : NSMutableDictionary = NSMutableDictionary()
+                    dic.setObject(image , forKey: "image")
+                    dic.setObject(index, forKey: "index")
+                    self.listImageIcon.addObject(dic)
+                    self.table.reloadData()
+                }
+            })
+        }
+    }
+    
+    
+    
     
     
     

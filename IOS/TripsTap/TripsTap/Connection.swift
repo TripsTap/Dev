@@ -266,7 +266,7 @@ class Connection: NSObject {
     */
     func getHotel(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
-        var url = "https://api.foursquare.com/v2/venues/search?near=phuket&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4bf58dd8d48988d1fa931735&v=20130815"
+        var url = "https://api.foursquare.com/v2/venues/search?ll="+ll+"&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4bf58dd8d48988d1fa931735&v=20130815"
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")

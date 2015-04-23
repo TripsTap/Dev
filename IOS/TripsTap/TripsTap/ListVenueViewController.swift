@@ -16,6 +16,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     @IBOutlet var table: UITableView!
     @IBOutlet var btnMap: UIButton!
     @IBOutlet var btnAddTrip: UIButton!
+    @IBOutlet var labNameTrip: UILabel!
     
     
 //MARK:-
@@ -47,11 +48,19 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         listPlaceNotSelect = NSMutableArray()
         // hide "get trip" btn
         if(pageType == "TripMe" || pageType == "TripForYou"){
-            btnAddTrip.hidden = false
+            btnAddTrip.setTitle("Create Trip", forState: UIControlState.Normal)
 
         }
         else if (pageType == "Main"){
-            btnAddTrip.hidden = true
+            btnAddTrip.setTitle("Share With Facebook", forState: UIControlState.Normal)
+
+            var name : String? = dicPlan.objectForKey("tripname") as? String
+            if name == nil {
+                labNameTrip.text = "Trip"
+            }
+            else {
+                labNameTrip.text = name
+            }
         }
         
         self.btnMap.enabled = false
@@ -227,12 +236,13 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             
             // not select already
             if (checkSelect){
-                cell.imageSelect.backgroundColor = UIColor.redColor()
+                cell.imageSelect.image = UIImage(named: "uncheck.png")
+                
             }
                 
                 //  select
             else{
-                cell.imageSelect.backgroundColor = UIColor.greenColor()
+                cell.imageSelect.image = UIImage(named: "check.png")
             }
             
         }
@@ -585,8 +595,20 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     @IBAction func clickAddTrip(sender: AnyObject) {
         
         var inputTextField: UITextField?
+        
+        var textAlert : String = ""
+        if (btnAddTrip.titleLabel?.text == "Create Trip"){
+            textAlert = "Name Your Trip"
+        }
+        else{
+            textAlert = "What's on you mind?"
+        }
+        
         if let gotModernAlert: AnyClass = NSClassFromString("UIAlertController") {
-            let actionSheetController: UIAlertController = UIAlertController(title: nil, message: "Please fill trip's name" , preferredStyle: .Alert)
+            
+            
+            
+            let actionSheetController: UIAlertController = UIAlertController(title: nil, message: textAlert , preferredStyle: .Alert)
             
             //Create and add the Cancel action
             let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -597,15 +619,19 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             
             //Create and an option action
             let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .Default) { action -> Void in
-                
-                self.saveTrip(inputTextField?.text)
+                if (self.btnAddTrip.titleLabel?.text == "Create Trip"){
+                    self.saveTrip(inputTextField?.text)
+                }
+                else{
+                    self.clickPostFacebook(inputTextField?.text)
+                }
                 
             }
             actionSheetController.addAction(okAction)
             //Add a text field
             actionSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
                 //TextField configuration
-                textField.placeholder = "Trip's name"
+                textField.placeholder = textAlert
                 inputTextField = textField
             }
             
@@ -613,7 +639,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             self.presentViewController(actionSheetController, animated: true, completion: nil)
         }
         else {
-            var alert : UIAlertView = UIAlertView(title: nil, message: "Please fill trip's name", delegate: self, cancelButtonTitle: "Cancle")
+            
+            var alert : UIAlertView = UIAlertView(title: nil, message: textAlert, delegate: self, cancelButtonTitle: "Cancle")
             alert.addButtonWithTitle("OK")
             alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
             alert.show()
@@ -634,6 +661,13 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         if buttonIndex == 1 {
             var tripName : String? = alertView.textFieldAtIndex(0)!.text
             saveTrip(tripName)
+            
+            if (self.btnAddTrip.titleLabel?.text == "Add Trip"){
+                self.saveTrip(tripName)
+            }
+            else{
+                self.clickPostFacebook(tripName)
+            }
         }
     }
     
@@ -663,14 +697,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                     infoView.info = listInfo.objectAtIndex(indexPath!.row) as! NSDictionary
                 }
                 
-//                for(var i = 0 ; i < self.listInfo.count ; i++ ){
-//                    
-//                    if((dicPlan.objectForKey("user_checkin") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("VENUE_ID") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-//                        
-//                        infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-//                    }
-//                }
-                
             }
             else{
                 
@@ -691,26 +717,12 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                     // when load info not complete
                     infoView.infoOld = (dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row) as! NSDictionary
                     
-//                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
-//                        
-//                        if((dicPlan.objectForKey("premises") as! NSArray).objectAtIndex(indexPath!.row).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-//                            
-//                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-//                        }
-//                    }
                 }
                     
                 else{
                     
                     infoView.infoOld = (dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count) as! NSDictionary
                     
-//                    for(var i = 0 ; i < self.listInfo.count ; i++ ){
-//                        
-//                        if((dicPlan.objectForKey("conclusion") as! NSArray).objectAtIndex(indexPath!.row - dicPlan.objectForKey("premises")!.count).objectForKey("venueId") as! String == listInfo.objectAtIndex(i).objectForKey("id") as! String){
-//                            
-//                            infoView.info = listInfo.objectAtIndex(i) as! NSDictionary
-//                        }
-//                    }
                 }
             }
         }
@@ -784,10 +796,10 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         }
     }
     
-    @IBAction func clickPostFacebook(sender: AnyObject) {
+    func clickPostFacebook(messageString : String?) {
         
         
-        var message : String = "ทริปนี้ของฉัน "
+        var message : String = messageString!
         
         if pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou" {
             
@@ -847,15 +859,16 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         var request : FBRequest = FBRequest(graphPath: "me/photos", parameters: dicPost as [NSObject : AnyObject] , HTTPMethod: "POST")
         conFB.addRequest(request, completionHandler: { (fbResCon, data, error) -> Void in
             
-            
+            if error == nil{
+                var alert : UIAlertView = UIAlertView(title: nil, message: "Post complete", delegate: self, cancelButtonTitle: "OK")
+                alert.show()
+            }
+            else{
+                var alert : UIAlertView = UIAlertView(title: "Error!", message: "Can't Post trip", delegate: self, cancelButtonTitle: "OK")
+                alert.show()
+            }
         })
         
         conFB.start()
-        
-        
-
-        
-        
-        
     }
 }

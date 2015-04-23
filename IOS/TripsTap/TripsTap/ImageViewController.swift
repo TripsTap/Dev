@@ -16,7 +16,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     @IBOutlet var collection: UICollectionView!
     @IBOutlet var viewImage: UIView!
     @IBOutlet var imagePlace: UIImageView!
-    
+    @IBOutlet var labNamelocation: UILabel!
     //MARK:-
     //MARK: Variable
     //MARK:-
@@ -24,13 +24,14 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
     var listImage : NSMutableArray! //list of image
     var venueID : String! // venue ud
     var currentIndexImage : Int! = 0 //position of image
-    
+    var nameLocation : String?
     //MARK:-
     //MARK: cycle
     //MARK:-
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        labNamelocation.text = nameLocation
         listImage = NSMutableArray()
         var connection : Connection = Connection.sharedInstance
         listUrl = NSMutableArray()
@@ -139,7 +140,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
         if currentIndexImage + 1 < listImage.count {
             currentIndexImage  = currentIndexImage + 1
             
-            self.imagePlace.image = self.listImage.objectAtIndex(self.currentIndexImage) as! UIImage
+            self.imagePlace.image = self.listImage.objectAtIndex(self.currentIndexImage) as? UIImage
             
         }
     }
@@ -153,7 +154,7 @@ class ImageViewController: UIViewController , UICollectionViewDataSource ,UIColl
 
         if currentIndexImage - 1 >= 0 {
             currentIndexImage = currentIndexImage - 1
-             imagePlace.image = listImage.objectAtIndex(currentIndexImage) as! UIImage
+             imagePlace.image = listImage.objectAtIndex(currentIndexImage) as? UIImage
 
         }
     }

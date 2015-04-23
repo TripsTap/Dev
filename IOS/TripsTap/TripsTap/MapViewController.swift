@@ -7,8 +7,8 @@
 //
 
 import UIKit
-
-class MapViewController: UIViewController {
+import MapKit
+class MapViewController: UIViewController , GMSMapViewDelegate {
 
     //MARK:-
     //MARK: IBOutlet
@@ -25,7 +25,7 @@ class MapViewController: UIViewController {
     var pageType : String? // type of page before
     var countLoadSeccess : Int! = 0 // load success
     var mainViewController: UIViewController!
-    
+    var indexSelectMarker : Int = 0
     
     //MARK:-
     //MARK: cycle
@@ -114,11 +114,10 @@ class MapViewController: UIViewController {
         var lngFrist : Double = locationFrist.objectForKey("lng") as! Double
         
         
-        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:10)
+        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:15)
         var mapView = GMSMapView.mapWithFrame(self.view.bounds, camera:camera)
-        mapView.myLocationEnabled = false
-        
-        
+        mapView.myLocationEnabled = true
+        mapView.delegate = self
         var path = GMSMutablePath()
         
         
@@ -136,7 +135,7 @@ class MapViewController: UIViewController {
             var position : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             var marker = GMSMarker()
             marker.position = position
-            marker.snippet = self.listInfo!.objectAtIndex(i).objectForKey("name") as! String
+            marker.snippet = String(format: "%d %@", i+1 , self.listInfo!.objectAtIndex(i).objectForKey("name") as! String)
             marker.appearAnimation = kGMSMarkerAnimationPop
             marker.map = mapView
             
@@ -217,6 +216,38 @@ class MapViewController: UIViewController {
         else{
             self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
         }
+    }
+    
+    @IBAction func clickDirect(sender: AnyObject) {
+        openMapForPlace()
+    }
+    
+    func openMapForPlace() {
+        
+        var latitute:CLLocationDegrees =  (self.listInfo.objectAtIndex(indexSelectMarker).objectForKey("location") as! NSDictionary).objectForKey("lat") as! Double
+        var longitute:CLLocationDegrees =  (self.listInfo.objectAtIndex(indexSelectMarker).objectForKey("location") as! NSDictionary).objectForKey("lng") as! Double
+        
+        let regionDistance:CLLocationDistance = 10000
+        var coordinates = CLLocationCoordinate2DMake(latitute, longitute)
+        let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
+        var options = [
+            MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(MKCoordinateSpan: regionSpan.span)
+        ]
+        var placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        var mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = self.listInfo!.objectAtIndex(indexSelectMarker).objectForKey("name")  as! String
+        mapItem.openInMapsWithLaunchOptions(options)
+        
+    }
+    
+    
+    func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
+        var firsrChar = Array(marker.snippet)[0]
+
+        indexSelectMarker = String(firsrChar).toInt()!-1
+        
+        return false
     }
 
 }

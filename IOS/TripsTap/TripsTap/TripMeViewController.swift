@@ -30,7 +30,10 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: variable
 //MARK: -
     
-    let location : NSArray = ["Uthai Thani","Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
+    let location : NSArray = ["Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",  "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",  "Chiang Rai",    "Chiang Mai",     "Nan",    "Phayao",  "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",       "Uttaradit"]
+    
+    
+    //["Uthai Thani","Phuket","Trat","Krung Thep Mahanakhon","Chainat" ,"Nakhon Sawan" ,"Nonthaburi" ,"Pathum Thani" ,"Ayutthaya","Lopburi","Samut Songkhram","Samut Prakan","Samut Sakhon","Saraburi","Singburi","Ang Thong","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi",    "Ratchaburi",    "Suphanburi",    "Chanthaburi",    "Chachoengsao",    "Chonburi",        "Nakhon Nayok",    "Prachinburi",    "Rayong",    "Sa Kaeo",    "Kalasin",    "Khon Kaen",    "Chaiyaphum",    "Nakhon Phanom",    "Nakhon Ratchasima",    "Buriram",    "Maha Sarakham",    "Mukdahan",    "Yasothon",    "Roi Et",    "Loei",    "Si Sa Ket",    "Sakon Nakhon",    "Surin",    "Nong Khai",    "Nong Bua Lamphu",    "Amnat Charoen",    "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang",    "Nakhon Si Thammarat",    "Narathiwat",    "Pattani",    "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla",    "Satun",    "Surat Thani",    "Kamphaeng Phet",    "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",    "Phichit",    "Phitsanulok",    "Phetchabun",    "Phrae",    "Mae Hong Son",    "Lampang",    "Lamphun",    "Sukhothai",    "Uttaradit"]
     
     var mainViewController: UIViewController!
     
@@ -99,43 +102,11 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
     */
     @IBAction func clickDonePicker(sender: AnyObject) {
 
-        selectCategory.removeAllObjects()
-        viewPicker.hidden = true
-        viewIndicator.hidden = false
-        
-        // dont slide picker
-        if(textLocation.text == ""){
-            textLocation.text = location[0] as! String
-        }
-
-        
-        // send request get category
-         self.connection = Connection.sharedInstance
-        connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
-            
-            self.viewIndicator.hidden = true
-            self.category.removeAllObjects()
-            self.table.reloadData()
-            if(error == nil)
-            {
-                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
-                    
-                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
-                    self.table.reloadData()
-                }
-                    
-                else{
-                    UIAlertView(title: "Don't have Category!", message: "Please select other location", delegate: self, cancelButtonTitle: "OK").show()
-                }
-            }
-            else {
-                
-                UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
-                
-            }
-        }
+        loadCategory()
         
     }
+    
+    
     
     
     @IBAction func clickBack(sender: AnyObject) {
@@ -173,7 +144,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 
                     if(result.count == 0 ){
                         
-                         UIAlertView(title: "Don't have trip!", message: "Please select the other category", delegate: self, cancelButtonTitle: "OK").show()
+                        
                         
                     }
                     else{
@@ -205,7 +176,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
                     
                     if(result.count == 0 ){
                         
-                        UIAlertView(title: "Don't have trip!", message: "Please select the other category", delegate: self, cancelButtonTitle: "OK").show()
+                       
                         
                     }
                     else{
@@ -276,7 +247,10 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 
     // dismiss picker
     @IBAction func clickDismiss(sender: AnyObject) {
-        viewPicker.hidden = true
+        if !viewPicker.hidden {
+            viewPicker.hidden = true
+            loadCategory()
+        }
     }
 
     
@@ -336,12 +310,12 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         
         // set image select already
         if (checkSelect){
-            cell.imageSelect.backgroundColor = UIColor.greenColor()
+            cell.imageSelect.image = UIImage(named: "check.png")
         }
             
         // set image not select
         else{
-            cell.imageSelect.backgroundColor = UIColor.redColor()
+            cell.imageSelect.image = UIImage(named: "uncheck.png")
         }
         
         return cell
@@ -378,6 +352,47 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK:-
 //MARK: function
 //MARK:-
+    
+    
+    func loadCategory(){
+        selectCategory.removeAllObjects()
+        viewPicker.hidden = true
+        viewIndicator.hidden = false
+        
+        // dont slide picker
+        if(textLocation.text == ""){
+            textLocation.text = location[0] as! String
+        }
+        
+        
+        // send request get category
+        self.connection = Connection.sharedInstance
+        connection.getCategoryTripsMe(textLocation.text, place: 0) { (result, error) -> () in
+            
+            self.viewIndicator.hidden = true
+            self.category.removeAllObjects()
+            self.table.reloadData()
+            if(error == nil)
+            {
+                if(  ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSArray).count != 0){
+                    
+                    self.category = ((result.objectAtIndex(0) as! NSDictionary)["cats"] as! NSMutableArray).mutableCopy() as! NSMutableArray
+                    self.table.reloadData()
+                }
+                    
+                
+                
+            }
+            else {
+                
+                UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+                
+            }
+        }
+        
+        
+    }
+    
     
     // enable get trip btn
     func checkEnableTripMeBtn(){

@@ -11,7 +11,7 @@ import UIKit
 class RestaAndHotelTableViewCell: UITableViewCell {
 
     @IBOutlet var labName: UILabel!
-   
+    @IBOutlet var labKM: UILabel!
     @IBOutlet var imagePlace: UIImageView!
 
 

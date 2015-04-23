@@ -192,7 +192,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         else{
             // must login before
             if PlanFile.sharedInstance.behaviour.objectForKey("FBID") == nil{
-                UIAlertView(title: nil, message: "Please login with Facebook before!", delegate: self, cancelButtonTitle: "OK").show()
+                UIAlertView(title: nil, message: "Please login with Facebook!", delegate: self, cancelButtonTitle: "OK").show()
             }
             // wait info
             else{

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class MainViewController: UIViewController,UITableViewDataSource,UITableViewDelegate , UIAlertViewDelegate {
 
     //MARK:-
     //MARK: IBOutlet
@@ -79,7 +79,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     
                     var loadImageCount :Int = 0
                     let imageAtIndex : Int = i
-                    // load image of each place
+                    // load image of each places
                     for(var j = 0 ; j < self.listPlan?.objectAtIndex(i).objectForKey("user_checkin")?.count && loadImageCount < 3 ; j++  ){
                         
                         loadImageCount++
@@ -140,7 +140,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         var loadImageCount :Int = 0
         let imageAtIndex : Int = i
-        // load image of each place
+        // load image of each places
         for(var j = 0 ; j < conclusion.count && loadImageCount < 3 ; j++  ){
             
             loadImageCount++
@@ -200,7 +200,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
             for var j = i + 1 ; j < self.listPlan?.count ; j++ {
                 var countI : Int = (listPlan?.objectAtIndex(i).objectForKey("premises") as! NSArray).count as Int + (listPlan?.objectAtIndex(i).objectForKey("conclusion") as! NSArray).count as Int
-                var countJ : Int = (listPlan?.objectAtIndex(j).objectForKey("premises") as! NSArray).count as! Int + (listPlan?.objectAtIndex(j).objectForKey("conclusion") as! NSArray).count as! Int
+                var countJ : Int = (listPlan?.objectAtIndex(j).objectForKey("premises") as! NSArray).count as Int + (listPlan?.objectAtIndex(j).objectForKey("conclusion") as! NSArray).count as Int
                 
                 var rateI : String = listPlan?.objectAtIndex(i).objectForKey("rate") as! String
                 var rateJ : String = listPlan?.objectAtIndex(j).objectForKey("rate") as! String
@@ -283,7 +283,29 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     @IBAction func longPressEditCell(sender: AnyObject) {
         if (pageType == nil && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
-            self.table.setEditing(!self.table.editing, animated: true)
+            var indexRow : NSIndexPath =  self.table.indexPathForSelectedRow()!
+            var alert : UIAlertView = UIAlertView(title: "Set main trip", message: "", delegate: self, cancelButtonTitle: "No")
+            alert.addButtonWithTitle("Yes")
+            
+            alert.delegate = self
+            alert.show()
+    
+        }
+    }
+    
+    //MARK:-
+    //MARK: alert delegate
+    //MARK:-
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == 1 {
+            var indexRow : Int =  self.table.indexPathForSelectedRow()!.row
+            
+            self.listPlan?.exchangeObjectAtIndex(indexRow, withObjectAtIndex: 0)
+            
+            PlanFile.sharedInstance.listPlan = listPlan
+            PlanFile.sharedInstance.saveFile()
+
         }
     }
     
@@ -316,11 +338,11 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }
             
             
-            // For one place in plan
+            // For one places in plan
             if user_checkin.count == 1{
 
                 var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
-                var locat : String = String(format: "%@ %d place ",tripName,user_checkin.count  )
+                var locat : String = String(format: "%@ %d placess ",tripName,user_checkin.count  )
                 
                 
                 cell.labName.text = locat
@@ -341,11 +363,11 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 return cell
             }
             
-            // For two place in plan
+            // For two places in plan
             else if user_checkin.count == 2 {
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
-                var locat : String = String(format: "%@ %d place",tripName,user_checkin.count )
+                var locat : String = String(format: "%@ %d places",tripName,user_checkin.count )
                 cell.labCountRate.text = locat
                                 cell.labRate.text = rate
                 var countIamge = 0
@@ -370,7 +392,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
                 
-                var locat : String = String(format: "%@ %d place ",tripName,user_checkin.count  )
+                var locat : String = String(format: "%@ %d places ",tripName,user_checkin.count  )
                 cell.labCountRate.text = locat
                                 cell.labRate.text = rate
                 
@@ -397,7 +419,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
-                var locat : String = String(format: "%@ %d place",tripName ,user_checkin.count  )
+                var locat : String = String(format: "%@ %d places",tripName ,user_checkin.count  )
                 cell.labCountRate.text = locat
                 cell.labRate.text = rate
                 
@@ -443,11 +465,11 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 tripName = data.objectForKey("tripname") as! String
             }
             
-            // For one place in trip
+            // For one places in trip
             if conclusionCount + premisesCount == 1{
                 
                 var cell : MainFourTableViewCellTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainFourTableViewCellTableViewCell") as! MainFourTableViewCellTableViewCell
-                var locat : String = String(format: "%@ %d place ",tripName, conclusionCount + premisesCount  )
+                var locat : String = String(format: "%@ %d places ",tripName, conclusionCount + premisesCount  )
                 
                 cell.labName.text = locat
                 cell.labRate.text = rate
@@ -467,11 +489,11 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 return cell
             }
             
-            // For two place in trip
+            // For two places in trip
             else if (conclusionCount + premisesCount  == 2 ){
                 
                 var cell : MainTwoTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainTwoTableViewCell") as! MainTwoTableViewCell
-                var locat : String = String(format: "%@ %d place",tripName , conclusionCount + premisesCount )
+                var locat : String = String(format: "%@ %d places",tripName , conclusionCount + premisesCount )
                 cell.labCountRate.text = locat
                 cell.labRate.text = rate
                 var countIamge = 0
@@ -497,7 +519,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             {
                 var cell : MainOneTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainOneTableViewCell") as! MainOneTableViewCell
                 
-                var locat : String = String(format: "%@ %d place ",tripName , conclusionCount + premisesCount  )
+                var locat : String = String(format: "%@ %d places ",tripName , conclusionCount + premisesCount  )
                 cell.labCountRate.text = locat
                 cell.labRate.text = rate
                 var countIamge = 0
@@ -523,7 +545,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
             else{
                 var cell : MainThreeTableViewCell = tableView.dequeueReusableCellWithIdentifier("MainThreeTableViewCell") as! MainThreeTableViewCell
                 
-                var locat : String = String(format: "%@ %d place ",tripName , conclusionCount + premisesCount )
+                var locat : String = String(format: "%@ %d places ",tripName , conclusionCount + premisesCount )
                 cell.labCountRate.text = locat
                 cell.labRate.text = rate
                 var countIamge = 0
