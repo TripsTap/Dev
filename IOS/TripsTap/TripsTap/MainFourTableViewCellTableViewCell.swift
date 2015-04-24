@@ -11,8 +11,10 @@ import UIKit
 class MainFourTableViewCellTableViewCell: UITableViewCell {
 
     @IBOutlet var imageOne: UIImageView!
-    @IBOutlet var labName: UILabel!
     @IBOutlet var labRate: UILabel!
+    @IBOutlet var labName: UILabel!
+    @IBOutlet var labCountRate: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

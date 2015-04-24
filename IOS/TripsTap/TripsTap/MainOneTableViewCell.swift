@@ -16,6 +16,7 @@ class MainOneTableViewCell: UITableViewCell {
     @IBOutlet var imageThree: UIImageView!
     @IBOutlet var labLocation: UILabel!
     @IBOutlet var labRate: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

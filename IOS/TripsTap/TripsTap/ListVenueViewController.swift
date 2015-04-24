@@ -790,9 +790,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     }
 
     @IBAction func longPressEditCell(sender: AnyObject) {
-        if (pageType == "Main" && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
-            self.table.setEditing(!self.table.editing, animated: true)
-        }
+//        if (pageType == "Main" && (sender as! UILongPressGestureRecognizer).state == UIGestureRecognizerState.Began){
+//            self.table.setEditing(!self.table.editing, animated: true)
+//        }
     }
     
     func clickPostFacebook(messageString : String?) {

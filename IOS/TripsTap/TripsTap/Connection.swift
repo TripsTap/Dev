@@ -182,8 +182,9 @@ class Connection: NSObject {
         }
 
         
-        
-        
+//        var url = "http://128.199.130.63:3000/triptap?userId="+userID
+//
+//        
 //        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
 //            println("---------------------")
 //            println("get same Behaviour ")
@@ -195,7 +196,7 @@ class Connection: NSObject {
 //                planFile.saveBehaviour()
 //            }
 //        }
-
+//
         
     }
     

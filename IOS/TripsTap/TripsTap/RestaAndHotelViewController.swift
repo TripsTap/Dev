@@ -47,7 +47,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         self.viewLoader.hidden = false
         
         if(self.pageType == "restaurant"){
-            self.labTitle.text = "Restaurant"
+            self.labTitle.text = "Near By Restaurant"
             var ll = "2,3"
             connection.getRestaurant(ll,completion: { (result, error) -> () in
                 self.viewLoader.hidden = true
@@ -68,7 +68,7 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         }
         else{
             
-            self.labTitle.text = "Hotel"
+            self.labTitle.text = "Near By Hotels"
             var ll = String(format: "%@,%@",latitude,longitude)
             connection.getHotel(ll,completion: { (result, error) -> () in
                 self.viewLoader.hidden = true

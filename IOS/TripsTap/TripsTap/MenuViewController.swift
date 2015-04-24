@@ -106,7 +106,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         
         self.infoCateArr.removeAllObjects()
 
-        FBRequestConnection.startWithGraphPath("/"+FBID+"?fields=tagged_places.limit(200)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+        FBRequestConnection.startWithGraphPath("/"+FBID+"?fields=tagged_places.limit(100)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
             if error == nil {
                 println(result.description)
@@ -115,7 +115,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
                 
                 self.countTagPlace = taggedPlaces.count
                 
-                for(var i = 0 ; i < taggedPlaces.count ; i++){
+                for(var i = 0 ; i < taggedPlaces.count && i < 100 ; i++){
                     
                     self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
                 }
@@ -138,6 +138,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
             if error == nil {
+                println(result.objectForKey("category_list"))
                 var infoCateDic : NSMutableDictionary = NSMutableDictionary()
                 infoCateDic.setObject(result.objectForKey("category")!, forKey: "category")
                 infoCateDic.setObject(result.objectForKey("category_list")!, forKey: "category_list")

@@ -114,7 +114,7 @@ class MapViewController: UIViewController , GMSMapViewDelegate {
         var lngFrist : Double = locationFrist.objectForKey("lng") as! Double
         
         
-        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:15)
+        var camera = GMSCameraPosition.cameraWithLatitude( latFrist , longitude: lngFrist   , zoom:10)
         var mapView = GMSMapView.mapWithFrame(self.view.bounds, camera:camera)
         mapView.myLocationEnabled = true
         mapView.delegate = self
@@ -129,7 +129,7 @@ class MapViewController: UIViewController , GMSMapViewDelegate {
             var lng : Double = location.objectForKey("lng") as! Double
             
             
-            path.addLatitude(lat, longitude:lng)
+//            path.addLatitude(lat, longitude:lng)
             //
             
             var position : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: lat, longitude: lng)
@@ -142,10 +142,10 @@ class MapViewController: UIViewController , GMSMapViewDelegate {
             
         }
         
-        var polyline = GMSPolyline(path: path)
-        polyline.strokeWidth = 2.0
-        polyline.geodesic = true
-        polyline.map = mapView
+//        var polyline = GMSPolyline(path: path)
+//        polyline.strokeWidth = 2.0
+//        polyline.geodesic = true
+//        polyline.map = mapView
         
         self.viewMap.addSubview(mapView)
 
