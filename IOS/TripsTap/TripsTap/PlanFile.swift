@@ -18,8 +18,9 @@ class PlanFile: NSObject {
     var listPlan : NSMutableArray!  // plan that user save already
     var fileName : String = "plan.peach"  // path of file
     var fileBehaviour : String = "behaviour.peach"  // path of file
+    var fileFristOpen : String = "fristopne.peach"
     var behaviour : NSMutableDictionary!  // behaviour of user (receive from fackbook)
-    var fristOpenApp : Int!
+    var fristOpenApp : NSMutableDictionary!
     
     
     //MARK:-
@@ -41,7 +42,7 @@ class PlanFile: NSObject {
 
         super.init()
         
-        fristOpenApp = 0
+
         var realPathPlan : String = applicationDocumentsDirectory(fileName)
         
         if(NSFileManager.defaultManager().fileExistsAtPath(realPathPlan)){
@@ -60,6 +61,17 @@ class PlanFile: NSObject {
             behaviour = NSMutableDictionary()
             saveFile()
         }
+        
+        var realPathFristOpen : String = applicationDocumentsDirectory(fileFristOpen)
+        if(NSFileManager.defaultManager().fileExistsAtPath(realPathFristOpen)){
+            fristOpenApp = NSMutableDictionary(contentsOfFile: realPathFristOpen)
+        }
+        else{
+            fristOpenApp = NSMutableDictionary()
+            fristOpenApp.setObject("0", forKey: "fristopen")
+            saveFile()
+        }
+
         
         
     }
@@ -105,6 +117,15 @@ class PlanFile: NSObject {
     func getBehaviour() -> NSDictionary?{
         var realPath : String = applicationDocumentsDirectory(fileBehaviour)
         return NSDictionary(contentsOfFile: realPath)
+    }
+    
+    
+    //MARK:-
+    //MARK:check open frist time
+    //MARK:-
+    func saveFristTimeOpen(){
+        var realPath = applicationDocumentsDirectory(fileFristOpen)
+        self.fristOpenApp.writeToFile(realPath, atomically: true)
     }
     
     

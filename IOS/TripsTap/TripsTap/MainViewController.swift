@@ -15,7 +15,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     //MARK:-
     @IBOutlet var table: UITableView!
     @IBOutlet var btnBackAndMenu: UIButton!
-    
+    @IBOutlet var scrollTutorial: UIScrollView!
     
     //MARK:-
     //MARK: variable
@@ -111,6 +111,16 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 }
             }
         }
+        
+        
+        var fristOpen : String? = planFile?.fristOpenApp.objectForKey("fristopen") as? String
+        
+        if fristOpen == "0"{
+            planFile?.fristOpenApp.setObject("1", forKey: "fristopen")
+            planFile?.saveFristTimeOpen()
+            setViewTutorial()
+        }
+        
 
     }
     
@@ -268,6 +278,55 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return url
         
     }
+    
+    
+    func setViewTutorial(){
+        scrollTutorial.hidden = false
+        scrollTutorial.showsHorizontalScrollIndicator = false
+        var listTutorial : NSMutableArray = NSMutableArray()
+        listTutorial.addObject(UIImageView(image: UIImage(named: "tu1.png")!))
+        listTutorial.addObject(UIImageView(image: UIImage(named: "tu2.png")!))
+        listTutorial.addObject(UIImageView(image: UIImage(named: "tu3.png")!))
+        listTutorial.addObject(UIImageView(image: UIImage(named: "tu4.png")!))
+        listTutorial.addObject(UIImageView(image: UIImage(named: "tu5.png")!))
+        
+        
+        for var i = 0 ; i < listTutorial.count ; i++ {
+
+                var viewImage : UIImageView = listTutorial.objectAtIndex(i) as! UIImageView
+                var positionX : Int = Int(self.view.frame.size.width) * i
+                
+                viewImage.frame = CGRect(origin: CGPoint(x: positionX, y: 0), size: self.view.frame.size)
+                viewImage.contentMode = UIViewContentMode.ScaleAspectFit
+                scrollTutorial.addSubview(listTutorial.objectAtIndex(i) as! UIImageView)
+
+
+            if i == listTutorial.count - 1 {
+            
+                var btnTutorial : UIButton = UIButton()
+                btnTutorial.frame = CGRect(origin: CGPoint(x: positionX, y: 0), size: self.view.frame.size)
+                btnTutorial.addTarget(self, action: "finishTutorial:", forControlEvents: .TouchUpInside)
+                scrollTutorial.addSubview(btnTutorial)
+        }
+        
+                
+
+        }
+        
+        
+        
+        var widthOfScroll : CGFloat = self.view.bounds.size.width * CGFloat(listTutorial.count)
+        scrollTutorial.contentSize = CGSize(width: widthOfScroll , height: self.view.bounds.height)
+        CGSize()
+    }
+    
+    
+    
+    func finishTutorial(sender:NSObject){
+        self.scrollTutorial.hidden = true
+    }
+    
+//    scr
     
     //MARK:-
     //MARK: button event

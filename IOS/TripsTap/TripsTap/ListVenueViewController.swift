@@ -601,7 +601,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             textAlert = "Name Your Trip"
         }
         else{
-            textAlert = "What's on you mind?"
+            textAlert = "Comment"
         }
         
         if let gotModernAlert: AnyClass = NSClassFromString("UIAlertController") {
@@ -660,9 +660,8 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex == 1 {
             var tripName : String? = alertView.textFieldAtIndex(0)!.text
-            saveTrip(tripName)
             
-            if (self.btnAddTrip.titleLabel?.text == "Add Trip"){
+            if (self.btnAddTrip.titleLabel?.text == "Create Trip"){
                 self.saveTrip(tripName)
             }
             else{
