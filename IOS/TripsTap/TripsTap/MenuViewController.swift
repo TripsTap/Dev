@@ -115,7 +115,8 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
                     
                     self.countTagPlace = taggedPlaces.count
                     
-                    for(var i = 0 ; i < taggedPlaces.count && i < 100 ; i++){
+                    println(taggedPlaces.count)
+                    for(var i = 0 ; i < taggedPlaces.count ; i++){
                         
                         self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
                     }
@@ -138,6 +139,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
 
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
+            
             if error == nil {
                 var infoCateDic : NSMutableDictionary = NSMutableDictionary()
                 infoCateDic.setObject(result.objectForKey("category")!, forKey: "category")
@@ -145,13 +147,17 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
                 infoCateDic.setObject(result.objectForKey("location")!, forKey: "location")
                 
                 self.infoCateArr.addObject(infoCateDic)
-                
-                if self.countTagPlace == self.infoCateArr.count{
+                println(self.infoCateArr.count)
+                if self.countTagPlace == self.infoCateArr.count  || self.infoCateArr.count == 100 {
                     var connection : Connection = Connection.sharedInstance
                     
                     connection.setBehaviour( self.infoCateArr, userID: self.FBID)
                     
                 }
+            
+            }
+            else{
+                self.countTagPlace = self.countTagPlace - 1
             }
             
         })

@@ -111,9 +111,9 @@ class TripForYouViewController: UIViewController  {
         
         labCatUser3.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(2).objectForKey("catName") as! String)
         
-        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+50))
-        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+45))
-        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+40))
+        labPer1.text = String(format: "%D%",Int(arc4random_uniform(4)+50))
+        labPer2.text = String(format: "%D%",Int(arc4random_uniform(4)+45))
+        labPer3.text = String(format: "%D%",Int(arc4random_uniform(4)+40))
         
     }
     
@@ -132,7 +132,7 @@ class TripForYouViewController: UIViewController  {
             return "Mesuem"
         }
         else if catName == "nutual" {
-            return "Natual"
+            return "Nature"
         }
         else if catName == "outdoor" {
             return "Outdoor"

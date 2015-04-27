@@ -38,12 +38,21 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
-//                println(NSData(contentsOfFile: "tirpFrist.txt"))
-//        NSBundle.mainBundle().pathForResource("firpFrist", ofType: "txt")
-//        NSData().data
+        
+    
         planFile = PlanFile.sharedInstance
         
         self.listImage = NSMutableArray()
+        
+        
+        
+        var fristOpen : String? = planFile?.fristOpenApp.objectForKey("fristopen") as? String
+        
+        if fristOpen == "0"{
+            planFile?.fristOpenApp.setObject("1", forKey: "fristopen")
+            planFile?.saveFristTimeOpen()
+            setViewTutorial()
+        }
         
         //start with main
         if(pageType != "TripMe"){
@@ -119,13 +128,7 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
         
         
-        var fristOpen : String? = planFile?.fristOpenApp.objectForKey("fristopen") as? String
-        
-        if fristOpen == "0"{
-            planFile?.fristOpenApp.setObject("1", forKey: "fristopen")
-            planFile?.saveFristTimeOpen()
-            setViewTutorial()
-        }
+      
         
 
     }
@@ -287,11 +290,22 @@ class MainViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     
     func setViewTutorial(){
-//        let location = "/Users/you/Desktop/tirpFrist.txt"
-//        let fileContent = NSString(contentsOfFile: location, encoding: NSUTF8StringEncoding, error: nil)
+        
+        var myDict: NSArray?
+        if let path = NSBundle.mainBundle().pathForResource("tirpFrist", ofType: "txt") {
+            myDict = NSArray(contentsOfFile: path)
+            planFile!.listPlan = NSMutableArray(array:myDict!)
+            planFile!.saveFile()
+            listPlan = NSMutableArray(array : myDict!)
+            self.table.reloadData()
+        }
+        if let dict = myDict {
+            
+        }
+        
 
         
-//        PlanFile.sharedInstance.listPlan =
+
         scrollTutorial.hidden = false
         scrollTutorial.showsHorizontalScrollIndicator = false
         var listTutorial : NSMutableArray = NSMutableArray()

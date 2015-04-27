@@ -72,6 +72,7 @@
 		83DA42F71AD2DADF00FA3F04 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42F61AD2DADF00FA3F04 /* InfoTableViewCell.swift */; };
 		83DA42FC1AD5F52B00FA3F04 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA42FB1AD5F52B00FA3F04 /* ImageViewController.swift */; };
 		83DA43021AD810B800FA3F04 /* TripForYouViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DA43011AD810B800FA3F04 /* TripForYouViewController.swift */; };
+		83F775371AEDCEAA001A3F95 /* tirpFrist.txt in Resources */ = {isa = PBXBuildFile; fileRef = 83BED4161AC05E4700FB19C3 /* tirpFrist.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -541,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837FED971AECF175008D034D /* logo_02_circle-2.png in Resources */,
+				83F775371AEDCEAA001A3F95 /* tirpFrist.txt in Resources */,
 				839B90821AA6C8C4002E0A01 /* LaunchScreen.xib in Resources */,
 				837FED941AECF0C2008D034D /* tu3.png in Resources */,
 				839C6F2A1AE9288700E23DB9 /* check.png in Resources */,
