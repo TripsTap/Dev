@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource {
+class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UITableViewDelegate, UITableViewDataSource {
 
 //MARK:-
 //MARK: IBOutlet
@@ -27,6 +28,8 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     var mainViewController: UIViewController! //main page
     var listOfTable : NSMutableArray! // array of place
     var listImageIcon : NSMutableArray! // list icon
+    var locationManager: CLLocationManager!
+    var checkComeIn : Int = 0
     
 //MARK:-
 //MARK: cycle
@@ -34,62 +37,28 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.locationManager = CLLocationManager()
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startMonitoringSignificantLocationChanges()
+        
         self.navigationController?.navigationBar.hidden = true
         var storyboard = UIStoryboard(name: "Main", bundle: nil)
         let mainViewController = storyboard.instantiateViewControllerWithIdentifier("MainViewController") as! MainViewController
         self.mainViewController = UINavigationController(rootViewController: mainViewController)
 
-        
         self.connection = Connection.sharedInstance
         self.listOfTable = NSMutableArray()
         listImageIcon = NSMutableArray()
         
         self.viewLoader.hidden = false
         
-        if(self.pageType == "restaurant"){
-            self.labTitle.text = "Near By Restaurant"
-            var ll = "2,3"
-            connection.getRestaurant(ll,completion: { (result, error) -> () in
-                self.viewLoader.hidden = true
-                if (error == nil){
-                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
-                    
-                    self.setDictanceToObject()
-                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
-                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
-                    
-                    self.getImageIcon()
-                    self.table.reloadData()
-                }
-                else {
-                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
-                }
-            });
-        }
-        else{
-            
-            self.labTitle.text = "Near By Hotels"
-            var ll = String(format: "%@,%@",latitude,longitude)
-            connection.getHotel(ll,completion: { (result, error) -> () in
-                self.viewLoader.hidden = true
-                if (error == nil){
-                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
-                    
-                    self.setDictanceToObject()
-                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
-                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
-
-                    self.getImageIcon()
-                    self.table.reloadData()
-                }
-                else {
-                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
-                }
-                
-            });
-        }
-
     }
+    
+    
+
 
 
     override func didReceiveMemoryWarning() {
@@ -121,41 +90,6 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         
 
         cell.labKM.text = String(format: "%.2f km",(self.listOfTable.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("distance") as! Double)
-        
-//        if pageType == "restaurant"{
-//            // bakery
-//            if (cateShortName.rangeOfString("Bakery") != nil || cateShortName.rangeOfString("Café") != nil){
-//                cell.imagePlace.backgroundColor = UIColor.greenColor()
-//            }
-//                // coffee
-//            else if(cateShortName.rangeOfString("Coffee") != nil ){
-//                cell.imagePlace.backgroundColor = UIColor.redColor()
-//            }
-//                // food
-//            else{
-//                cell.imagePlace.backgroundColor = UIColor.blackColor()
-//            }
-//        }
-//        
-//        else {
-//            // hotel
-//            if (cateShortName.rangeOfString("Hotel") != nil ){
-//                cell.imagePlace.backgroundColor = UIColor.greenColor()
-//            }
-//                // Resort
-//            else if(cateShortName.rangeOfString("Resort") != nil ){
-//                cell.imagePlace.backgroundColor = UIColor.redColor()
-//            }
-//                //Hostel
-//            else if cateShortName.rangeOfString("Hostel") != nil{
-//                cell.imagePlace.backgroundColor = UIColor.purpleColor()
-//            }
-//                // other
-//            else{
-//                cell.imagePlace.backgroundColor = UIColor.blackColor()
-//            }
-//            
-//        }
         
         for var i = 0 ; i  < self.listImageIcon.count ; i++ {
             if self.listImageIcon.objectAtIndex(i).objectForKey("index") as! Int == indexPath.row{
@@ -196,10 +130,10 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
     }
     
     
+    
     //MARK:-
     //MARK: LocationManager
     //MARK:-
-    
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
         
         let currentLocation : CLLocation = newLocation
@@ -207,6 +141,62 @@ class RestaAndHotelViewController: UIViewController,CLLocationManagerDelegate,UI
         longitude = "\(currentLocation.coordinate.longitude)"
         println("longitude \(self.latitude)")
         println("latitude \(self.longitude)")
+        
+        if checkComeIn == 0 {
+            loadInfo()
+            checkComeIn = 1
+        }
+    }
+    
+    func loadInfo(){
+        if(self.pageType == "restaurant"){
+            self.labTitle.text = "Near By Restaurant"
+            var ll = String(format: "%@,%@",latitude,longitude)
+            connection.getRestaurant(ll,completion: { (result, error) -> () in
+                self.viewLoader.hidden = true
+                if (error == nil){
+                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
+                    
+                    self.setDictanceToObject()
+                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
+                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
+                    
+                    self.getImageIcon()
+                    self.table.reloadData()
+                }
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+                }
+            });
+        }
+        else{
+            
+            self.labTitle.text = "Near By Hotels"
+            var ll = String(format: "%@,%@",latitude,longitude)
+            connection.getHotel(ll,completion: { (result, error) -> () in
+                self.viewLoader.hidden = true
+                if (error == nil){
+                    self.listOfTable = NSMutableArray(array: (result.objectForKey("response") as! NSDictionary).objectForKey("venues") as! NSMutableArray)
+                    
+                    self.setDictanceToObject()
+                    var descriptor: NSSortDescriptor = NSSortDescriptor(key: "distance", ascending: true)
+                    self.listOfTable = NSMutableArray(array: self.listOfTable.sortedArrayUsingDescriptors([descriptor]))
+                    
+                    self.getImageIcon()
+                    self.table.reloadData()
+                }
+                else {
+                    UIAlertView(title: "Error occur!", message: "No request available", delegate: self, cancelButtonTitle: "OK").show()
+                }
+                
+            });
+        }
+        
+
+    }
+    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        println(error)
     }
     
     func setDictanceToObject(){

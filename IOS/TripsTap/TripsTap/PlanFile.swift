@@ -84,10 +84,10 @@ class PlanFile: NSObject {
     
     */
     func applicationDocumentsDirectory(fileName : String) -> String{
-        let dirs: [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String]
-        let directories:[String] = dirs!
-        var realPath = String(format: "%@%@", directories[0] , fileName)
-        return realPath
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
+        let documentsDirectory = paths[0] as! String
+        let path = documentsDirectory.stringByAppendingPathComponent(fileName)
+        return path
         
     }
     
@@ -98,6 +98,7 @@ class PlanFile: NSObject {
     func saveFile(){
         var realPath = applicationDocumentsDirectory(fileName)
         listPlan.writeToFile(realPath, atomically: true)
+        
     }
     
     func deletePlanWithIndex(index : Int ){

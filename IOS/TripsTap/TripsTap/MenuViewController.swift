@@ -73,10 +73,10 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         // save info of user
         planFile.behaviour.setObject(FBID, forKey: "FBID")
         planFile.behaviour.setObject(FBName, forKey: "FBName")
-        planFile.behaviour.setObject(user.objectForKey("email"), forKey: "FBMail")
-        planFile.behaviour.setObject(user.objectForKey("gender"), forKey: "FBGender")
+//        planFile.behaviour.setObject(user.objectForKey("email"), forKey: "FBMail")
+//        planFile.behaviour.setObject(user.objectForKey("gender"), forKey: "FBGender")
         planFile.saveBehaviour()
-        Connection.sharedInstance.getSameBehaviour(FBID)
+//        Connection.sharedInstance.getSameBehaviour(FBID)
         
         getProfileImage()
         getPlaceFromFB()
@@ -109,15 +109,16 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         FBRequestConnection.startWithGraphPath("/"+FBID+"?fields=tagged_places.limit(100)", completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
             if error == nil {
-                println(result.description)
-                
-                var taggedPlaces : NSArray = (result as! NSDictionary).objectForKey("tagged_places")?.objectForKey("data") as! NSArray
-                
-                self.countTagPlace = taggedPlaces.count
-                
-                for(var i = 0 ; i < taggedPlaces.count && i < 100 ; i++){
+
+                if (result as! NSDictionary).objectForKey("tagged_places") != nil {
+                    var taggedPlaces : NSArray = (result as! NSDictionary).objectForKey("tagged_places")?.objectForKey("data") as! NSArray
                     
-                    self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
+                    self.countTagPlace = taggedPlaces.count
+                    
+                    for(var i = 0 ; i < taggedPlaces.count && i < 100 ; i++){
+                        
+                        self.getInfoOfCategory((taggedPlaces.objectAtIndex(i).objectForKey("place") as! NSDictionary).objectForKey("id") as! String)
+                    }
                 }
             }
 
@@ -138,7 +139,6 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         FBRequestConnection.startWithGraphPath("/"+cateID, completionHandler: { (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             
             if error == nil {
-                println(result.objectForKey("category_list"))
                 var infoCateDic : NSMutableDictionary = NSMutableDictionary()
                 infoCateDic.setObject(result.objectForKey("category")!, forKey: "category")
                 infoCateDic.setObject(result.objectForKey("category_list")!, forKey: "category_list")
@@ -147,7 +147,6 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
                 self.infoCateArr.addObject(infoCateDic)
                 
                 if self.countTagPlace == self.infoCateArr.count{
-                    println("send load place complete")
                     var connection : Connection = Connection.sharedInstance
                     
                     connection.setBehaviour( self.infoCateArr, userID: self.FBID)
@@ -225,11 +224,13 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     @IBAction func clickMap(sender: AnyObject) {
         
-        let mapViewController = storyboards.instantiateViewControllerWithIdentifier("MapViewController") as! MapViewController
-        mapViewController.pageType = "Main"
-        self.mapViewController = UINavigationController(rootViewController: mapViewController)
-        
-        self.slideMenuController()?.changeMainViewController(self.mapViewController, close: true)
+        if PlanFile.sharedInstance.listPlan.count != 0 {
+            let mapViewController = storyboards.instantiateViewControllerWithIdentifier("MapViewController") as! MapViewController
+            mapViewController.pageType = "Main"
+            self.mapViewController = UINavigationController(rootViewController: mapViewController)
+            
+            self.slideMenuController()?.changeMainViewController(self.mapViewController, close: true)
+        }
         
     }
     

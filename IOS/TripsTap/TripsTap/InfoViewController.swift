@@ -45,7 +45,7 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
         super.viewDidLoad()
         
         listSizeOfCell = NSMutableArray()
-        if(pageType == "Restaurant" || pageType == "Hotel"){
+        if(pageType == "Near By Restaurant" || pageType == "Near By Hotels"){
             
             setLatAndLng()
             setMap()

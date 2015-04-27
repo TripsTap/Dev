@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // regis google map sdk
-        GMSServices.provideAPIKey("AIzaSyB2KaJa01bnVnRy__1GUK17ownU-ZeuMYQ")
+        GMSServices.provideAPIKey("AIzaSyDT_ZEA5Lp0TAPSY85VHEMECzbA_VK6xnQ")
         
         // regis facebook sdk
         FBLoginView.self

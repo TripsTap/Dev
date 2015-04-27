@@ -168,35 +168,37 @@ class Connection: NSObject {
     
     func getSameBehaviour(userID : String!){
         
-        Alamofire.request(.GET , "https://api.mongolab.com/api/1/databases/knn_result/collections/user_id?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N" , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
+//        Alamofire.request(.GET , "https://api.mongolab.com/api/1/databases/knn_result/collections/user_id?apiKey=pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N" , parameters: nil ).responseJSON { (request, response, data, error) -> Void in
+//            println("---------------------")
+//            println("get same Behaviour ")
+//            println(data)
+//            if error == nil {
+//                // save plan
+//                var planFile : PlanFile = PlanFile.sharedInstance
+//                var trip : NSDictionary! = NSDictionary(dictionary: data?.objectAtIndex(1) as! NSDictionary)
+//                planFile.behaviour.setObject( trip , forKey: "info")
+//                planFile.saveBehaviour()
+//            }
+//        }
+
+        
+        var url = "http://128.199.130.63:3000/triptap"
+
+        
+        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
             println("---------------------")
             println("get same Behaviour ")
-            println(data)
-            if error == nil {
-                // save plan
+            println("---------------------")
+            println(data?.description)
+            println(data?.objectForKey("des"))
+            if error == nil && data?.objectForKey("response") as? String != "try again" && data != nil {
                 var planFile : PlanFile = PlanFile.sharedInstance
-                var trip : NSDictionary! = NSDictionary(dictionary: data?.objectAtIndex(1) as! NSDictionary)
+                var trip : NSMutableDictionary! = NSMutableDictionary(dictionary: data as! [NSObject : AnyObject])
                 planFile.behaviour.setObject( trip , forKey: "info")
                 planFile.saveBehaviour()
             }
         }
 
-        
-//        var url = "http://128.199.130.63:3000/triptap?userId="+userID
-//
-//        
-//        Alamofire.request(.GET , url , parameters: ["userId" : userID] ).responseJSON { (request, response, data, error) -> Void in
-//            println("---------------------")
-//            println("get same Behaviour ")
-//            println(data)
-//            if error == nil {
-//                var planFile : PlanFile = PlanFile.sharedInstance
-//                var trip : NSMutableDictionary! = NSMutableDictionary(dictionary: data as! [NSObject : AnyObject])
-//                planFile.behaviour.setObject( trip , forKey: "info")
-//                planFile.saveBehaviour()
-//            }
-//        }
-//
         
     }
     
@@ -242,7 +244,7 @@ class Connection: NSObject {
     
     func getRestaurant(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
-        var url = "https://api.foursquare.com/v2/venues/search?near=phuket&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
+        var url = "https://api.foursquare.com/v2/venues/search?ll="+ll+"&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in    
             println("---------------------")

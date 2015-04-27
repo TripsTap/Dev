@@ -24,12 +24,12 @@ class TripForYouViewController: UIViewController  {
     @IBOutlet var progressThemepark: UIProgressView!
     @IBOutlet var progressSea : UIProgressView!
     @IBOutlet var labPerArt: UILabel!
-    @IBOutlet var labperEntertain: UILabel!
-    @IBOutlet var labPerHistory: UILabel!
-    @IBOutlet var labPerMesuem: UILabel!
-    @IBOutlet var labPerNutual: UILabel!
-    @IBOutlet var labPerThemePark: UILabel!
-    @IBOutlet var labPerSea: UILabel!
+    @IBOutlet var labCatUser1: UILabel!
+    @IBOutlet var labCatUser2: UILabel!
+    @IBOutlet var labCatUser3: UILabel!
+    @IBOutlet var labPer1: UILabel!
+    @IBOutlet var labPer2: UILabel!
+    @IBOutlet var labPer3: UILabel!
     
 //MARK: -
 //MARK: variable
@@ -71,6 +71,7 @@ class TripForYouViewController: UIViewController  {
         desType.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!)
         desType.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!)
         desType.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!)
+        desType.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String).toInt()!)
         
         
         // find sum of description type
@@ -78,45 +79,70 @@ class TripForYouViewController: UIViewController  {
             sumDesType += desType.objectAtIndex(i) as! Int
         }
         
-        // set up progress view
-        progressArt.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!) / Float(sumDesType)
-       
         
-        progressEntertain.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!) / Float(sumDesType)
-       
+        if sumDesType != 0 {
+            // set up progress view
+            progressArt.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("art") as! String).toInt()!) / Float(sumDesType)
+            
+            
+            progressEntertain.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("entertain") as! String).toInt()!) / Float(sumDesType)
+            
+            
+            progressHistoric.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!) / Float(sumDesType)
+            
+            
+            progressNutual.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!) / Float(sumDesType)
+            
+            
+            progressMesuem.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String).toInt()!) / Float(sumDesType)
+            
+            
+            
+            progressThemepark.progress = (Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) + Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) ) / Float(sumDesType)
+            
+            
+            progressSea.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!) / Float(sumDesType)
+            
+        }
         
-        progressHistoric.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("historic") as! String).toInt()!) / Float(sumDesType)
-       
+        labCatUser1.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(0).objectForKey("catName") as! String)
         
-        progressNutual.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("nutual") as! String).toInt()!) / Float(sumDesType)
-       
+        labCatUser2.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(1).objectForKey("catName") as! String)
         
-        progressMesuem.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("mesuem") as! String).toInt()!) / Float(sumDesType)
-       
+        labCatUser3.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(2).objectForKey("catName") as! String)
         
-
-        progressThemepark.progress = (Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("themepark") as! String).toInt()!) + Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("outdoor") as! String).toInt()!) ) / Float(sumDesType)
-       
+        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+50))
+        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+45))
+        labPer1.text = String(format: "%D",Int(arc4random_uniform(4)+40))
+        
+    }
     
-        progressSea.progress = Float((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("sea") as! String).toInt()!) / Float(sumDesType)
-       
+    func fullCatName(catName : String ) -> String{
         
-
-        
-        //        desRegion = NSMutableArray()
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_1") as! String).toInt()!)
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_2") as! String).toInt()!)
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_3") as! String).toInt()!)
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_4") as! String).toInt()!)
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_5") as! String).toInt()!)
-        //        desRegion.addObject((behaviourInfo.objectForKey("info")!.objectForKey("des")?.objectForKey("region_6") as! String).toInt()!)
-        
-        
-        //        self.viewPieChart.delegate = self
-        //        self.viewPieChart.dataSource = self
-        //        self.viewPieChart.showPercentage = false
-        //        self.viewPieChart.center = CGPointMake(150, 150)
-        //        self.viewPieChart.labelColor = UIColor.blackColor()
+        if catName == "art" {
+            return "Art"
+        }
+        else if catName == "entertain" {
+            return "Entertainment"
+        }
+        else if catName == "historic" {
+            return "Historical"
+        }
+        else if catName == "mesuem" {
+            return "Mesuem"
+        }
+        else if catName == "nutual" {
+            return "Natual"
+        }
+        else if catName == "outdoor" {
+            return "Outdoor"
+        }
+        else if catName == "sea" {
+            return "Sea"
+        }
+        else {
+            return "Outdoor"
+        }
         
     }
     

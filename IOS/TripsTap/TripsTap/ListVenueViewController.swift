@@ -55,7 +55,7 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             btnAddTrip.setTitle("Share With Facebook", forState: UIControlState.Normal)
 
             var name : String? = dicPlan.objectForKey("tripname") as? String
-            if name == nil {
+            if name == "" {
                 labNameTrip.text = "Trip"
             }
             else {
@@ -73,7 +73,6 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
         if(pageType == "TripForYou" || dicPlan.objectForKey("type") as? String == "TripForYou"){
             
             allocArray((dicPlan.objectForKey("user_checkin") as! NSArray).count)
-            
             for(var i = 0 ; i < (dicPlan.objectForKey("user_checkin") as! NSArray).count ; i++){
                 // index of image when func call back
                 let imageAtIndex : Int = i
