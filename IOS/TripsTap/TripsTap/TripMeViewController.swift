@@ -30,7 +30,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: variable
 //MARK: -
     
-    let location : NSArray = ["Phuket","Trat","Krung Thep Mahanakhon"   ,"Pathum Thani" ,"Ayutthaya","Lopburi","Kanchanaburi",    "Nakhon Pathom",    "Prachuap Khiri Khan",    "Phetchaburi", "Chanthaburi", "Chonburi", "Rayong" ,    "Nakhon Ratchasima",  "Udon Thani",    "Ubon Ratchathani",    "Krabi",    "Chumphon",    "Trang", "Phangnga",    "Phatthalung",        "Yala",    "Ranong",    "Songkhla", "Surat Thani", "Chiang Rai",    "Chiang Mai",    "Tak",    "Nan",    "Phayao",      "Mae Hong Son",    "Lampang" ]
+    let location : NSArray = ["Ayutthaya", "Chanthaburi", "Chiang Mai", "Chiang Rai", "Chonburi", "Chumphon", "Kanchanaburi", "Krabi", "Krung Thep Mahanakhon", "Lampang", "Lopburi", "Mae Hong Son", "Nakhon Pathom", "Nakhon Ratchasima", "Nan", "Pathum Thani", "Phangnga", "Phatthalung", "Phayao", "Phetchaburi", "Phuket", "Prachuap Khiri Khan", "Ranong", "Rayong", "Songkhla", "Surat Thani", "Tak", "Trang", "Trat", "Ubon Ratchathani", "Udon Thani", "Yala"]
+    
 
     
     

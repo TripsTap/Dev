@@ -55,6 +55,12 @@ class TripForYouViewController: UIViewController  {
         
         self.navigationController?.navigationBar.hidden = true
         
+        
+        
+    }
+    
+    
+    override func viewWillAppear(animated: Bool) {
         planFile = PlanFile.sharedInstance
         
         behaviourInfo = NSMutableDictionary(dictionary: planFile.behaviour as NSMutableDictionary)
@@ -105,16 +111,16 @@ class TripForYouViewController: UIViewController  {
             
         }
         
-        labCatUser1.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(0).objectForKey("catName") as! String)
+        labCatUser1.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(0).objectForKey("catName") as! String
         
-        labCatUser2.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(1).objectForKey("catName") as! String)
+        labCatUser2.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(1).objectForKey("catName") as! String
         
-        labCatUser3.text = fullCatName((behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(2).objectForKey("catName") as! String)
+        labCatUser3.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(2).objectForKey("catName") as! String
         
-        labPer1.text = String(format: "%D%",Int(arc4random_uniform(4)+50))
-        labPer2.text = String(format: "%D%",Int(arc4random_uniform(4)+45))
-        labPer3.text = String(format: "%D%",Int(arc4random_uniform(4)+40))
-        
+        labPer1.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(0).objectForKey("num") as! String
+        labPer2.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(1).objectForKey("num") as! String
+        labPer3.text = (behaviourInfo.objectForKey("info")!.objectForKey("maxCat") as! NSArray).objectAtIndex(2).objectForKey("num") as! String
+
     }
     
     func fullCatName(catName : String ) -> String{

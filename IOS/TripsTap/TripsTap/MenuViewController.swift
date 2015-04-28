@@ -29,6 +29,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     var countTagPlace : Int! // check place load all complete
     var FBID : String! // user id of facebook
     var FBName : String! // user name of facebook
+    var isLogin : Int! = 0
 
     
 //MARK:-
@@ -59,6 +60,7 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
         println("User Logged In")
+        
     }
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
@@ -78,14 +80,18 @@ class MenuViewController: UIViewController, FBLoginViewDelegate {
         planFile.saveBehaviour()
 //        Connection.sharedInstance.getSameBehaviour(FBID)
         
-        getProfileImage()
-        getPlaceFromFB()
+        if isLogin == 0 {
+            getProfileImage()
+            getPlaceFromFB()
+            isLogin = 1
+        }
         
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
         PlanFile.sharedInstance.behaviour.removeAllObjects()
         PlanFile.sharedInstance.saveBehaviour()
+        isLogin = 0
         println("User Logged Out")
     }
     
