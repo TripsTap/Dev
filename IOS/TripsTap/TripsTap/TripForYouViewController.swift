@@ -61,6 +61,7 @@ class TripForYouViewController: UIViewController  {
     
     
     override func viewWillAppear(animated: Bool) {
+        sumDesType = 0 
         planFile = PlanFile.sharedInstance
         
         behaviourInfo = NSMutableDictionary(dictionary: planFile.behaviour as NSMutableDictionary)

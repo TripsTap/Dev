@@ -50,7 +50,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             setLatAndLng()
             setMap()
             
-            listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
+            
+            if info.objectForKey("tips")?.objectForKey("count") as! Int == 0 {
+                listComment = NSMutableArray()
+            }
+            else {
+            listComment = NSMutableArray(array: (info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray))
+            }
             
             //load image
             loadImage(getUrlImage())
@@ -79,7 +85,13 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
             else{
                 setLatAndLng()
                 setMap()
-                listComment = NSMutableArray(array: info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray)
+                if info.objectForKey("tips")?.objectForKey("count") as! Int == 0 {
+                    listComment = NSMutableArray()
+                }
+                else {
+                    listComment = NSMutableArray(array: (info.objectForKey("tips")?.objectForKey("groups")?.objectAtIndex(0).objectForKey("items") as! NSMutableArray))
+                }
+
                 var urlImage : String = getUrlImage()
                 loadImage(urlImage)
                 
@@ -186,7 +198,9 @@ class InfoViewController: UIViewController,UITableViewDataSource, UITableViewDel
     func setInfoOfView(){
         location = ((info.objectForKey("location") as! NSDictionary).objectForKey("formattedAddress") as! NSArray).componentsJoinedByString(", ")
         
-        labRating.text = String(format: "%.1f", (info.objectForKey("rating") as! NSNumber).doubleValue )
+        if info.objectForKey("rating") != nil {
+            labRating.text = String(format: "%.1f", (info.objectForKey("rating") as! NSNumber).doubleValue )
+        }
         
         if ( (info.objectForKey("contact") as! NSDictionary).objectForKey("phone") == nil) {
             phone = "-"

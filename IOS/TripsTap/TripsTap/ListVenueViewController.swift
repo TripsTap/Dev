@@ -79,6 +79,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 // load image
                 var urlFull : String = dicPlan.objectForKey("user_checkin")?.objectAtIndex(i).objectForKey("PHOTO") as! String
+                if urlFull == "" {
+                    continue
+                }
                 var url : String = getUrlImage(urlFull)
                 if(url != ""){
                     loadImage(url, index: imageAtIndex)
@@ -105,6 +108,9 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
                 
                 // load image
                 var urlFull : String = dicPlan.objectForKey("premises")?.objectAtIndex(i).objectForKey("image") as! String
+                if urlFull == "" {
+                    continue
+                }
                 var url : String = getUrlImage(urlFull)
                 if(url != ""){
                     loadImage(url, index: imageAtIndex)
@@ -506,11 +512,13 @@ class ListVenueViewController: UIViewController, UITableViewDelegate,UITableView
             urlFull :  String full url   (...oooo...)
     */
     func getUrlImage(urlFull : String)->String{
+
         var imageArray : NSArray = urlFull.componentsSeparatedByString("oooo") as NSArray
         var url : String = ""
         
         println("------------------------")
-        var a : NSArray = ((imageArray.objectAtIndex(1) as! String).componentsSeparatedByString("-") as NSArray)
+        println(urlFull)
+        var a : NSArray = ((imageArray.objectAtIndex(0) as! String).componentsSeparatedByString("-") as NSArray)
         
         for(var i = 0 ; i < a.count - 1 ; i++){
             if(i == 0){

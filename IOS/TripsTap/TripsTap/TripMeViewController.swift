@@ -30,7 +30,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
 //MARK: variable
 //MARK: -
     
-    let location : NSArray = ["Ayutthaya", "Chanthaburi", "Chiang Mai", "Chiang Rai", "Chonburi", "Chumphon", "Kanchanaburi", "Krabi", "Krung Thep Mahanakhon", "Lampang", "Lopburi", "Mae Hong Son", "Nakhon Pathom", "Nakhon Ratchasima", "Nan", "Pathum Thani", "Phangnga", "Phatthalung", "Phayao", "Phetchaburi", "Phuket", "Prachuap Khiri Khan", "Ranong", "Rayong", "Songkhla", "Surat Thani", "Tak", "Trang", "Trat", "Ubon Ratchathani", "Udon Thani", "Yala"]
+    let location : NSArray = ["Ayutthaya", "Chanthaburi", "Chiang Mai", "Chiang Rai", "Chonburi", "Chumphon", "Kanchanaburi", "Krabi", "Krung Thep Mahanakhon", "Lampang", "Lopburi", "Mae Hong Son", "Nakhon Pathom", "Nakhon Ratchasima", "Nan", "Pathum Thani", "Phangnga", "Phatthalung", "Phayao", "Phetchaburi", "Phuket", "Prachuap Khiri Khan", "Ranong", "Rayong", "Songkhla", "Surat Thani",  "Trat", "Ubon Ratchathani", "Udon Thani"]
     
 
     
@@ -137,8 +137,8 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
         categorySort = cateSelectList.sortedArrayUsingDescriptors([descriptor])
         
         
-        // start with function
-        if(self.segmentType.selectedSegmentIndex == 0 ){
+        // interest in  function
+        if(self.segmentType.selectedSegmentIndex == 1 ){
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess (start with)")
                 
@@ -170,7 +170,7 @@ class TripMeViewController: UIViewController ,UITableViewDelegate, TripMeCellDel
             }
         }
             
-        // interest in Function
+        // Start with Function
         else{
             connection.getRuleTripsMe(textLocation.text, category: cateSelectList) { (result, error) -> () in
                 println("getRuleTripsMe sucess  (interest in)")

@@ -36,11 +36,10 @@ class Connection: NSObject {
 //MARK: -
 //
     
-    let apiKey : String = "pssG0fVnXU2G1hV3eI9_SuidpTGqSi4N"
-    
-    
-    let CLIENT_ID = "VQFA1NFZFVHNCSQL1GTBVAOWBDQOHSQEHOW5YZKU1IS1JRFO"
-    let CLIENT_SECRET = "KMIYI5FXHQFHCQYKRE35EKX125UEH4AQERSJRXMAZXDRFLDF"
+    let apiKey : String = ""
+
+    let CLIENT_ID = ""
+    let CLIENT_SECRET = ""
     
     
 //
@@ -244,7 +243,7 @@ class Connection: NSObject {
     
     func getRestaurant(ll : String ,completion :( ( result : AnyObject! , error : NSError! )  ->()) ){
         
-        var url = "https://api.foursquare.com/v2/venues/search?ll="+ll+"&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
+        var url = "https://api.foursquare.com/v2/venues/search?ll="+ll+"&radius=10000&limit=50&client_id="+(self.CLIENT_ID as String)+"&client_secret="+(self.CLIENT_SECRET as String)+"&categoryId=4d4b7105d754a06374d81259&v=20130815"
         
         Alamofire.request(.GET, url, parameters: nil  ).responseJSON { (request, response, data, error) -> Void in    
             println("---------------------")
